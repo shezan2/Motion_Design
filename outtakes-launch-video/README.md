@@ -56,7 +56,7 @@ All timings in that file are absolute frames. Change a beat there and both the p
 ```bash
 npm i
 npm run dev                       # Remotion Studio preview
-python3 scripts/beat.py           # regenerate public/beat.wav from the timeline (needs numpy + scipy)
+python3 scripts/beat.py           # regenerate the SFX track public/beat.wav from the timeline (needs numpy + scipy)
 npx remotion render Outtakes-16x9 out/outtakes-launch-16x9.mp4 --crf=19
 npx remotion render Outtakes-9x16 out/outtakes-launch-9x16.mp4 --crf=19
 node scripts/stills.mjs 130,375,700   # review stills for both formats
@@ -66,14 +66,26 @@ On a machine without a Chrome download, set `REMOTION_CHROME=/path/to/chrome-hea
 
 ## Sound
 
-`scripts/beat.py` synthesizes everything from scratch: 120 BPM, 808-style kick and bass, clap, hats, a two-stage mechanical shutter click, booms, risers, UI blips and the phone buzz. Each hit is placed on a timeline frame. The master is about −15 LUFS integrated, with peaks around −1 dBFS. There is room for a voiceover later. The chase and call beats are the natural places for it.
+**Sound effects only, no music or drum groove.** `scripts/beat.py` synthesizes every effect and places each one on a timeline frame:
 
-## Checks run on the render
+- two-stage mechanical shutter clicks on every cut and through the burst
+- impacts on the hits
+- risers into the reveal and the date
+- whooshes
+- message/UI blips and keystrokes
+- the phone buzz
 
-- Decodes, 39.0 s, 30 fps, AAC stereo audio present.
-- No empty frames, except two deliberate black beats: the curtain before the crash (frames 352–359) and the opening frames 0–2.
-- No end-card hold: the end frame keeps contracting until the shutter closes.
-- Longest near-static stretch is about 1.3 s, during the client typing, with the caret and camera drift alive.
+A quiet floodlit-pitch crowd/air bed sits underneath and ducks under the impacts, so the effects never sit on digital silence. The master runs through a fast peak limiter: about −16 LUFS integrated, true peak about −2.8 dBTP. There is room for a voiceover later.
+
+## Review gates (motionmaxxing `look.py`, both formats)
+
+- **G0 render exists:** PASS. 39.00 s, audio present.
+- **G2 no empty frame:** PASS. No run of more than 3 flat frames. The black beat before the OUTTAKES crash is now 3 frames.
+- **G3 end-card hold:** PASS. The film ends mid-motion as the shutter closes.
+- **Audio:** no flags. Loudness −16.0 LUFS, true peak −2.8 dBTP, no silence dropouts. 77–79 % of cuts land within ±80 ms of a sound.
+- **Motion:** mean luma change 5.2 (16:9) and 4.9 (9:16), inside the human band of 4.4–9.8.
+- **G1 and G4:** checked by eye on `look.py`'s sheet. They pass: UI text is readable and there is one hero per frame.
+- **G5 (`lint.mjs`):** not run. It lints an HyperFrames/HTML `index.html`, and this film is React/Remotion, so there is no file for it to read. The same rules (no corner labels, counters, kicker-above-headline, letter-typed headlines) were followed by hand. The only letter-typing is inside the search field.
 
 ## Licence note
 

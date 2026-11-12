@@ -1,4 +1,4 @@
-"""Synthesize the film's beat track from src/timeline.json.
+"""Synthesize the film's sound-effects track (no music, no drum groove) from src/timeline.json.
 
 No samples, no music library: every sound (kick, clap, hats, 808, camera
 shutter, impacts, risers, UI blips, phone buzz) is generated here, and every
@@ -181,6 +181,7 @@ BASS_NOTES = [41.2, 41.2, 49.0, 36.7]  # E1 E1 G1 D1, one per bar
 
 
 def groove(f0, f1, kind="full", gain=1.0):
+    return  # SFX-only mix: no drum groove
     for k in beats(f0, f1):
         f = k * BEAT_F / 4
         t = t_of(f)
@@ -240,8 +241,7 @@ place(whoosh(0.5), t_of(c["shrink"][0]), 0.6)
 for f in c["bubbles"]:
     place(blip(), t_of(f), 0.9, 0.15)
 for f in c["words"]:
-    place(kick(), t_of(f), 0.8)
-    place(clap(), t_of(f), 0.5)
+    place(shutter(0.7), t_of(f), 0.6)
 place(whoosh(0.35), t_of(c["swap"] - 3), 0.7)
 place(riser(t_of(c["to"] - 3 - 322)), t_of(322), 0.7)
 place(shutter(1.0), t_of(c["to"]), 0.9)  # curtain closes; then silence
@@ -249,7 +249,6 @@ place(shutter(1.0), t_of(c["to"]), 0.9)  # curtain closes; then silence
 # 3 reveal: the hit
 place(boom(2.2), t_of(r["crash"]), 1.0)
 place(shutter(1.3), t_of(r["crash"]), 1.0)
-place(kick(1.2), t_of(r["crash"]), 1.0)
 groove(r["crash"] + BEAT_F * 2, k_["from"], "full")
 for f in r["words"]:
     place(tick(), t_of(f), 0.35, -0.2)
@@ -288,28 +287,56 @@ while f < cta["riser"][1] - 1:
     f += step
     step = max(1.875, step * 0.82)
 for i, f in enumerate(roll):
-    place(clap(), t_of(f), 0.25 + 0.5 * i / len(roll))
+    place(shutter(0.4), t_of(f), 0.2 + 0.4 * i / len(roll))  # burst-mode build
 place(riser(t_of(cta["riser"][1] - cta["riser"][0])), t_of(cta["riser"][0]), 0.6)
 place(boom(2.0), t_of(cta["crash"]), 1.0)
 place(shutter(1.3), t_of(cta["crash"]), 1.0)
-place(kick(1.2), t_of(cta["crash"]), 1.0)
 groove(cta["crash"] + BEAT_F, cta["final"], "full")
 place(blip(), t_of(cta["pill"]), 0.6)
 place(shutter(0.6), t_of(cta["press"]), 0.7)
 # end: one last shutter, a quiet sub tail, the curtain closing
 place(shutter(1.1), t_of(cta["final"]), 0.9)
 place(boom(1.6), t_of(cta["final"]), 0.45)
-place(bass(BASS_NOTES[0], 1.2), t_of(cta["final"]), 0.6)
-place(shutter(0.8), t_of(cta["to"] - 6), 0.8)
+place(shutter(0.8), t_of(cta["to"] - 3), 0.8)
+
+# ambience bed: distant crowd / floodlit-pitch air under everything, so the
+# SFX never sit on digital silence. Ducked under impacts.
+def ambience():
+    x = rng.standard_normal((N, 2))
+    crowd = np.stack([bp(x[:, 0], 250, 1800, 2), bp(x[:, 1], 250, 1800, 2)], axis=1)
+    tt = np.arange(N) / SR
+    swell = 0.75 + 0.25 * np.sin(2 * np.pi * tt / 7.3) * np.sin(2 * np.pi * tt / 3.1 + 1)
+    air = np.stack([hp(x[:, 1], 6000), hp(x[:, 0], 6000)], axis=1) * 0.25
+    return (crowd * swell[:, None] + air) * 0.022
+
+bed = ambience()
+duck = np.ones(N)
+for f in [h["land"], r["crash"], m["from"], cta["crash"], cta["final"]]:
+    i = int(t_of(f) * SR); n = int(1.2 * SR)
+    duck[i:i + n] = np.minimum(duck[i:i + n], 1 - 0.7 * np.exp(-np.arange(min(n, N - i)) / SR * 3))
+# silence before the two hits stays (designed breath), but not digital: keep 15 %
+for f0, f1 in [(c["to"] - 2, r["crash"]), (cta["riser"][1] - 2, cta["crash"])]:
+    duck[int(t_of(f0) * SR):int(t_of(f1) * SR)] = 0.15
+L += bed[:, 0] * duck
+R += bed[:, 1] * duck
 
 # ------------------------------------------------------------------ master
 mix = np.stack([L, R], axis=1)
 mix = mix[: int(T["total"] / FPS * SR) + int(0.3 * SR)]
-rms = np.sqrt(np.mean(mix**2))
-mix *= 10 ** (-15.5 / 20) / max(rms, 1e-9)  # ~ -15.5 dBFS RMS
-mix = np.tanh(mix * 1.1) / np.tanh(1.1)  # soft limiter
+mix = np.tanh(mix * 1.1) / np.tanh(1.1)  # soft limiter (SFX only: peak-normalised, no loudness push)
 peak = np.max(np.abs(mix))
-mix *= 0.89 / peak  # ~ -1 dBFS peak
+mix *= 0.50 / peak
+# fast look-ahead peak limiter, then +6 dB make-up: shutter clicks are spiky,
+# so this lifts loudness toward the -14 LUFS social target without overshoot.
+from scipy.ndimage import maximum_filter1d, uniform_filter1d
+gain_db = 6.5
+mix *= 10 ** (gain_db / 20)
+ceil = 0.5
+env = maximum_filter1d(np.max(np.abs(mix), axis=1), size=int(0.004 * SR))
+g = np.minimum(1.0, ceil / np.maximum(env, 1e-9))
+g = uniform_filter1d(np.minimum.accumulate(g[::-1])[::-1] if False else g, size=int(0.003 * SR))
+g = np.minimum(g, ceil / np.maximum(env, 1e-9))
+mix *= g[:, None]
 fade = int(0.25 * SR)
 mix[-fade:] *= np.linspace(1, 0, fade)[:, None]
 
