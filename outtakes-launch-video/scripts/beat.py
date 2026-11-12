@@ -367,19 +367,28 @@ if vo_cfg:
     edge = int(0.012 * SR)
     for a, b, at, _ in vo_cfg["segments"]:
         seg = take[int(a * SR):int(b * SR)].copy()
+        # level-match every line to the same speech loudness, so whispered
+        # lines are not buried (gain capped at +12 dB)
+        fr = seg[: len(seg) // 960 * 960].reshape(-1, 960)
+        r = np.sqrt((fr**2).mean(1))
+        act = r[r > 10 ** (-45 / 20)]
+        if len(act):
+            lvl = 20 * np.log10(np.sqrt((act**2).mean()))
+            seg *= 10 ** (min(12.0, -23.0 - lvl) / 20)
         seg[:edge] *= np.linspace(0, 1, edge)
         seg[-edge:] *= np.linspace(1, 0, edge)
         i = int(at * SR)
         m = min(len(seg), n_out - i)
         vo[i:i + m] += seg[:m]
     vo *= 0.9 / max(np.max(np.abs(vo)), 1e-9)
+    vo = np.tanh(vo * 1.8) / np.tanh(1.8)  # soft compression: evens out syllables
     # duck: SFX down ~7 dB while the voice speaks, smooth attack/release
     from scipy.ndimage import uniform_filter1d as _uf
     act = (_uf(np.abs(vo), size=int(0.05 * SR)) > 0.01).astype(float)
     act = _uf(np.maximum.accumulate(act[::-1])[::-1] * 0 + act, size=int(0.25 * SR))
-    duck_g = 1 - 0.55 * np.clip(act * 1.5, 0, 1)
+    duck_g = 1 - 0.75 * np.clip(act * 1.5, 0, 1)  # SFX ~-12 dB under the voice
     out_mix = mix * duck_g[:, None] * 0.85 + vo[:, None] * 0.62
-    out_mix *= 10 ** (7.0 / 20)  # make-up gain toward -14 LUFS
+    out_mix *= 10 ** (5.7 / 20)  # make-up gain toward -14 LUFS
     ceil2 = 0.63  # -4 dBFS, true-peak aware (4x oversampled detection)
     from scipy.signal import resample_poly
     tp = np.max(np.abs(resample_poly(out_mix, 4, 1, axis=0)), axis=1).reshape(-1, 4).max(axis=1)[: len(out_mix)]

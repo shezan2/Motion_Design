@@ -85,9 +85,9 @@ The ElevenLabs take lives at `public/vo/take.mp3`. `timeline.json` → `vo.segme
 - "Your portfolio. Your style. Your rates." plays over the profile.
 - "They call you." plays over the incoming call.
 
-`python3 scripts/beat.py` writes `public/beat.wav` (the effects-only track) and `public/mix.wav` (voice + effects, with the effects lowered about 7 dB under the voice). The film plays `mix.wav`. To go back to effects only, point `Film.tsx` at `beat.wav`.
+`python3 scripts/beat.py` writes `public/beat.wav` (the effects-only track) and `public/mix.wav` (voice + effects, every line level-matched (whispers lifted up to +12 dB), effects lowered about 12 dB under the voice). The film plays `mix.wav`. To go back to effects only, point `Film.tsx` at `beat.wav`.
 
-VO mix (motionmaxxing `look.py`): −14.8 LUFS, true peak −2.8 dBTP, no flags. G0, G2 and G3 pass on both formats.
+VO mix (motionmaxxing `look.py`): about −14 LUFS, true peak under −2.5 dBTP, no flags. G0, G2 and G3 pass on both formats.
 
 ## Review gates (SFX-only version) (motionmaxxing `look.py`, both formats)
 
