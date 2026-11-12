@@ -11,7 +11,7 @@ Two compositions share one timeline:
 
 ## The idea
 
-**The shutter is the beat.** Every cut is a camera shutter firing, and the percussion is built from shutter clicks, kicks and impacts. No music, just beats, as briefed. The film opens in burst mode on the collective's own photos, so the first thing a photographer sees is the work of people they know.
+**The shutter is the beat.** Every cut is a camera shutter firing, and the soundtrack is sound effects only (shutters, impacts, risers, UI blips) with no music. The film opens in burst mode on the collective's own photos, so the first thing a photographer sees is the work of people they know.
 
 ## Beats
 
