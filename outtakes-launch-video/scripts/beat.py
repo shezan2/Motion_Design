@@ -348,3 +348,45 @@ with wave.open(str(out), "wb") as w:
     w.setframerate(SR)
     w.writeframes(pcm.tobytes())
 print(f"wrote {out} {len(mix) / SR:.2f}s rms={20 * np.log10(np.sqrt(np.mean(mix ** 2))):.1f} dBFS")
+
+
+# ------------------------------------------------------------------ voiceover mix
+# Places each VO segment from timeline.json on its film cue, ducks the SFX
+# under the voice, and writes public/mix.wav (beat.wav stays the SFX stem).
+import subprocess
+
+vo_cfg = T.get("vo")
+if vo_cfg:
+    raw = subprocess.run(
+        ["ffmpeg", "-v", "error", "-i", str(ROOT / "public" / vo_cfg["file"]), "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"],
+        capture_output=True, check=True,
+    ).stdout
+    take = np.frombuffer(raw, np.float32).astype(float)
+    n_out = len(mix)
+    vo = np.zeros(n_out)
+    edge = int(0.012 * SR)
+    for a, b, at, _ in vo_cfg["segments"]:
+        seg = take[int(a * SR):int(b * SR)].copy()
+        seg[:edge] *= np.linspace(0, 1, edge)
+        seg[-edge:] *= np.linspace(1, 0, edge)
+        i = int(at * SR)
+        m = min(len(seg), n_out - i)
+        vo[i:i + m] += seg[:m]
+    vo *= 0.9 / max(np.max(np.abs(vo)), 1e-9)
+    # duck: SFX down ~7 dB while the voice speaks, smooth attack/release
+    from scipy.ndimage import uniform_filter1d as _uf
+    act = (_uf(np.abs(vo), size=int(0.05 * SR)) > 0.01).astype(float)
+    act = _uf(np.maximum.accumulate(act[::-1])[::-1] * 0 + act, size=int(0.25 * SR))
+    duck_g = 1 - 0.55 * np.clip(act * 1.5, 0, 1)
+    out_mix = mix * duck_g[:, None] * 0.85 + vo[:, None] * 0.62
+    out_mix *= 10 ** (7.0 / 20)  # make-up gain toward -14 LUFS
+    ceil2 = 0.63  # -4 dBFS, true-peak aware (4x oversampled detection)
+    from scipy.signal import resample_poly
+    tp = np.max(np.abs(resample_poly(out_mix, 4, 1, axis=0)), axis=1).reshape(-1, 4).max(axis=1)[: len(out_mix)]
+    env2 = maximum_filter1d(tp, size=int(0.004 * SR))
+    g2 = np.minimum(1.0, ceil2 / np.maximum(env2, 1e-9))
+    out_mix *= np.minimum(_uf(g2, size=int(0.003 * SR)), g2)[:, None]
+    pcm2 = (np.clip(out_mix, -1, 1) * 32767).astype(np.int16)
+    with wave.open(str(ROOT / "public" / "mix.wav"), "wb") as w:
+        w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR); w.writeframes(pcm2.tobytes())
+    print("wrote public/mix.wav with", len(vo_cfg["segments"]), "VO segments")

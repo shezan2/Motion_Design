@@ -177,5 +177,76 @@
       "f": 1128,
       "kind": "curtain"
     }
-  ]
+  ],
+  "vo": {
+    "file": "vo/take.mp3",
+    "segments": [
+      [
+        0.0,
+        1.06,
+        3.4,
+        "You got the shot."
+      ],
+      [
+        1.62,
+        6.34,
+        5.7,
+        "Then comes the chasing... the invoices... can pay you next week ah?"
+      ],
+      [
+        6.95,
+        10.28,
+        11.85,
+        "Outtakes. Made by photographers... for photographers."
+      ],
+      [
+        10.7,
+        14.49,
+        16.0,
+        "One place where clubs, players and parents actually come looking."
+      ],
+      [
+        18.1,
+        19.73,
+        19.85,
+        "They search. They find you."
+      ],
+      [
+        14.85,
+        17.81,
+        22.75,
+        "Your portfolio. Your style. Your rates."
+      ],
+      [
+        19.98,
+        20.62,
+        25.8,
+        "They call you."
+      ],
+      [
+        20.9,
+        22.95,
+        27.05,
+        "Camaraderie... over rivalry."
+      ],
+      [
+        23.2,
+        26.67,
+        31.1,
+        "Sign up free. Set up your profile from the sixteenth of November."
+      ],
+      [
+        26.88,
+        29.45,
+        34.7,
+        "We go live on the twentieth... five p.m."
+      ],
+      [
+        29.78,
+        31.47,
+        37.3,
+        "outtakes dot S G."
+      ]
+    ]
+  }
 }

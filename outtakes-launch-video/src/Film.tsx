@@ -48,6 +48,6 @@ export const Film: React.FC<FilmProps> = ({ withAudio }) => (
     </Scene>
     <Grain opacity={0.09} />
     <Shutter />
-    {withAudio ? <Audio src={staticFile("beat.wav")} /> : null}
+    {withAudio ? <Audio src={staticFile("mix.wav")} /> : null}
   </AbsoluteFill>
 );

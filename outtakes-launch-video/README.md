@@ -77,7 +77,19 @@ On a machine without a Chrome download, set `REMOTION_CHROME=/path/to/chrome-hea
 
 A quiet floodlit-pitch crowd/air bed sits underneath and ducks under the impacts, so the effects never sit on digital silence. The master runs through a fast peak limiter: about −16 LUFS integrated, true peak about −2.8 dBTP. There is room for a voiceover later.
 
-## Review gates (motionmaxxing `look.py`, both formats)
+## Voiceover
+
+The ElevenLabs take lives at `public/vo/take.mp3`. `timeline.json` → `vo.segments` lists each line as `[take_start, take_end, film_seconds, text]`. Two lines are split, so each part lands on the shot it describes:
+
+- "They search. They find you." plays over the search results.
+- "Your portfolio. Your style. Your rates." plays over the profile.
+- "They call you." plays over the incoming call.
+
+`python3 scripts/beat.py` writes `public/beat.wav` (the effects-only track) and `public/mix.wav` (voice + effects, with the effects lowered about 7 dB under the voice). The film plays `mix.wav`. To go back to effects only, point `Film.tsx` at `beat.wav`.
+
+VO mix (motionmaxxing `look.py`): −14.8 LUFS, true peak −2.8 dBTP, no flags. G0, G2 and G3 pass on both formats.
+
+## Review gates (SFX-only version) (motionmaxxing `look.py`, both formats)
 
 - **G0 render exists:** PASS. 39.00 s, audio present.
 - **G2 no empty frame:** PASS. No run of more than 3 flat frames. The black beat before the OUTTAKES crash is now 3 frames.
