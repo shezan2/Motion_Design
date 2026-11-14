@@ -69,7 +69,7 @@ export const Hook: React.FC = () => {
               onsets={h.words}
               size={portrait ? 108 : 128}
               color={C.white}
-              colors={{ 3: C.lime }}
+              colors={{ 3: C.green }}
               maxWidth={portrait ? 900 : 1700}
             />
           </AbsoluteFill>
@@ -174,7 +174,7 @@ export const Chase: React.FC = () => {
                 fontSize: font,
                 lineHeight: 1.22,
                 color: "#0d0d0f",
-                background: C.lime,
+                background: C.green,
                 padding: `28px 38px`,
                 borderRadius: `${bubbleH / 2}px ${bubbleH / 2}px 10px ${bubbleH / 2}px`,
                 whiteSpace: "nowrap",
@@ -234,7 +234,7 @@ const ChasingLine: React.FC = () => {
         <span
           style={{
             ...word,
-            color: C.lime,
+            color: C.green,
             translate: `0px ${(ramp(f, c.words[1], c.words[1] + 10, [1, 0]) * 105 - out * 110).toFixed(2)}%`,
             visibility: f < c.words[1] ? "hidden" : "visible",
           }}
@@ -247,7 +247,7 @@ const ChasingLine: React.FC = () => {
             position: "absolute",
             left: "0.04em",
             top: "0.08em",
-            color: C.lime,
+            color: C.green,
             translate: `0px ${(inn * 105).toFixed(2)}%`,
             visibility: f < c.swap + 4 ? "hidden" : "visible",
           }}

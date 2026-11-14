@@ -2,7 +2,7 @@ import React from "react";
 import { AbsoluteFill } from "remotion";
 import { C, ui, wordmark } from "../brand";
 import { EASE, hash, lerp, ramp, useF, useLayout } from "../anim";
-import { Chip, CtaPill, Cursor, MenuIcon, Photo, SearchIcon, Words } from "../components";
+import { Chip, CtaPill, Cursor, MenuIcon, Photo, SearchIcon, Tag, Words } from "../components";
 import T from "../timeline.json";
 
 // Shared geometry so the wordmark in Reveal and the docking wordmark in UI line up.
@@ -29,7 +29,7 @@ export const Reveal: React.FC = () => {
     <AbsoluteFill style={{ background: C.bg }}>
       <AbsoluteFill
         style={{
-          background: `radial-gradient(ellipse 60% 45% at 50% ${(g.cy / g.H) * 100}%, rgba(216,238,72,${0.1 + decay * 0.2}) 0%, rgba(25,66,42,0.25) 45%, rgba(13,13,15,0) 75%)`,
+          background: `radial-gradient(ellipse 70% 55% at 50% ${(g.cy / g.H) * 100}%, rgba(90,85,211,${0.32 + decay * 0.3}) 0%, rgba(47,41,115,0.35) 40%, rgba(17,17,19,0) 75%)`,
         }}
       />
       {[5, 4, 3, 2, 1].map((k) =>
@@ -42,7 +42,7 @@ export const Reveal: React.FC = () => {
       <div
         style={{
           ...streakStyle(g.cx, g.cy, g.size, sc, 1),
-          textShadow: `0 0 ${60 + decay * 80}px rgba(216,238,72,${glow})`,
+          textShadow: `0 0 ${60 + decay * 80}px rgba(127,149,248,${glow})`,
         }}
       >
         OUTTAKES
@@ -67,7 +67,7 @@ const streakStyle = (cx: number, cy: number, size: number, scale: number, opacit
   top: cy,
   translate: "-50% -50%",
   fontSize: size,
-  color: C.lime,
+  color: C.white,
   scale: String(scale),
   opacity,
   whiteSpace: "nowrap",
@@ -76,17 +76,19 @@ const streakStyle = (cx: number, cy: number, size: number, scale: number, opacit
 // ---------------------------------------------------------------- UI
 // Buys: "clients will actually find you" — the wordmark docks into the site's
 // nav, a client searches, your profile is in the results, they open it.
-const CARDS_L = [
-  { photo: "celebrate-fists", label: "Football · Matchday" },
-  { photo: "basketball", label: "Basketball · Action" },
-  { photo: "floodlight-profile", label: "You", you: true },
-  { photo: "sepak-takraw", label: "Sepak takraw" },
+type Sport = "track" | "football" | "rugby" | "swimming";
+type Card = { photo: string; tags: Sport[]; you?: boolean };
+const CARDS_L: Card[] = [
+  { photo: "celebrate-fists", tags: ["football", "track"] },
+  { photo: "motion-blur", tags: ["football", "rugby"] },
+  { photo: "floodlight-profile", tags: ["football", "track", "rugby"], you: true },
+  { photo: "stretch-ball", tags: ["football"] },
 ];
-const CARDS_P = [
-  { photo: "celebrate-fists", label: "Football · Matchday" },
-  { photo: "floodlight-profile", label: "You", you: true },
-  { photo: "basketball", label: "Basketball · Action" },
-  { photo: "sepak-takraw", label: "Sepak takraw" },
+const CARDS_P: Card[] = [
+  { photo: "celebrate-fists", tags: ["football", "track"] },
+  { photo: "floodlight-profile", tags: ["football", "track", "rugby"], you: true },
+  { photo: "motion-blur", tags: ["football", "rugby"] },
+  { photo: "stretch-ball", tags: ["football"] },
 ];
 const QUERY = "football photographer";
 // irregular keystroke gaps (frames) for the client's typing
@@ -98,7 +100,7 @@ const useUiGeo = () => {
     const cardW = 440;
     const cardH = 540;
     const x0 = 80;
-    const y0 = 470;
+    const y0 = 490;
     const cards = [0, 1, 2, 3].map((i) => ({
       x: x0 + (i % 2) * (cardW + 40),
       y: y0 + Math.floor(i / 2) * (cardH + 110),
@@ -107,24 +109,24 @@ const useUiGeo = () => {
     }));
     return {
       W, H, portrait,
-      nav: { cx: W / 2, cy: 130, w: 760, h: 104, font: 70 },
-      head: { top: 420, size: 92, maxW: 920 },
-      search: { cx: W / 2, y: 980, w: 920, h: 120, font: 46, yUp: 220 },
-      chipsY: 350,
+      nav: { x: 80, cy: 140, font: 104, boxW: 210, boxH: 76 },
+      head: { top: 470, size: 92, maxW: 920 },
+      search: { cx: W / 2, y: 1020, w: 920, h: 120, font: 44, yUp: 236 },
+      chipsY: 384,
       cards,
       cardLabel: 34,
     };
   }
   const cardW = 400;
-  const cardH = 470;
+  const cardH = 440;
   const x0 = (W - (4 * cardW + 3 * 40)) / 2;
-  const cards = [0, 1, 2, 3].map((i) => ({ x: x0 + i * (cardW + 40), y: 360, w: cardW, h: cardH }));
+  const cards = [0, 1, 2, 3].map((i) => ({ x: x0 + i * (cardW + 40), y: 400, w: cardW, h: cardH }));
   return {
     W, H, portrait,
-    nav: { cx: W / 2, cy: 76, w: 660, h: 84, font: 58 },
-    head: { top: 210, size: 104, maxW: 1560 },
-    search: { cx: W / 2, y: 560, w: 1040, h: 116, font: 44, yUp: 168 },
-    chipsY: 280,
+    nav: { x: 120, cy: 100, font: 112, boxW: 400, boxH: 66 },
+    head: { top: 270, size: 96, maxW: 1760 },
+    search: { cx: W / 2, y: 610, w: 1040, h: 110, font: 40, yUp: 200 },
+    chipsY: 318,
     cards,
     cardLabel: 30,
   };
@@ -142,7 +144,7 @@ export const UI: React.FC = () => {
   // dock: wordmark travels from the reveal position into the nav pill
   const d = ramp(f, u.dock[0], u.dock[1], [0, 1], EASE.inOut);
   const wmSize = lerp(rg.size * 0.94, g.nav.font, d);
-  const wmX = lerp(rg.cx, g.nav.cx - g.nav.w / 2 + 44, d);
+  const wmX = lerp(rg.cx, g.nav.x, d);
   const wmY = lerp(rg.cy, g.nav.cy, d);
   const pillGrow = ramp(f, u.dock[0] + 12, u.dock[1] + 6, [0, 1], EASE.land);
   const sideIn = ramp(f, u.dock[0] + 10, u.dock[1] + 10, [1, 0], EASE.land);
@@ -182,7 +184,7 @@ export const UI: React.FC = () => {
     <AbsoluteFill style={{ background: C.bg }}>
       <AbsoluteFill
         style={{
-          background: "radial-gradient(ellipse 80% 55% at 50% 0%, rgba(25,66,42,0.55) 0%, rgba(13,13,15,0) 70%)",
+          background: "radial-gradient(ellipse 90% 60% at 50% 115%, rgba(90,85,211,0.42) 0%, rgba(47,41,115,0.28) 40%, rgba(17,17,19,0) 75%)",
         }}
       />
       {/* tagline from the reveal, leaving */}
@@ -206,25 +208,7 @@ export const UI: React.FC = () => {
           translate: `${(g.W / 2 - focusX) * push}px ${(g.H / 2 - focusY) * push}px`,
         }}
       >
-        {/* nav pill */}
-        <div
-          style={{
-            position: "absolute",
-            left: g.nav.cx - (g.nav.w / 2) * pillGrow - 0,
-            top: g.nav.cy - g.nav.h / 2,
-            width: g.nav.w * pillGrow,
-            height: g.nav.h,
-            borderRadius: 999,
-            background: "#000",
-            border: "1.5px solid rgba(255,255,255,0.08)",
-            overflow: "hidden",
-            opacity: pillGrow > 0.02 ? 1 : 0,
-          }}
-        >
-          <div style={{ position: "absolute", right: 34, top: (g.nav.h - g.nav.font * 0.6) / 2, opacity: pillGrow }}>
-            <MenuIcon size={g.nav.font * 0.6} />
-          </div>
-        </div>
+        {/* site header: big white logo top-left (docked), nav box top-right */}
         <div
           style={{
             ...wordmark,
@@ -233,53 +217,49 @@ export const UI: React.FC = () => {
             top: wmY,
             translate: `${lerp(-50, 0, d)}% -50%`,
             fontSize: wmSize,
-            color: lerpColor(d),
+            color: C.white,
             whiteSpace: "nowrap",
           }}
         >
           OUTTAKES
         </div>
-
-        {/* side pills (landscape), as in the Figma header */}
-        {!g.portrait ? (
-          <>
-            <div style={{ position: "absolute", left: 120 - sideIn * 500, top: g.nav.cy - 34 }}>
-              <CtaPill label="Find a photographer" size={22} />
+        <div
+          style={{
+            position: "absolute",
+            right: (g.portrait ? 80 : 120) - sideIn * 600,
+            top: g.nav.cy - g.nav.boxH / 2,
+            width: g.nav.boxW,
+            height: g.nav.boxH,
+            borderRadius: 10,
+            background: C.surface,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "0 8px 0 8px",
+            boxSizing: "border-box",
+            opacity: pillGrow > 0.02 ? 1 : 0,
+          }}
+        >
+          {!g.portrait ? (
+            <div style={{ ...ui, background: C.white, color: C.ink, fontSize: 24, height: g.nav.boxH - 16, display: "flex", alignItems: "center", padding: "0 34px", borderRadius: 6 }}>
+              Sign In
             </div>
-            <div
-              style={{
-                position: "absolute",
-                right: 120 - sideIn * 500,
-                top: g.nav.cy - 34,
-                height: 68,
-                padding: "0 44px",
-                borderRadius: 999,
-                background: C.surface,
-                display: "flex",
-                alignItems: "center",
-                gap: 16,
-                ...ui,
-                fontSize: 22,
-                color: C.text,
-                textTransform: "uppercase",
-              }}
-            >
-              <SearchIcon size={26} />
-              Search
-            </div>
-          </>
-        ) : null}
+          ) : null}
+          <div style={{ ...ui, color: C.white, fontSize: g.portrait ? 30 : 24, display: "flex", alignItems: "center", gap: 18, padding: "0 18px", marginLeft: "auto" }}>
+            Menu <MenuIcon size={g.portrait ? 34 : 28} />
+          </div>
+        </div>
 
         {/* hero headline (Figma photographer CTA copy) */}
         {f < u.enter + 12 ? (
           <div style={{ position: "absolute", left: 0, right: 0, top: g.head.top, display: "flex", justifyContent: "center" }}>
             <Words
-              text={g.portrait ? "GET FOUND BY THOSE WHO ACTUALLY NEED YOU." : "GET FOUND BY THOSE / WHO ACTUALLY NEED YOU."}
+              text={g.portrait ? "EVERY SIDELINE SHOT STARTS WITH A SEARCH." : "EVERY SIDELINE SHOT / STARTS WITH A SEARCH."}
               onsets={u.words}
               exitAt={u.enter - 2}
               size={g.head.size}
               color={C.white}
-              colors={{ 7: C.lime }}
+              colors={{ 6: C.green }}
               maxWidth={g.head.maxW}
               lineHeight={1.02}
             />
@@ -295,9 +275,9 @@ export const UI: React.FC = () => {
               top: searchY,
               width: g.search.w,
               height: g.search.h,
-              borderRadius: 999,
-              background: "#161618",
-              border: `2px solid ${f >= u.enter && f < u.enter + 6 ? C.lime : "rgba(255,255,255,0.14)"}`,
+              borderRadius: 12,
+              background: C.surface,
+              border: `2px solid ${f >= u.enter && f < u.enter + 6 ? C.green : "rgba(255,255,255,0.14)"}`,
               display: "flex",
               alignItems: "center",
               gap: 26,
@@ -311,7 +291,7 @@ export const UI: React.FC = () => {
             <SearchIcon size={g.search.font * 0.95} />
             <span style={{ ...ui, fontSize: g.search.font, color: typed ? C.white : C.muted, whiteSpace: "nowrap" }}>
               {typed ? QUERY.slice(0, typed) : "Search photographers"}
-              <span style={{ opacity: caretOn && typed ? 1 : 0, color: C.lime }}>|</span>
+              <span style={{ opacity: caretOn && typed ? 1 : 0, color: C.green }}>|</span>
             </span>
           </div>
         ) : null}
@@ -330,7 +310,7 @@ export const UI: React.FC = () => {
                 gap: 18,
               }}
             >
-              {(g.portrait ? ["Football", "Basketball", "Rugby"] : ["Football", "Basketball", "Rugby", "Track"]).map((lab, i) => (
+              {(g.portrait ? ["Popular", "Under $60", "$60 to $70"] : ["Popular", "Under $60", "$60 to $70", "Highlight", "Matches", "Track"]).map((lab, i) => (
                 <div
                   key={lab}
                   style={{
@@ -338,7 +318,7 @@ export const UI: React.FC = () => {
                     opacity: ramp(f, u.enter + 6 + i * 2, u.enter + 9 + i * 2),
                   }}
                 >
-                  <Chip label={lab} size={g.portrait ? 26 : 22} active={i === 0} />
+                  <Chip label={lab} size={g.portrait ? 30 : 24} active={i === 0} />
                 </div>
               ))}
             </div>
@@ -365,9 +345,9 @@ export const UI: React.FC = () => {
                       position: "relative",
                       width: r.w,
                       height: r.h,
-                      borderRadius: 24,
+                      borderRadius: 4,
                       overflow: "hidden",
-                      outline: isYou && pressed ? `5px solid ${C.lime}` : "none",
+                      outline: isYou && pressed ? `5px solid ${C.green}` : "none",
                       outlineOffset: 4,
                     }}
                   >
@@ -380,19 +360,23 @@ export const UI: React.FC = () => {
                           top: 20,
                           ...ui,
                           fontSize: g.portrait ? 26 : 22,
-                          fontWeight: 600,
-                          textTransform: "uppercase",
-                          background: C.lime,
-                          color: "#0d0d0f",
+                          fontWeight: 500,
+                          background: C.green,
+                          color: C.ink,
                           padding: "10px 20px",
-                          borderRadius: 999,
+                          borderRadius: 6,
                         }}
                       >
                         Your profile
                       </div>
                     ) : null}
                   </div>
-                  <div style={{ ...ui, fontSize: g.cardLabel, color: isYou ? C.lime : C.text, marginTop: 18 }}>{card.label}</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 16 }}>
+                    {isYou ? <span style={{ ...ui, fontSize: g.cardLabel, color: C.green, marginRight: 8 }}>You</span> : null}
+                    {card.tags.map((t) => (
+                      <Tag key={t} sport={t} size={g.portrait ? 22 : 22} />
+                    ))}
+                  </div>
                 </div>
               );
             })}
@@ -403,14 +387,6 @@ export const UI: React.FC = () => {
       </AbsoluteFill>
     </AbsoluteFill>
   );
-};
-
-const lerpColor = (t: number) => {
-  // lime -> white as the wordmark becomes the nav logo
-  const a = [216, 238, 72];
-  const b = [255, 255, 255];
-  const c = a.map((v, i) => Math.round(lerp(v, b[i], t)));
-  return `rgb(${c[0]},${c[1]},${c[2]})`;
 };
 
 // ---------------------------------------------------------------- PROFILE
@@ -452,7 +428,7 @@ const Profile: React.FC = () => {
     <AbsoluteFill style={{ background: C.bg }}>
       <AbsoluteFill
         style={{
-          background: "radial-gradient(ellipse 70% 60% at 15% 10%, rgba(25,66,42,0.6) 0%, rgba(13,13,15,0) 70%)",
+          background: "radial-gradient(ellipse 80% 60% at 10% 110%, rgba(90,85,211,0.4) 0%, rgba(47,41,115,0.25) 40%, rgba(17,17,19,0) 75%)",
         }}
       />
       <AbsoluteFill style={{ scale: String(enter), transformOrigin: "50% 45%" }}>
@@ -465,7 +441,7 @@ const Profile: React.FC = () => {
             height: geo.avatar.s,
             borderRadius: 999,
             overflow: "hidden",
-            outline: `4px solid ${C.lime}`,
+            outline: `4px solid ${C.green}`,
             outlineOffset: 5,
           }}
         >
@@ -489,7 +465,7 @@ const Profile: React.FC = () => {
           Sports photographer · Singapore
         </div>
         <div style={{ position: "absolute", left: geo.chips.x, top: geo.chips.y, display: "flex", gap: 14 }}>
-          {["Football", "Matchday", "Portraits"].map((c, i) => (
+          {(["football", "track", "rugby"] as const).map((c, i) => (
             <div
               key={c}
               style={{
@@ -497,7 +473,7 @@ const Profile: React.FC = () => {
                 opacity: ramp(f, u.profile + 8 + i * 2, u.profile + 11 + i * 2),
               }}
             >
-              <Chip label={c} size={geo.chips.size} active={i === 0} icon={i === 0} />
+              <Tag sport={c} size={geo.chips.size * 1.15} />
             </div>
           ))}
         </div>
@@ -515,9 +491,9 @@ const Profile: React.FC = () => {
                 top: geo.grid.y + row * (geo.grid.cellH + 24),
                 width: cellW,
                 height: geo.grid.cellH,
-                borderRadius: 20,
+                borderRadius: 4,
                 overflow: "hidden",
-                clipPath: `inset(${reveal}% 0 0 0 round 20px)`,
+                clipPath: `inset(${reveal}% 0 0 0)`,
               }}
             >
               <Photo name={p} scale={ramp(f, a, a + 40, [1.15, 1.03])} />

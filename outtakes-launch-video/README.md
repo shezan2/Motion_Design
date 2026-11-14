@@ -20,7 +20,7 @@ Two compositions share one timeline:
 | 1 | 0–165 | **Hook — burst** | 17 shutter clicks speeding up, then the shot lands. "YOU GOT THE SHOT." | the hero photo stays on screen |
 | 2 | 165–352 | **Turn — the chase** | That photo shrinks into a sent image in a DM, then invoice follow-ups pile up: "just following up :)", "hello?", "hellooo??", then "Seen". "CHASING PAYMENTS." flips to "BOOKINGS." | riser, then silence and the shutter closes |
 | 3 | 352–465 | **Reveal** | OUTTAKES crashes in on the hit. "MADE BY PHOTOGRAPHERS, FOR PHOTOGRAPHERS." | the wordmark docks into the site's nav pill |
-| 4 | 465–742 | **Proof — get found** | Site hero: "GET FOUND BY THOSE WHO ACTUALLY NEED YOU." A client types "football photographer", your card appears in the results, gets clicked and opens your profile (portfolio, styles), then CONTACT is pressed | the camera pushes into your card |
+| 4 | 465–742 | **Proof — get found** | Site hero: "EVERY SIDELINE SHOT STARTS WITH A SEARCH." A client types "football photographer", your card appears in the results, gets clicked and opens your profile (portfolio, styles), then CONTACT is pressed | the camera pushes into your card |
 | 5 | 742–810 | **Payoff — the call** | "NEW CLIENT — found you on OUTTAKES", phone buzzing | shutter |
 | 6 | 810–930 | **Community** | "CAMARADERIE / OVER / RIVALRY.", one word per cut, then Shot of the Week with this week's nominees | shutter |
 | 7 | 930–1170 | **CTA** | "SIGN UP FREE." → "SET UP YOUR PROFILE FROM 16 NOV." → **20.11** crashes in → "WE GO LIVE · 5PM SGT" → a cursor presses "SIGN UP FREE · OUTTAKES.SG" → wordmark + url, and the shutter closes | end |
@@ -29,7 +29,16 @@ Two compositions share one timeline:
 
 - **Real:**
   - All 16 photos (supplied by Outtakes).
-  - Colours, fonts and wordmark style from the Figma design system: lime `#D8EE48`, olive, forest, `#0D0D0F`, Archivo extended and condensed italic, Geist.
+  - **Branding: the new site, "Outtakes Dark", Nov 2026:**
+  - background `#111113`
+  - one green accent `#74F260`
+  - cream `#F0EBE4`
+  - the night → violet `#2F2973`/`#5A55D3` → sky `#9BC3F4` → cream gradient
+  - sport tag colours
+  - white condensed-italic wordmark
+  - Archivo extended headlines, Archivo body
+  - italic section labels
+  - the site's header and nav, buttons, filter chips, square photo cards and the Shot of the Week nominees strip
   - Copy from the Figma file: "Get found by those who actually need you", "Camaraderie over rivalry", "Shot of the week", "Nominees this week", "Find a photographer".
   - The booking flow ("Call the photographer and agree on the shoot").
   - "Made by photographers for photographers", "Sign up free", the dates and the URL, from the brief.

@@ -127,7 +127,7 @@ export const Words: React.FC<{
 
 export const Wordmark: React.FC<{ size: number; color?: string; style?: CSSProperties }> = ({
   size,
-  color = C.lime,
+  color = C.white,
   style,
 }) => <span style={{ ...wordmark, fontSize: size, color, whiteSpace: "nowrap", ...style }}>OUTTAKES</span>;
 
@@ -238,70 +238,89 @@ export const PhoneIcon: React.FC<{ size: number; color?: string; rotate?: number
   </svg>
 );
 
-// Lime CTA pill + arrow circle, as in the Figma "cta button component".
-export const CtaPill: React.FC<{ label: string; size: number; press?: number; style?: CSSProperties }> = ({
+// Green CTA button + separate arrow block, as on the new site ("Find a Photographer ->").
+export const CtaPill: React.FC<{ label: string; size: number; press?: number; style?: CSSProperties; light?: boolean }> = ({
   label,
   size,
   press = 0,
   style,
-}) => (
-  <div style={{ display: "flex", alignItems: "center", gap: size * 0.18, scale: String(1 - press * 0.06), ...style }}>
-    <div
-      style={{
-        ...ui,
-        background: C.lime,
-        color: "#0d0d0f",
-        fontSize: size,
-        fontWeight: 600,
-        letterSpacing: "-0.01em",
-        textTransform: "uppercase",
-        padding: `${size * 0.62}px ${size * 1.2}px`,
-        borderRadius: 999,
-        whiteSpace: "nowrap",
-      }}
-    >
-      {label}
+  light = false,
+}) => {
+  const bg = light ? C.white : C.green;
+  const h = size * 2.3;
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: Math.max(2, size * 0.08), scale: String(1 - press * 0.06), ...style }}>
+      <div
+        style={{
+          ...ui,
+          background: bg,
+          color: C.ink,
+          fontSize: size,
+          fontWeight: 500,
+          height: h,
+          display: "flex",
+          alignItems: "center",
+          padding: `0 ${size * 2.2}px`,
+          borderRadius: size * 0.35,
+          whiteSpace: "nowrap",
+        }}
+      >
+        {label}
+      </div>
+      <div
+        style={{
+          width: h,
+          height: h,
+          borderRadius: size * 0.35,
+          background: bg,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <ArrowIcon size={size * 1.15} color={C.ink} />
+      </div>
     </div>
-    <div
-      style={{
-        width: size * 2.24,
-        height: size * 2.24,
-        borderRadius: 999,
-        background: C.lime,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <ArrowIcon size={size * 1.2} />
-    </div>
-  </div>
-);
+  );
+};
 
+// Filter chip ("Popular", "Under $60"...): outlined, active one filled white.
 export const Chip: React.FC<{ label: string; size: number; active?: boolean; icon?: boolean }> = ({
   label,
   size,
   active = false,
-  icon = true,
 }) => (
   <div
     style={{
       ...ui,
-      display: "flex",
-      alignItems: "center",
-      gap: size * 0.5,
-      background: active ? C.white : C.surface,
-      color: active ? "#0d0d0f" : C.text,
+      background: active ? C.white : "transparent",
+      border: `${Math.max(1.5, size * 0.07)}px solid ${active ? C.white : "rgba(255,255,255,0.75)"}`,
+      color: active ? C.ink : C.white,
       fontSize: size,
-      textTransform: "uppercase",
-      letterSpacing: "-0.01em",
-      padding: `${size * 0.62}px ${size * 1.3}px`,
-      borderRadius: 999,
+      padding: `${size * 0.45}px ${size * 0.95}px`,
+      borderRadius: size * 0.35,
       whiteSpace: "nowrap",
     }}
   >
-    {icon ? <BallIcon size={size * 1.25} color={active ? "#0d0d0f" : C.text} /> : null}
     {label}
+  </div>
+);
+
+// Sport tag (coloured pill under a photographer card).
+export const Tag: React.FC<{ sport: keyof typeof C.tag; size: number }> = ({ sport, size }) => (
+  <div
+    style={{
+      ...ui,
+      background: C.tag[sport],
+      color: C.ink,
+      fontSize: size,
+      padding: `${size * 0.18}px ${size * 0.8}px`,
+      borderRadius: 999,
+      whiteSpace: "nowrap",
+      textTransform: "capitalize",
+    }}
+  >
+    {sport}
   </div>
 );
 

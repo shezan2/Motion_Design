@@ -1,23 +1,29 @@
 import { CSSProperties } from "react";
 import { continueRender, delayRender, staticFile } from "remotion";
 
-// Tokens pulled from the Outtakes Figma design system (node 1283:73).
+// Tokens sampled from the new Outtakes website/branding ("Outtakes Dark", Nov 2026).
 export const C = {
-  bg: "#0d0d0f",
-  surface: "#222222",
+  bg: "#111113",
+  surface: "#23202a", // nav / panels
   black: "#000000",
   white: "#ffffff",
-  text: "rgba(255,255,255,0.9)",
+  ink: "#111113", // text on cream
+  cream: "#f0ebe4",
+  text: "rgba(255,255,255,0.92)",
   muted: "rgba(255,255,255,0.62)",
-  lime: "#d8ee48",
-  limeLight: "#ecffb7",
-  olive: "#577127",
-  oliveInk: "#405904",
-  forest: "#19422a",
+  green: "#74f260", // the one accent: buttons, "on", "you"
+  violetDeep: "#2f2973",
+  violet: "#5a55d3",
+  sky: "#9bc3f4",
+  tag: { track: "#ff9cb8", football: "#b9f5a3", rugby: "#ffda74", swimming: "#b5f2ff" },
 };
 
+// The site's signature gradient (footer / "Every sideline" section): night -> violet -> sky -> cream.
+export const brandGradient = (dir = "180deg") =>
+  `linear-gradient(${dir}, ${C.bg} 0%, #1c1a3a 22%, ${C.violetDeep} 38%, ${C.violet} 55%, #7f95f8 68%, ${C.sky} 80%, #cfe3ea 90%, ${C.cream} 100%)`;
+
 // Fonts: Archivo (variable width + weight) for headlines and the wordmark,
-// Geist for UI text, matching the Figma file. Loaded from /public so renders
+// Archivo also sets body/UI text on the new site (Geist kept as a fallback). Loaded from /public so renders
 // never depend on a font CDN.
 const fontHandle = delayRender("Loading brand fonts");
 const faces = [
@@ -64,8 +70,20 @@ export const wordmark: CSSProperties = {
   lineHeight: 1,
 };
 
+// Body/UI text: the new site sets body copy in Archivo at normal width.
 export const ui: CSSProperties = {
-  fontFamily: "Geist, sans-serif",
-  fontWeight: 500,
+  fontFamily: "Archivo, sans-serif",
+  fontWeight: 450,
+  fontStretch: "100%",
+  letterSpacing: "-0.015em",
+};
+
+// Section labels on the site: italic, uppercase, regular weight ("DISCOVER YOUR FRAME").
+export const label: CSSProperties = {
+  fontFamily: "Archivo, sans-serif",
+  fontStyle: "italic",
+  fontWeight: 400,
+  fontStretch: "100%",
+  textTransform: "uppercase",
   letterSpacing: "-0.02em",
 };

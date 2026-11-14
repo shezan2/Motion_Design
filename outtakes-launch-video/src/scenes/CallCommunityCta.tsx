@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
-import { C, display, ui, wordmark } from "../brand";
+import { brandGradient, C, display, label, ui, wordmark } from "../brand";
 import { EASE, hash, lerp, ramp, useF, useLayout } from "../anim";
 import { CtaPill, Cursor, PhoneIcon, Photo, Words, Wordmark } from "../components";
 import T from "../timeline.json";
@@ -62,14 +62,14 @@ export const Call: React.FC = () => {
                       position: "absolute",
                       inset: 0,
                       borderRadius: 999,
-                      border: `3px solid ${C.lime}`,
+                      border: `3px solid ${C.green}`,
                       scale: String(1 + t * 0.9),
                       opacity: (1 - t) * 0.6 * pIn,
                     }}
                   />
                 );
               })}
-              <div style={{ position: "absolute", inset: 0, borderRadius: 999, background: C.lime, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ position: "absolute", inset: 0, borderRadius: 999, background: C.green, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <PhoneIcon size={btn * 0.46} color="#0d0d0f" />
               </div>
             </div>
@@ -111,7 +111,7 @@ export const Community: React.FC = () => {
             text={word.word as string}
             onsets={[word.from + 2]}
             size={word.word === "CAMARADERIE" && portrait ? Math.min(size, (W - 200) / 8.6) : size}
-            color={word.word === "RIVALRY." ? C.lime : C.white}
+            color={word.word === "RIVALRY." ? C.green : C.white}
           />
         </AbsoluteFill>
       ) : null}
@@ -119,87 +119,63 @@ export const Community: React.FC = () => {
   );
 };
 
-// Buys: "your best frame gets the spotlight" (Figma: Shot of the week + nominees).
+// Buys: "your best frame gets the spotlight" — styled like the new site hero:
+// full-bleed shot + "SHOT OF THE WEEK", then the cream nominees strip rises.
+const NOMINEES = [
+  { photo: "point-orange", title: "MATCH POINT" },
+  { photo: "kids-duel", title: "FINALS" },
+  { photo: "stretch-ball", title: "TOUCH" },
+];
+
 const ShotOfTheWeek: React.FC = () => {
   const f = useF();
-  const { portrait } = useLayout();
+  const { H, portrait } = useLayout();
   const s = T.community.sotw;
-  const pIn = ramp(f, s, s + 14, [0, 1], EASE.land);
-  const photo = portrait ? { w: 720, h: 900 } : { w: 600, h: 750 };
-  const thumbs = ["point-orange", "kids-duel", "stretch-ball"];
+  const strip = ramp(f, s + 24, s + 38, [1, 0], EASE.land);
+  const stripH = portrait ? H * 0.42 : H * 0.46;
+  const pad = portrait ? 70 : 120;
+  const thumbW = portrait ? 290 : 400;
+  const thumbH = portrait ? 330 : 250;
 
   return (
     <AbsoluteFill style={{ background: C.bg }}>
-      <AbsoluteFill
-        style={{
-          background: "radial-gradient(ellipse 70% 60% at 35% 50%, rgba(87,113,39,0.45) 0%, rgba(25,66,42,0.25) 40%, rgba(13,13,15,0) 75%)",
-        }}
+      <Photo
+        name="portrait-flare"
+        pos="50% 28%"
+        scale={ramp(f, s, s + 14, [1.18, 1.04], EASE.land) * ramp(f, s + 14, s + 60, [1, 0.98], EASE.linear)}
       />
-      <AbsoluteFill
+      <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.55) 100%)" }} />
+      <div style={{ position: "absolute", left: pad, bottom: portrait ? stripH + 70 : stripH + 50, translate: `0px ${(1 - strip) * 0}px` }}>
+        <Words text="SHOT OF THE WEEK" onsets={[s + 4, s + 8, s + 11, s + 15]} size={portrait ? 84 : 92} color={C.white} align="left" maxWidth={portrait ? 940 : 1400} />
+      </div>
+      <div
         style={{
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: portrait ? "column" : "row",
-          gap: portrait ? 70 : 100,
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: stripH,
+          background: C.cream,
+          translate: `0px ${strip * stripH}px`,
+          padding: `${portrait ? 50 : 44}px ${pad}px`,
+          boxSizing: "border-box",
         }}
       >
-        <div
-          style={{
-            position: "relative",
-            width: photo.w,
-            height: photo.h,
-            borderRadius: 28,
-            overflow: "hidden",
-            scale: String(lerp(1.25, 1, pIn)),
-            rotate: `${lerp(-4, 0, pIn)}deg`,
-            boxShadow: "0 40px 120px rgba(0,0,0,0.55)",
-          }}
-        >
-          <Photo name="portrait-flare" scale={ramp(f, s, s + 60, [1.08, 1.0], EASE.linear)} />
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: portrait ? "center" : "flex-start", gap: 34 }}>
-          <Words
-            text="SHOT OF THE WEEK"
-            onsets={[s + 4, s + 8, s + 11, s + 15]}
-            size={portrait ? 96 : 96}
-            color={C.white}
-            colors={{ 3: C.lime }}
-            maxWidth={portrait ? 900 : 640}
-            align={portrait ? "center" : "left"}
-          />
-          <div style={{ display: "flex", flexDirection: "column", gap: 18, alignItems: portrait ? "center" : "flex-start" }}>
-            <div
-              style={{
-                ...ui,
-                fontSize: portrait ? 32 : 28,
-                color: C.muted,
-                textTransform: "uppercase",
-                opacity: ramp(f, s + 18, s + 21),
-              }}
-            >
-              Nominees this week
-            </div>
-            <div style={{ display: "flex", gap: 18 }}>
-              {thumbs.map((t, i) => (
-                <div
-                  key={t}
-                  style={{
-                    width: portrait ? 170 : 150,
-                    height: portrait ? 212 : 188,
-                    borderRadius: 16,
-                    overflow: "hidden",
-                    position: "relative",
-                    translate: `0px ${ramp(f, s + 20 + i * 3, s + 32 + i * 3, [80, 0])}px`,
-                    opacity: f >= s + 20 + i * 3 ? 1 : 0,
-                  }}
-                >
-                  <Photo name={t} />
+        <div style={{ ...label, fontSize: portrait ? 40 : 38, color: C.ink }}>Shot of the week nominees</div>
+        <div style={{ display: "flex", gap: portrait ? 25 : 32, marginTop: portrait ? 34 : 28 }}>
+          {NOMINEES.map((n, i) => {
+            const a = s + 30 + i * 3;
+            return (
+              <div key={n.photo} style={{ translate: `0px ${ramp(f, a, a + 12, [90, 0])}px`, opacity: f >= a ? 1 : 0 }}>
+                <div style={{ position: "relative", width: thumbW, height: thumbH, overflow: "hidden" }}>
+                  <Photo name={n.photo} />
                 </div>
-              ))}
-            </div>
-          </div>
+                <div style={{ ...display, fontSize: portrait ? 26 : 34, color: C.ink, marginTop: 14, whiteSpace: "nowrap" }}>{n.title}</div>
+              </div>
+            );
+          })}
         </div>
-      </AbsoluteFill>
+      </div>
     </AbsoluteFill>
   );
 };
@@ -218,7 +194,7 @@ export const Cta: React.FC = () => {
       <AbsoluteFill style={{ background: C.bg }} />
       <AbsoluteFill
         style={{
-          background: `radial-gradient(ellipse 90% 55% at 50% 105%, rgba(216,238,72,${0.16 + breathe * 0.05}) 0%, rgba(87,113,39,0.28) 35%, rgba(13,13,15,0) 72%)`,
+          background: `radial-gradient(ellipse 110% ${48 + breathe * 4}% at 50% 108%, rgba(155,195,244,0.55) 0%, rgba(90,85,211,0.55) 30%, rgba(47,41,115,0.4) 55%, rgba(17,17,19,0) 80%)`,
         }}
       />
     </>
@@ -252,7 +228,7 @@ export const Cta: React.FC = () => {
             exitAt={c.profiles - 8}
             size={portrait ? 150 : 200}
             color={C.white}
-            colors={{ 2: C.lime }}
+            colors={{ 2: C.green }}
             maxWidth={portrait ? 920 : 1800}
           />
         </AbsoluteFill>
@@ -265,7 +241,7 @@ export const Cta: React.FC = () => {
             exitAt={c.riser[0]}
             size={portrait ? 96 : 104}
             color={C.white}
-            colors={{ 5: C.lime, 6: C.lime }}
+            colors={{ 5: C.green, 6: C.green }}
             maxWidth={portrait ? 900 : 1500}
             lineHeight={1.02}
           />
@@ -283,7 +259,7 @@ export const Cta: React.FC = () => {
           <div
             style={{
               ...dateStyle(W, H, dateSize, dateSc * lerp(1, portrait ? 0.62 : 0.5, up), 1, lerp(0, portrait ? -H * 0.17 : -H * 0.2, up)),
-              textShadow: `0 0 ${50 + decay * 80}px rgba(216,238,72,${0.2 + decay * 0.4})`,
+              textShadow: `0 0 ${50 + decay * 80}px rgba(116,242,96,${0.18 + decay * 0.4})`,
             }}
           >
             {copy.liveDate}
@@ -303,7 +279,7 @@ export const Cta: React.FC = () => {
               onsets={[c.crash + 8, c.crash + 12, c.crash + 16, c.crash + 20, c.crash + 24]}
               size={portrait ? 60 : 64}
               color={C.white}
-              colors={{ 3: C.lime, 4: C.lime }}
+              colors={{ 3: C.green, 4: C.green }}
               maxWidth={portrait ? 900 : 1600}
             />
           </div>
@@ -338,7 +314,7 @@ const dateStyle = (W: number, H: number, size: number, scale: number, opacity: n
   translate: "-50% -60%",
   fontSize: size,
   fontWeight: 900,
-  color: C.lime,
+  color: C.green,
   scale: String(scale),
   opacity,
   whiteSpace: "nowrap",
@@ -353,13 +329,9 @@ const Final: React.FC = () => {
   const close = ramp(f, c.to - 6, c.to - 1, [0, 100], EASE.inOut);
   return (
     <AbsoluteFill style={{ background: C.bg }}>
-      <AbsoluteFill
-        style={{
-          background: "radial-gradient(ellipse 60% 45% at 50% 50%, rgba(25,66,42,0.55) 0%, rgba(13,13,15,0) 70%)",
-        }}
-      />
+      <AbsoluteFill style={{ background: brandGradient(), translate: `0px ${ramp(f, c.final, c.to, [-8, -16], EASE.linear)}%`, height: "125%" }} />
       <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", flexDirection: "column", gap: portrait ? 34 : 30, scale: String(sc) }}>
-        <span style={{ ...wordmark, fontSize: portrait ? 230 : 250, color: C.lime }}>OUTTAKES</span>
+        <span style={{ ...wordmark, fontSize: portrait ? 230 : 250, color: C.white }}>OUTTAKES</span>
         <span style={{ ...ui, fontSize: portrait ? 44 : 40, color: C.white, letterSpacing: "0.01em" }}>
           {T.copy.url.toLowerCase()} · {T.copy.liveDate} · {T.copy.liveTime}
         </span>
