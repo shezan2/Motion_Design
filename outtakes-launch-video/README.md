@@ -22,7 +22,7 @@ Two compositions share one timeline:
 | 3 | 352–465 | **Reveal** | OUTTAKES crashes in on the hit. "MADE BY PHOTOGRAPHERS, FOR PHOTOGRAPHERS." | the wordmark docks into the site's nav pill |
 | 4 | 465–742 | **Proof — get found** | Site hero: "EVERY SIDELINE SHOT STARTS WITH A SEARCH." A client types "football photographer", your card appears in the results, gets clicked and opens your profile (portfolio, styles), then CONTACT is pressed | the camera pushes into your card |
 | 5 | 742–810 | **Payoff — the call** | "NEW CLIENT — found you on OUTTAKES", phone buzzing | shutter |
-| 6 | 810–930 | **Community** | "CAMARADERIE / OVER / RIVALRY.", one word per cut, then Shot of the Week with this week's nominees | shutter |
+| 6 | 810–930 | **The tables turn** | The DM thread returns, flipped: clients message *you* ("are you free saturday?", "how much for the final?", "can you shoot our team?"), then "NOW THEY CHASE YOU." Then Shot of the Week with the nominees strip. | shutter |
 | 7 | 930–1170 | **CTA** | "SIGN UP FREE." → "SET UP YOUR PROFILE FROM 16 NOV." → **20.11** crashes in → "WE GO LIVE · 5PM SGT" → a cursor presses "SIGN UP FREE · OUTTAKES.SG" → wordmark + url, and the shutter closes | end |
 
 ## What is real vs illustrative
@@ -39,7 +39,7 @@ Two compositions share one timeline:
   - Archivo extended headlines, Archivo body
   - italic section labels
   - the site's header and nav, buttons, filter chips, square photo cards and the Shot of the Week nominees strip
-  - Copy from the Figma file: "Get found by those who actually need you", "Camaraderie over rivalry", "Shot of the week", "Nominees this week", "Find a photographer".
+  - Copy from the Figma file: "Get found by those who actually need you", "Shot of the week", "Nominees this week", "Find a photographer".
   - The booking flow ("Call the photographer and agree on the shoot").
   - "Made by photographers for photographers", "Sign up free", the dates and the URL, from the brief.
 - **Illustrative:**

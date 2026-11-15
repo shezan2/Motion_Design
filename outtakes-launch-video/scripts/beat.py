@@ -276,6 +276,10 @@ while f < k_["to"]:
 # 6 community + 7 CTA
 place(boom(1.2), t_of(m["from"]), 0.6)
 groove(m["from"], cta["riser"][0], "full")
+for f in m.get("incoming", []):
+    place(blip(), t_of(f), 0.9, -0.15)  # clients messaging you
+for f in m.get("words", [])[:1]:
+    place(shutter(0.7), t_of(f), 0.6)
 for f in m["cuts"] + [m["sotw"], cta["from"]]:
     place(shutter(1.0), t_of(f), 0.85, (rng.random() - 0.5) * 0.3)
 # snare roll + riser into silence, then the date hit

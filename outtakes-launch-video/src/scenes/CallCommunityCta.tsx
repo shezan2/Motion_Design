@@ -82,36 +82,70 @@ export const Call: React.FC = () => {
 
 // ---------------------------------------------------------------- COMMUNITY
 // Buys: "you join a crew, not a marketplace" — Figma About copy, one word per cut.
-const COMMUNITY = [
-  { photo: "team-talk", word: "CAMARADERIE", from: 810, to: 840 },
-  { photo: "team-backs", word: null, from: 825, to: 840 },
-  { photo: "heart-hands", word: "OVER", from: 840, to: 855 },
-  { photo: "number-10", word: "RIVALRY.", from: 855, to: 870 },
-];
+// Buys: "the tables turn" — the DM thread from the opening comes back flipped:
+// now clients message the photographer. Pays off the chase beat.
+const INCOMING = ["are you free saturday?", "how much for the final?", "can you shoot our team?"];
 
 export const Community: React.FC = () => {
   const f = useF();
-  const { W, portrait } = useLayout();
+  const { W, H, portrait } = useLayout();
   const m = T.community;
   if (f >= m.sotw) return <ShotOfTheWeek />;
 
-  let shot = COMMUNITY[0];
-  for (const c of COMMUNITY) if (f >= c.from) shot = c;
-  const word = COMMUNITY.filter((c) => c.word && f >= c.from && f < c.to).pop();
-  const size = portrait ? 104 : 176;
+  const cw = portrait ? 940 : 1160;
+  const x0 = (W - cw) / 2;
+  const font = portrait ? 56 : 58;
+  const bubbleH = font * 1.22 + 2 * 28;
+  const gap = 18;
+  const baseline = portrait ? H * 0.62 : H * 0.7;
+  const p = m.incoming.map((a) => ramp(f, a, a + 9, [0, 1], EASE.land));
+  const dim = ramp(f, m.words[0] - 4, m.words[0] + 6, [0, 1]);
 
   return (
-    <AbsoluteFill style={{ background: "#000" }}>
-      <Photo name={shot.photo} scale={ramp(f, shot.from, shot.from + 15, [1.1, 1.02], EASE.land)} />
-      <AbsoluteFill style={{ background: "rgba(0,0,0,0.38)" }} />
-      {word ? (
+    <AbsoluteFill style={{ background: C.bg }}>
+      <Photo name="team-talk" scale={ramp(f, m.from, m.sotw, [1.12, 1.02], EASE.linear)} style={{ filter: "blur(30px) brightness(0.32) saturate(1.2)" }} />
+      <AbsoluteFill style={{ opacity: 1 - dim * 0.72, scale: String(1 - dim * 0.06), filter: dim > 0 ? `blur(${dim * 6}px)` : undefined }}>
+        {INCOMING.map((msg, i) => {
+          if (f < m.incoming[i]) return null;
+          let off = 0;
+          for (let j = i + 1; j < INCOMING.length; j++) off += p[j] * (bubbleH + gap);
+          return (
+            <div
+              key={i}
+              style={{
+                position: "absolute",
+                left: x0,
+                top: baseline - off - bubbleH,
+                height: bubbleH,
+                translate: `0px ${(1 - p[i]) * 50}px`,
+                scale: String(0.9 + 0.1 * p[i]),
+                transformOrigin: "0% 100%",
+                ...ui,
+                fontSize: font,
+                lineHeight: 1.22,
+                color: C.white,
+                background: C.surface,
+                border: "1.5px solid rgba(255,255,255,0.1)",
+                padding: "28px 38px",
+                borderRadius: `${bubbleH / 2}px ${bubbleH / 2}px ${bubbleH / 2}px 10px`,
+                whiteSpace: "nowrap",
+                boxSizing: "border-box",
+              }}
+            >
+              {msg}
+            </div>
+          );
+        })}
+      </AbsoluteFill>
+      {f >= m.words[0] ? (
         <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
           <Words
-            key={word.word}
-            text={word.word as string}
-            onsets={[word.from + 2]}
-            size={word.word === "CAMARADERIE" && portrait ? Math.min(size, (W - 200) / 8.6) : size}
-            color={word.word === "RIVALRY." ? C.green : C.white}
+            text={portrait ? "NOW THEY / CHASE YOU." : "NOW THEY CHASE YOU."}
+            onsets={m.words}
+            size={portrait ? 116 : 104}
+            color={C.white}
+            colors={{ 2: C.green, 3: C.green }}
+            maxWidth={portrait ? 940 : 1800}
           />
         </AbsoluteFill>
       ) : null}
@@ -131,7 +165,7 @@ const ShotOfTheWeek: React.FC = () => {
   const f = useF();
   const { H, portrait } = useLayout();
   const s = T.community.sotw;
-  const strip = ramp(f, s + 24, s + 38, [1, 0], EASE.land);
+  const strip = ramp(f, s + 14, s + 26, [1, 0], EASE.land);
   const stripH = portrait ? H * 0.42 : H * 0.46;
   const pad = portrait ? 70 : 120;
   const thumbW = portrait ? 290 : 400;
@@ -146,7 +180,7 @@ const ShotOfTheWeek: React.FC = () => {
       />
       <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.55) 100%)" }} />
       <div style={{ position: "absolute", left: pad, bottom: portrait ? stripH + 70 : stripH + 50, translate: `0px ${(1 - strip) * 0}px` }}>
-        <Words text="SHOT OF THE WEEK" onsets={[s + 4, s + 8, s + 11, s + 15]} size={portrait ? 84 : 92} color={C.white} align="left" maxWidth={portrait ? 940 : 1400} />
+        <Words text="SHOT OF THE WEEK" onsets={[s + 2, s + 5, s + 8, s + 11]} size={portrait ? 84 : 92} color={C.white} align="left" maxWidth={portrait ? 940 : 1400} />
       </div>
       <div
         style={{
@@ -164,7 +198,7 @@ const ShotOfTheWeek: React.FC = () => {
         <div style={{ ...label, fontSize: portrait ? 40 : 38, color: C.ink }}>Shot of the week nominees</div>
         <div style={{ display: "flex", gap: portrait ? 25 : 32, marginTop: portrait ? 34 : 28 }}>
           {NOMINEES.map((n, i) => {
-            const a = s + 30 + i * 3;
+            const a = s + 20 + i * 3;
             return (
               <div key={n.photo} style={{ translate: `0px ${ramp(f, a, a + 12, [90, 0])}px`, opacity: f >= a ? 1 : 0 }}>
                 <div style={{ position: "relative", width: thumbW, height: thumbH, overflow: "hidden" }}>
