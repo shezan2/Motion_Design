@@ -1,17 +1,29 @@
 # Outtakes — launch film (Remotion)
 
-A 39-second launch film for outtakes.sg aimed at Outtakes' own photographers. It has one job: get them to sign up (free) and set up a profile before the platform goes live on **20 Nov, 5PM SGT**.
+A 47-second launch film for outtakes.sg aimed at Outtakes' own photographers. It has one job: get them to sign up (free) and set up a profile before the platform goes live on **20 Nov, 5PM SGT**.
 
 Two compositions share one timeline:
 
 | id | size | use |
 |---|---|---|
 | `Outtakes-16x9` | 1920×1080 | master: website, YouTube, X |
-| `Outtakes-9x16` | 1080×1920 | Reels, TikTok, Shorts |
+| `Outtakes-9x16` | 1080×1920 | **primary**: Reels, TikTok, Shorts (phone-native layout) |
 
 ## The idea
 
 **The shutter is the beat.** Every cut is a camera shutter firing, and the soundtrack is sound effects only (shutters, impacts, risers, UI blips) with no music. The film opens in burst mode on the collective's own photos, so the first thing a photographer sees is the work of people they know.
+
+## Portrait-first design
+
+The 9:16 cut is designed as a phone film, not a cropped 16:9:
+
+- Key text and UI stay out of the zones Reels/TikTok cover: the top bar (about 250 px), the caption and buttons area (about 420 px at the bottom) and the side buttons (about 140 px on the right).
+- The website section is the **mobile** site. Results are one column of big cards that scroll until your card is centred, and a fingertip taps it instead of a mouse cursor. The CONTACT button is tapped the same way.
+- The header stays fixed while the page scrolls underneath it.
+
+## Pacing
+
+The timeline was stretched 20 % (39 s → 46.8 s) for a calmer read. Voice lines moved with their cues, and the "Outtakes" hit is still locked to the logo crash.
 
 ## Beats
 

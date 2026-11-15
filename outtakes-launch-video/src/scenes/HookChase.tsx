@@ -61,13 +61,13 @@ export const Hook: React.FC = () => {
             style={{
               justifyContent: "flex-end",
               alignItems: "center",
-              paddingBottom: portrait ? 300 : 120,
+              paddingBottom: portrait ? 600 : 120,
             }}
           >
             <Words
               text="YOU GOT THE SHOT."
               onsets={h.words}
-              size={portrait ? 108 : 128}
+              size={portrait ? 124 : 128}
               color={C.white}
               colors={{ 3: C.green }}
               maxWidth={portrait ? 900 : 1700}
@@ -102,7 +102,7 @@ export const Chase: React.FC = () => {
   const gap = 18;
   const imgW = cw * (portrait ? 0.8 : 0.62);
   const imgH = imgW / 1.5;
-  const baseline = portrait ? H - 380 : H - 110;
+  const baseline = portrait ? H - 560 : H - 110;
   const seenH = 48;
 
   const p = c.bubbles.map((a) => ramp(f, a, a + 9, [0, 1], EASE.land));
@@ -118,7 +118,7 @@ export const Chase: React.FC = () => {
 
   // photo shrinks from full-bleed into the image bubble
   const s = ramp(f, c.shrink[0], c.shrink[1], [0, 1], EASE.inOut);
-  const target = { x: x0 + cw - imgW, y: imgBottom - imgH, w: imgW, h: imgH };
+  const target = { x: x0 + cw - imgW - (portrait ? 70 : 0), y: imgBottom - imgH, w: imgW, h: imgH };
   const rect = {
     x: lerp(0, target.x, s),
     y: lerp(0, target.y, s),
@@ -164,7 +164,7 @@ export const Chase: React.FC = () => {
               key={i}
               style={{
                 position: "absolute",
-                right: x0,
+                right: x0 + (portrait ? 70 : 0), // clear of the Reels/TikTok side buttons
                 top: bottom - bubbleH,
                 height: bubbleH,
                 translate: `0px ${(1 - p[i]) * 50}px`,
@@ -189,7 +189,7 @@ export const Chase: React.FC = () => {
           <div
             style={{
               position: "absolute",
-              right: x0 + 12,
+              right: x0 + 12 + (portrait ? 70 : 0),
               top: baseline - seenH + 12,
               ...ui,
               fontSize: portrait ? 30 : 30,

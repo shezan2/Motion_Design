@@ -2,7 +2,7 @@ import React from "react";
 import { AbsoluteFill } from "remotion";
 import { C, ui, wordmark } from "../brand";
 import { EASE, hash, lerp, ramp, useF, useLayout } from "../anim";
-import { Chip, CtaPill, Cursor, MenuIcon, Photo, SearchIcon, Tag, Words } from "../components";
+import { Chip, CtaPill, Cursor, MenuIcon, Photo, SearchIcon, Tag, Tap, Words } from "../components";
 import T from "../timeline.json";
 
 // Shared geometry so the wordmark in Reveal and the docking wordmark in UI line up.
@@ -97,22 +97,18 @@ const KEY_GAPS = [0, 2, 2, 1, 2, 3, 1, 2, 2, 4, 2, 1, 2, 2, 1, 3, 2, 1, 2, 2, 1]
 const useUiGeo = () => {
   const { W, H, portrait } = useLayout();
   if (portrait) {
-    const cardW = 440;
-    const cardH = 540;
+    // phone-native: the mobile site, one column of big cards that scrolls
+    const cardW = 920;
+    const cardH = 600;
     const x0 = 80;
-    const y0 = 490;
-    const cards = [0, 1, 2, 3].map((i) => ({
-      x: x0 + (i % 2) * (cardW + 40),
-      y: y0 + Math.floor(i / 2) * (cardH + 110),
-      w: cardW,
-      h: cardH,
-    }));
+    const y0 = 700;
+    const cards = [0, 1, 2, 3].map((i) => ({ x: x0, y: y0 + i * (cardH + 110), w: cardW, h: cardH }));
     return {
       W, H, portrait,
-      nav: { x: 80, cy: 140, font: 104, boxW: 210, boxH: 76 },
-      head: { top: 470, size: 92, maxW: 920 },
-      search: { cx: W / 2, y: 1020, w: 920, h: 120, font: 44, yUp: 236 },
-      chipsY: 384,
+      nav: { x: 80, cy: 300, font: 104, boxW: 210, boxH: 76 },
+      head: { top: 480, size: 100, maxW: 940 },
+      search: { cx: W / 2, y: 1060, w: 920, h: 130, font: 46, yUp: 430 },
+      chipsY: 600,
       cards,
       cardLabel: 34,
     };
@@ -162,9 +158,12 @@ export const UI: React.FC = () => {
   }
   const caretOn = Math.floor(f / 8) % 2 === 0 || (f >= u.typeStart && f < u.enter);
 
+  // portrait: the results page scrolls until your card is centred, then a finger taps it
+  const scroll = g.portrait ? ramp(f, u.enter + 22, u.cursorIn + 6, [0, -(you.y + you.h / 2 - g.H * 0.5)], EASE.inOut) : 0;
+
   // cursor: enters oversize, decelerates, parks on your card, presses
   const cx = you.x + you.w * 0.58;
-  const cy = you.y + you.h * 0.52;
+  const cy = you.y + you.h * 0.52 + scroll;
   const cIn = ramp(f, u.cursorIn, u.cardPress - 8, [0, 1], EASE.land);
   const curX = lerp(g.W * 0.92, cx, cIn);
   const curY = lerp(g.H * 1.1, cy, cIn);
@@ -176,7 +175,7 @@ export const UI: React.FC = () => {
   const drift = ramp(f, u.dock[1], u.push[0], [1, 1.035], EASE.linear);
   const camScale = lerp(1, 2.6, push) * drift;
   const focusX = you.x + you.w / 2;
-  const focusY = you.y + you.h / 2;
+  const focusY = you.y + you.h / 2 + scroll;
 
   if (f >= u.profile) return <Profile />;
 
@@ -209,9 +208,24 @@ export const UI: React.FC = () => {
         }}
       >
         {/* site header: big white logo top-left (docked), nav box top-right */}
+        {g.portrait ? (
+          <div
+            style={{
+              position: "absolute",
+              left: 0,
+              right: 0,
+              top: 0,
+              height: g.nav.cy + 150,
+              zIndex: 2,
+              background: `linear-gradient(180deg, ${C.bg} 82%, rgba(17,17,19,0) 100%)`,
+              opacity: ramp(f, u.enter + 18, u.enter + 24),
+            }}
+          />
+        ) : null}
         <div
           style={{
             ...wordmark,
+            zIndex: 3,
             position: "absolute",
             left: wmX,
             top: wmY,
@@ -231,6 +245,7 @@ export const UI: React.FC = () => {
             width: g.nav.boxW,
             height: g.nav.boxH,
             borderRadius: 10,
+            zIndex: 3,
             background: C.surface,
             display: "flex",
             alignItems: "center",
@@ -250,6 +265,7 @@ export const UI: React.FC = () => {
           </div>
         </div>
 
+        <div style={{ position: "absolute", inset: 0, translate: `0px ${scroll}px` }}>
         {/* hero headline (Figma photographer CTA copy) */}
         {f < u.enter + 12 ? (
           <div style={{ position: "absolute", left: 0, right: 0, top: g.head.top, display: "flex", justifyContent: "center" }}>
@@ -359,7 +375,7 @@ export const UI: React.FC = () => {
                           left: 20,
                           top: 20,
                           ...ui,
-                          fontSize: g.portrait ? 26 : 22,
+                          fontSize: g.portrait ? 32 : 22,
                           fontWeight: 500,
                           background: C.green,
                           color: C.ink,
@@ -374,7 +390,7 @@ export const UI: React.FC = () => {
                   <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 16 }}>
                     {isYou ? <span style={{ ...ui, fontSize: g.cardLabel, color: C.green, marginRight: 8 }}>You</span> : null}
                     {card.tags.map((t) => (
-                      <Tag key={t} sport={t} size={g.portrait ? 22 : 22} />
+                      <Tag key={t} sport={t} size={g.portrait ? 30 : 22} />
                     ))}
                   </div>
                 </div>
@@ -383,7 +399,9 @@ export const UI: React.FC = () => {
           </>
         ) : null}
 
-        {f >= u.cursorIn ? <Cursor x={curX} y={curY} scale={curScale} size={g.portrait ? 76 : 64} /> : null}
+        </div>
+        {f >= u.cursorIn && !g.portrait ? <Cursor x={curX} y={curY} scale={curScale} size={64} /> : null}
+        {g.portrait ? <Tap x={cx} y={cy} appear={u.cursorIn + 8} press={u.cardPress} /> : null}
       </AbsoluteFill>
     </AbsoluteFill>
   );
@@ -401,12 +419,13 @@ const Profile: React.FC = () => {
 
   const geo = portrait
     ? {
-        avatar: { x: 80, y: 150, s: 150 },
-        name: { x: 80, y: 340, size: 96 },
-        sub: { x: 80, y: 456, size: 34 },
-        chips: { x: 80, y: 520, size: 24 },
-        grid: { x: 80, y: 640, w: 920, cols: 2, cellH: 290 },
-        cta: { x: 80, y: 1620, size: 34 },
+        // kept between the Reels/TikTok top bar (~250 px) and caption zone (~420 px)
+        avatar: { x: 80, y: 280, s: 150 },
+        name: { x: 80, y: 462, size: 100 },
+        sub: { x: 80, y: 582, size: 36 },
+        chips: { x: 80, y: 648, size: 26 },
+        grid: { x: 80, y: 850, w: 920, cols: 3, cellH: 196 },
+        cta: { x: 80, y: 730, size: 34 },
       }
     : {
         avatar: { x: 120, y: 150, s: 150 },
@@ -511,7 +530,10 @@ const Profile: React.FC = () => {
         >
           <CtaPill label="Contact" size={geo.cta.size} press={press} style={{ transformOrigin: "0% 50%" }} />
         </div>
-        {f >= u.profile + 22 ? (
+        {portrait ? (
+          <Tap x={ctaRect.x + ctaRect.w * 0.3} y={ctaRect.y + ctaRect.h * 0.5} appear={u.contactPress - 14} press={u.contactPress} />
+        ) : null}
+        {f >= u.profile + 22 && !portrait ? (
           <Cursor
             x={curX + (hash(f) - 0.5) * 0}
             y={curY}

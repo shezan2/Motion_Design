@@ -17,7 +17,7 @@ export const Call: React.FC = () => {
   const ringing = f >= k.from + 8 && (f - k.from - 8) % 24 < 16;
   const shakeR = ringing ? (hash(f) - 0.5) * 3.2 : 0;
   const shakeX = ringing ? (hash(f + 7) - 0.5) * 10 : 0;
-  const cardW = portrait ? 900 : 860;
+  const cardW = portrait ? 820 : 860;
   const btn = portrait ? 150 : 132;
 
   return (
@@ -166,7 +166,7 @@ const ShotOfTheWeek: React.FC = () => {
   const { H, portrait } = useLayout();
   const s = T.community.sotw;
   const strip = ramp(f, s + 14, s + 26, [1, 0], EASE.land);
-  const stripH = portrait ? H * 0.42 : H * 0.46;
+  const stripH = portrait ? H * 0.56 : H * 0.46; // portrait: content sits above the caption zone
   const pad = portrait ? 70 : 120;
   const thumbW = portrait ? 290 : 400;
   const thumbH = portrait ? 330 : 250;

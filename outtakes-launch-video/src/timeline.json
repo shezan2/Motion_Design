@@ -1,7 +1,7 @@
 {
   "fps": 30,
   "bpm": 120,
-  "total": 1170,
+  "total": 1404,
   "copy": {
     "profilesOpen": "16 NOV",
     "liveDate": "20.11",
@@ -10,167 +10,167 @@
   },
   "hook": {
     "from": 0,
-    "to": 165,
+    "to": 198,
     "burst": [
-      3,
-      13,
-      22,
-      31,
-      39,
-      46,
-      52,
-      57,
+      4,
+      16,
+      26,
+      37,
+      47,
+      55,
       62,
-      66,
-      70,
-      73,
-      76,
+      68,
+      74,
       79,
-      82,
-      85,
-      87
+      84,
+      88,
+      91,
+      95,
+      98,
+      102,
+      104
     ],
-    "land": 90,
+    "land": 108,
     "words": [
-      104,
-      109,
-      113,
-      120
+      125,
+      131,
+      136,
+      144
     ]
   },
   "chase": {
-    "from": 165,
-    "to": 352,
+    "from": 198,
+    "to": 422,
     "shrink": [
-      165,
-      185
+      198,
+      222
     ],
     "bubbles": [
-      196,
-      222,
-      246,
-      264
+      235,
+      266,
+      295,
+      317
     ],
-    "seen": 282,
+    "seen": 338,
     "words": [
-      298,
-      304
+      358,
+      365
     ],
-    "swap": 322
+    "swap": 386
   },
   "reveal": {
-    "from": 352,
-    "to": 465,
-    "crash": 355,
+    "from": 422,
+    "to": 558,
+    "crash": 425,
     "words": [
-      392,
-      397,
-      402,
-      418,
-      424
+      470,
+      476,
+      482,
+      502,
+      509
     ]
   },
   "ui": {
-    "from": 465,
-    "to": 742,
+    "from": 558,
+    "to": 890,
     "dock": [
-      465,
-      487
+      558,
+      584
     ],
     "words": [
-      482,
-      486,
-      490,
-      494,
-      500,
-      504,
-      508,
-      514
+      578,
+      583,
+      588,
+      593,
+      600,
+      605,
+      610,
+      617
     ],
-    "typeStart": 548,
-    "enter": 588,
-    "cursorIn": 632,
-    "cardPress": 660,
+    "typeStart": 658,
+    "enter": 706,
+    "cursorIn": 758,
+    "cardPress": 792,
     "push": [
-      664,
-      682
+      797,
+      818
     ],
-    "profile": 682,
-    "contactPress": 736,
-    "cut": 742
+    "profile": 818,
+    "contactPress": 883,
+    "cut": 890
   },
   "call": {
-    "from": 742,
-    "to": 810
+    "from": 890,
+    "to": 972
   },
   "community": {
-    "from": 810,
-    "to": 930,
+    "from": 972,
+    "to": 1116,
     "cuts": [
-      810
+      972
     ],
     "incoming": [
-      813,
-      824,
-      835
+      976,
+      989,
+      1002
     ],
     "words": [
-      846,
-      850,
-      854,
-      860
+      1015,
+      1020,
+      1025,
+      1032
     ],
-    "sotw": 882
+    "sotw": 1058
   },
   "cta": {
-    "from": 930,
-    "to": 1170,
-    "free": 932,
-    "profiles": 990,
+    "from": 1116,
+    "to": 1404,
+    "free": 1118,
+    "profiles": 1188,
     "riser": [
-      1030,
-      1048
+      1236,
+      1258
     ],
-    "crash": 1050,
-    "pill": 1095,
-    "press": 1122,
-    "final": 1128
+    "crash": 1260,
+    "pill": 1314,
+    "press": 1346,
+    "final": 1354
   },
   "cuts": [
     {
-      "f": 165,
+      "f": 198,
       "kind": "none"
     },
     {
-      "f": 352,
+      "f": 422,
       "kind": "curtain"
     },
     {
-      "f": 682,
+      "f": 818,
       "kind": "flash"
     },
     {
-      "f": 742,
+      "f": 890,
       "kind": "curtain"
     },
     {
-      "f": 810,
+      "f": 972,
       "kind": "curtain"
     },
     {
-      "f": 882,
+      "f": 1058,
       "kind": "curtain"
     },
     {
-      "f": 930,
+      "f": 1116,
       "kind": "curtain"
     },
     {
-      "f": 1050,
+      "f": 1260,
       "kind": "flash"
     },
     {
-      "f": 1128,
+      "f": 1354,
       "kind": "curtain"
     }
   ],
@@ -180,61 +180,61 @@
       [
         0.0,
         1.06,
-        3.4,
+        4.08,
         "You got the shot."
       ],
       [
         1.62,
         6.34,
-        5.7,
+        6.84,
         "Then comes the chasing... the invoices... can pay you next week ah?"
       ],
       [
         6.95,
         10.28,
-        11.85,
+        14.19,
         "Outtakes. Made by photographers... for photographers."
       ],
       [
         10.7,
         14.49,
-        16.0,
+        19.2,
         "One place where clubs, players and parents actually come looking."
       ],
       [
         18.1,
         19.73,
-        19.85,
+        23.82,
         "They search. They find you."
       ],
       [
         14.85,
         17.81,
-        22.75,
+        27.3,
         "Your portfolio. Your style. Your rates."
       ],
       [
         19.98,
         20.62,
-        25.8,
+        30.96,
         "They call you."
       ],
       [
         23.2,
         26.67,
-        31.1,
+        37.32,
         "Sign up free. Set up your profile from the sixteenth of November."
       ],
       [
         26.88,
         29.45,
-        34.7,
+        41.64,
         "We go live on the twentieth... five p.m."
       ],
       [
         29.78,
         31.47,
-        37.3,
+        44.76,
         "outtakes dot S G."
       ]
     ]

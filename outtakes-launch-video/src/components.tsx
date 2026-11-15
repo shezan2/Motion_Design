@@ -1,7 +1,7 @@
 import React, { CSSProperties } from "react";
 import { AbsoluteFill, Img, staticFile } from "remotion";
 import { C, display, ui, wordmark } from "./brand";
-import { EASE, hash, ramp, useF } from "./anim";
+import { EASE, hash, lerp, ramp, useF } from "./anim";
 import T from "./timeline.json";
 
 // Focal points so landscape photos still frame the action in 9:16.
@@ -346,3 +346,41 @@ export const Cursor: React.FC<{ x: number; y: number; scale?: number; size?: num
     <path d="M4 3l15 8.5-6.6 1.6L9.6 20z" fill="#fff" stroke="#000" strokeWidth={1.4} strokeLinejoin="round" />
   </svg>
 );
+
+// Phone-native touch: a soft fingertip appears, presses (shrinks), and a ring ripples out.
+export const Tap: React.FC<{ x: number; y: number; appear: number; press: number }> = ({ x, y, appear, press }) => {
+  const f = useF();
+  if (f < appear) return null;
+  const pIn = ramp(f, appear, appear + 8, [0, 1], EASE.land);
+  const down = f >= press && f < press + 5;
+  const ring = ramp(f, press, press + 14, [0, 1], EASE.land);
+  const size = 120;
+  return (
+    <div style={{ position: "absolute", left: x - size / 2, top: y - size / 2, width: size, height: size, pointerEvents: "none" }}>
+      {f >= press ? (
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            borderRadius: 999,
+            border: `4px solid ${C.white}`,
+            scale: String(1 + ring * 1.4),
+            opacity: (1 - ring) * 0.8,
+          }}
+        />
+      ) : null}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          borderRadius: 999,
+          background: "rgba(255,255,255,0.55)",
+          border: "3px solid rgba(255,255,255,0.9)",
+          boxShadow: "0 10px 30px rgba(0,0,0,0.45)",
+          scale: String(lerp(1.6, 1, pIn) * (down ? 0.78 : 1)),
+          opacity: pIn * (f > press + 10 ? 0 : 1),
+        }}
+      />
+    </div>
+  );
+};

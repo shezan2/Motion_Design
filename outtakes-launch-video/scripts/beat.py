@@ -243,7 +243,7 @@ for f in c["bubbles"]:
 for f in c["words"]:
     place(shutter(0.7), t_of(f), 0.6)
 place(whoosh(0.35), t_of(c["swap"] - 3), 0.7)
-place(riser(t_of(c["to"] - 3 - 322)), t_of(322), 0.7)
+place(riser(t_of(c["to"] - 3 - c["swap"])), t_of(c["swap"]), 0.7)
 place(shutter(1.0), t_of(c["to"]), 0.9)  # curtain closes; then silence
 
 # 3 reveal: the hit
