@@ -1,0 +1,16 @@
+{
+  "controls": [
+    {
+      "sid": "bgColor",
+      "label": "Background"
+    },
+    {
+      "sid": "hook1",
+      "label": "Hook line 1"
+    },
+    {
+      "sid": "hook2",
+      "label": "Hook line 2"
+    }
+  ]
+}

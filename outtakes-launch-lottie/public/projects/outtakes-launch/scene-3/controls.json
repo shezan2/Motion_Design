@@ -1,0 +1,16 @@
+{
+  "controls": [
+    {
+      "sid": "bgColor",
+      "label": "Background"
+    },
+    {
+      "sid": "tag1",
+      "label": "Tagline line 1"
+    },
+    {
+      "sid": "tag2",
+      "label": "Tagline line 2"
+    }
+  ]
+}

@@ -1,3 +1,5 @@
+> **Superseded:** the current version of the launch film is the Lottie edition in [`../outtakes-launch-lottie`](../outtakes-launch-lottie/OUTTAKES.md) (text-to-lottie). This Remotion version is kept for reference.
+
 # Outtakes — launch film (Remotion)
 
 A 47-second launch film for outtakes.sg aimed at Outtakes' own photographers. It has one job: get them to sign up (free) and set up a profile before the platform goes live on **20 Nov, 5PM SGT**.

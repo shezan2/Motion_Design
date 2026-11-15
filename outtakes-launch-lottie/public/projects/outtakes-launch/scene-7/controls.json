@@ -1,0 +1,16 @@
+{
+  "controls": [
+    {
+      "sid": "bgColor",
+      "label": "Background"
+    },
+    {
+      "sid": "head1",
+      "label": "Headline line 1"
+    },
+    {
+      "sid": "head2",
+      "label": "Headline line 2"
+    }
+  ]
+}
