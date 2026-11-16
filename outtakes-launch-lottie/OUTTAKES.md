@@ -15,7 +15,7 @@ Skia Skottie player, and its authoring rules.
 | # | Scene | Frames | What it shows |
 |---|---|---|---|
 | 1 | Hook — burst mode | 180 | Ten of the collective's photos fire on shutter clicks, then the shot lands. "YOU GOT / THE SHOT." |
-| 2 | Problem — the DMs | 240 | One DM thread: "how much for saturday's match?" → "$150 for the full game" → "can do $30?" (lowball) → "game cancelled, no need to pay ya" (cancellation) → "just following up on the invoice :)" → Seen. "SOUND / FAMILIAR?" |
+| 2 | Problem — the DMs | 240 | One DM thread: "how much for saturday's match?" → "$70 for the full game" → "can do $30?" (lowball) → "game cancelled, no need to pay ya" (cancellation) → "just following up on the invoice :)" → Seen. "SOUND / FAMILIAR?" |
 | 3 | Reveal | 135 | OUTTAKES crashes in on the hit. "MADE BY PHOTOGRAPHERS, FOR PHOTOGRAPHERS." |
 | 4 | **Now clients chase you** | 165 | A client searches "football photographer", your profile is in the results, then booking requests stack up: sports club season coverage, brand shoot, final. *More clients, bigger clients, one central place where they search.* |
 | 5 | **Your portfolio, organised** | 135 | Profile with sport tags, filter chips (tapped) and a portfolio grid. *Proper organised portfolio.* |
@@ -36,7 +36,7 @@ Skia Skottie player, and its authoring rules.
 
 **What's illustrative:**
 - The DM thread.
-- The sample booking, invoice and payment values ($150, Jalan Besar Stadium, Sat 22 Nov, Sports club).
+- The sample booking, invoice and payment values ($70, Jalan Besar Stadium, Sat 22 Nov, Sports club).
 - "YOUR NAME".
 - The UI, which is rebuilt in Lottie from the website PDF design, not captured from the live site.
 

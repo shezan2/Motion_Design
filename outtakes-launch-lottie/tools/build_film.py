@@ -115,7 +115,7 @@ def scene_problem():
     else:
         c.image("plate", "plate-celebrate-blur.jpg", 1080, 1920, p=(W / 2, H / 2))
         cl, cr = L, R
-    msgs = [("them", "how much for saturday's match?", 14), ("me", "$150 for the full game", 42),
+    msgs = [("them", "how much for saturday's match?", 14), ("me", "$70 for the full game", 42),
             ("them", "can do $30?", 72), ("them", "game cancelled, no need to pay ya", 108),
             ("me", "just following up on the invoice :)", 146)]
     seen_at, dim_at = 172, 192
@@ -366,7 +366,7 @@ def scene_booking():
     yc = y0
     card = c.null("booking card", p=anim([(48, [0, 320, 0], "settle-soft"), (64, [0, 0, 0])]), ip=48)
     rows = [("Date", "Sat 22 Nov · 4:00 PM"), ("Venue", "Jalan Besar Stadium"),
-            ("Coverage", "Full match + edited photos"), ("Rate", "$150 · your rate")]
+            ("Coverage", "Full match + edited photos"), ("Rate", "$70 · your rate")]
     ry0 = yc + 168
     step = 114
     bty = ry0 + len(rows) * step + 4
@@ -425,12 +425,12 @@ def scene_invoices():
     fade_line(c, "22 Nov 2026", "OT Body Medium", 36, ink, L + 480, y0 + 222, start=43, parent=paper)
     box(c, "rule 1", L + 50, y0 + 266, CW - 100, 2, hexc("#111113", 0.14), parent=paper, ip=46)
     fade_line(c, "Full match coverage", "OT Body", 32, ink, L + 50, y0 + 334, start=50, parent=paper)
-    fade_line(c, "$150.00", "OT Body Medium", 32, ink, R - 50, y0 + 334, j=1, start=51, parent=paper)
+    fade_line(c, "$70.00", "OT Body Medium", 32, ink, R - 50, y0 + 334, j=1, start=51, parent=paper)
     fade_line(c, "Edited photos (40)", "OT Body", 32, ink, L + 50, y0 + 396, start=55, parent=paper)
     fade_line(c, "Included", "OT Body Medium", 32, ink, R - 50, y0 + 396, j=1, start=56, parent=paper)
     box(c, "rule 2", L + 50, y0 + 444, CW - 100, 2, hexc("#111113", 0.14), parent=paper, ip=60)
     fade_line(c, "Total", "OT Body Medium", 36, ink, L + 50, y0 + 524, start=64, parent=paper)
-    fade_line(c, "$150.00", "OT Display", 50, ink, R - 50, y0 + 528, j=1, start=66, parent=paper)
+    fade_line(c, "$70.00", "OT Display", 50, ink, R - 50, y0 + 528, j=1, start=66, parent=paper)
     fade_line(c, "PAYMENT", "OT Label", 24, ink55, L + 50, y0 + 620, start=72, parent=paper)
     fade_line(c, "Due on booking", "OT Body", 32, ink, L + 50, y0 + 664, start=74, parent=paper)
     # "Sent" stamp pops in (one flourish per beat)
@@ -463,7 +463,7 @@ def scene_payments():
             parent=c1, ip=18)
     lock_icon(c, L + 96, y0 + 86, 44, "ink", parent=c1, ip=18)
     label_text(c, "Payment secured", "OT Body Medium", 40, "white", L + 170, y0 + 84 + CAP * 40 / 2, parent=c1, ip=18)
-    fade_line(c, "$150.00", "OT Display", 84, "white", L + 48, y0 + 250, start=30, parent=c1)
+    fade_line(c, "$70.00", "OT Display", 84, "white", L + 48, y0 + 250, start=30, parent=c1)
     fade_line(c, "Sat 22 Nov · Jalan Besar Stadium", "OT Body", 28, GREY, L + 48, y0 + 306, start=34, parent=c1)
     c.cue(18, "whoosh", 0.5)
     c.cue(30, "chime_soft", 0.6)
