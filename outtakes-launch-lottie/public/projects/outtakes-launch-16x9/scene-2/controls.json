@@ -1,0 +1,16 @@
+{
+  "controls": [
+    {
+      "sid": "bgColor",
+      "label": "Background"
+    },
+    {
+      "sid": "problem1",
+      "label": "Line 1"
+    },
+    {
+      "sid": "problem2",
+      "label": "Line 2"
+    }
+  ]
+}

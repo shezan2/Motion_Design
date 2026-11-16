@@ -1,6 +1,7 @@
 """Author the Outtakes launch film as Lottie scenes for the text-to-lottie player.
 
-    python3 tools/build_film.py            # writes public/projects/outtakes-launch/scene-1..10
+    python3 tools/build_film.py                        # portrait  -> public/projects/outtakes-launch/scene-1..10
+    OT_FORMAT=landscape python3 tools/build_film.py    # landscape -> public/projects/outtakes-launch-16x9/scene-1..10
 
 Each scene = one chapter (skills/text-to-lottie/references/chapterization-transition-grammar.md):
 hook -> problem -> reveal -> six feature proofs (repeated armature) -> CTA.
@@ -20,14 +21,15 @@ from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).parent))
 from lottie_kit import CAP, Comp, Fonts, anim, ease_value, group, hexc, path, rect, stroke, text_doc, trim  # noqa: E402
-from film_parts import (BOTTOM, COL, CW, H, L, R, W, armature_headline, background, box, brand_gradient_rect,  # noqa: E402
-                        c_, chip, check_icon, cta_button, curtain_close, curtain_open, fade_line, flash, glow,
-                        drift, grain, label_text, lock_icon, photo, rise_line, search_icon, tag, tap, vignette)
+from film_parts import (BOTTOM, COL, CW, H, L, LANDSCAPE, R, W, armature_headline, background, box,  # noqa: E402
+                        brand_gradient_rect, c_, chip, check_icon, cta_button, curtain_close, curtain_open, drift,
+                        fade_line, feature_glow, flash, glow, label_text, lock_icon, photo, rise_line, rise_pair,
+                        search_icon, tag, tap)
 
 ROOT = Path(__file__).resolve().parent.parent
 PHOTOS = ROOT / "brand" / "photos"
 FONTS_DIR = ROOT / "brand" / "fonts"
-OUT = ROOT / "public" / "projects" / "outtakes-launch"
+OUT = ROOT / "public" / "projects" / ("outtakes-launch-16x9" if LANDSCAPE else "outtakes-launch")
 fonts = Fonts(FONTS_DIR)
 
 SIZES = {p.name: Image.open(p).size for p in PHOTOS.glob("*.jpg")}
@@ -80,16 +82,22 @@ def scene_hook():
     c.cue(land, "shutter_big", 1.0)
     c.cue(land, "boom_small", 0.45)
     from lottie_kit import gradient
-    c.shape("legibility", [group([rect(W, 1100, W / 2, H - 550),
-                                   gradient([(0, "#000000"), (1, "#000000")], [W / 2, H - 1100], [W / 2, H],
+    lh = 620 if LANDSCAPE else 1100
+    c.shape("legibility", [group([rect(W, lh, W / 2, H - lh / 2),
+                                   gradient([(0, "#000000"), (1, "#000000")], [W / 2, H - lh], [W / 2, H],
                                             alpha_stops=[(0, 0), (0.55, 0.55), (1, 0.8)])])], ip=land)
-    size = fonts.fit("OT Display", ["YOU GOT", "THE SHOT."], 920, 132)
-    b2 = 1420
-    b1 = b2 - size * 1.02
-    rise_line(c, fonts, "YOU GOT", "OT Display", size, "white", W / 2, b1, j=2, start=108, slot="hook1",
-              label="Hook line 1")
-    rise_line(c, fonts, "THE SHOT.", "OT Display", size, "green", W / 2, b2, j=2, start=117, slot="hook2",
-              label="Hook line 2")
+    if LANDSCAPE:
+        size = fonts.fit("OT Display", ["YOU GOT THE SHOT."], 1500, 150)
+        rise_pair(c, fonts, "YOU GOT", "THE SHOT.", "OT Display", size, W / 2, H - 130, start=108, gap_frames=9,
+                  slot1="hook1", slot2="hook2", label1="Hook line 1", label2="Hook line 2")
+    else:
+        size = fonts.fit("OT Display", ["YOU GOT", "THE SHOT."], 920, 132)
+        b2 = 1420
+        b1 = b2 - size * 1.02
+        rise_line(c, fonts, "YOU GOT", "OT Display", size, "white", W / 2, b1, j=2, start=108, slot="hook1",
+                  label="Hook line 1")
+        rise_line(c, fonts, "THE SHOT.", "OT Display", size, "green", W / 2, b2, j=2, start=117, slot="hook2",
+                  label="Hook line 2")
     c.cue(108, "tick", 0.5)
     c.cue(117, "tick", 0.5)
     drift(c)
@@ -101,21 +109,27 @@ def scene_hook():
 def scene_problem():
     c = Comp("02 Problem - the DMs", W, H, 240)
     background(c)
-    c.image("plate", "plate-celebrate-blur.jpg", 1080, 1920, p=(W / 2, H / 2))
+    if LANDSCAPE:
+        c.image("plate", "plate-celebrate-blur-land.jpg", 1920, 1080, p=(W / 2, H / 2))
+        cl, cr = (W - 900) / 2, (W + 900) / 2  # chat column centred in the wide frame
+    else:
+        c.image("plate", "plate-celebrate-blur.jpg", 1080, 1920, p=(W / 2, H / 2))
+        cl, cr = L, R
     msgs = [("them", "how much for saturday's match?", 14), ("me", "$150 for the full game", 42),
             ("them", "can do $30?", 72), ("them", "game cancelled, no need to pay ya", 108),
             ("me", "just following up on the invoice :)", 146)]
     seen_at, dim_at = 172, 192
     size = 42
-    while max(fonts.width("OT Body", size, m[1]) for m in msgs) > CW - 70:
+    while max(fonts.width("OT Body", size, m[1]) for m in msgs) > (cr - cl) - 70:
         size -= 1
     bh = size * 1.25 + 52
-    gap, seen_h, YB = 16, 52, 1400
+    gap, seen_h = 16, 52
+    YB = 930 if LANDSCAPE else 1400
     for i, (who, text, at) in enumerate(msgs):
         tw = fonts.width("OT Body", size, text)
         bw = tw + 68
-        bx = L if who == "them" else R - bw
-        ax = bx if who == "them" else R
+        bx = cl if who == "them" else cr - bw
+        ax = bx if who == "them" else cr
         keys = [(at, [ax, YB + 40, 0], "entrance-sharp"), (at + 9, [ax, YB, 0])]
         cur = 0
         pushes = [m[2] for m in msgs[i + 1:]] + [seen_at]
@@ -138,16 +152,21 @@ def scene_problem():
                                                  (dim_at, 100, "travel-balanced"), (dim_at + 10, 22)])
         c.cue(at, "blip_out" if who == "me" else "blip_in", 0.9)
     s0 = len(c._layers)
-    label_text(c, "Seen", "OT Body", 28, GREY, R - 8, YB - 12, j=1, ip=seen_at + 4)
+    label_text(c, "Seen", "OT Body", 28, GREY, cr - 8, YB - 12, j=1, ip=seen_at + 4)
     members_opacity(layers_since(c, s0), [(seen_at + 4, 0, "settle-soft"), (seen_at + 10, 100, "hold"),
                                           (dim_at, 100, "travel-balanced"), (dim_at + 10, 22)])
     c.cue(seen_at + 4, "tick", 0.4)
-    size2 = fonts.fit("OT Display", ["SOUND", "FAMILIAR?"], 920, 150)
-    b1 = 880
-    rise_line(c, fonts, "SOUND", "OT Display", size2, "white", W / 2, b1, j=2, start=dim_at + 4, slot="problem1",
-              label="Line 1")
-    rise_line(c, fonts, "FAMILIAR?", "OT Display", size2, "green", W / 2, b1 + size2 * 1.04, j=2,
-              start=dim_at + 13, slot="problem2", label="Line 2")
+    if LANDSCAPE:
+        size2 = fonts.fit("OT Display", ["SOUND FAMILIAR?"], 1560, 170)
+        rise_pair(c, fonts, "SOUND", "FAMILIAR?", "OT Display", size2, W / 2, H / 2 + CAP * size2 / 2, start=dim_at + 4,
+                  gap_frames=9, slot1="problem1", slot2="problem2", label1="Line 1", label2="Line 2")
+    else:
+        size2 = fonts.fit("OT Display", ["SOUND", "FAMILIAR?"], 920, 150)
+        b1 = 880
+        rise_line(c, fonts, "SOUND", "OT Display", size2, "white", W / 2, b1, j=2, start=dim_at + 4, slot="problem1",
+                  label="Line 1")
+        rise_line(c, fonts, "FAMILIAR?", "OT Display", size2, "green", W / 2, b1 + size2 * 1.04, j=2,
+                  start=dim_at + 13, slot="problem2", label="Line 2")
     c.cue(dim_at + 4, "tick", 0.6)
     c.cue(204, "riser:33", 0.6)
     curtain_open(c)
@@ -177,15 +196,17 @@ def scene_reveal():
     c = Comp("03 Reveal - OUTTAKES", W, H, 135)
     background(c)
     crash = 2  # with the previous chapter's closed curtain this makes exactly 3 black frames
-    glow(c, W / 2, 860, 950, alphas=(0.6, 0.32, 0.0), ip=crash)
-    size = fonts.fit("OT Wordmark", ["OUTTAKES"], 820, 270)
-    wordmark_crash(c, "OUTTAKES", "OT Wordmark", size, W / 2, 860, crash, 135)
+    wy = H / 2 - 50 if LANDSCAPE else 860
+    glow(c, W / 2, wy, 1100 if LANDSCAPE else 950, alphas=(0.6, 0.32, 0.0), ip=crash)
+    size = fonts.fit("OT Wordmark", ["OUTTAKES"], 1000 if LANDSCAPE else 820, 300 if LANDSCAPE else 270)
+    wordmark_crash(c, "OUTTAKES", "OT Wordmark", size, W / 2, wy, crash, 135)
     c.cue(crash, "boom", 1.0)
     c.cue(crash, "shutter_big", 1.0)
     ts = fonts.fit("OT Display", ["MADE BY PHOTOGRAPHERS,", "FOR PHOTOGRAPHERS."], 920, 56)
-    rise_line(c, fonts, "MADE BY PHOTOGRAPHERS,", "OT Display", ts, "white", W / 2, 1030, j=2, start=40,
+    tb = (wy + CAP * size / 2 + 120) if LANDSCAPE else 1030
+    rise_line(c, fonts, "MADE BY PHOTOGRAPHERS,", "OT Display", ts, "white", W / 2, tb, j=2, start=40,
               slot="tag1", label="Tagline line 1")
-    rise_line(c, fonts, "FOR PHOTOGRAPHERS.", "OT Display", ts, "white", W / 2, 1030 + ts * 1.25, j=2, start=50,
+    rise_line(c, fonts, "FOR PHOTOGRAPHERS.", "OT Display", ts, "white", W / 2, tb + ts * 1.25, j=2, start=50,
               slot="tag2", label="Tagline line 2")
     c.cue(40, "tick", 0.5)
     c.cue(50, "tick", 0.5)
@@ -200,7 +221,7 @@ def scene_reveal():
 def scene_clients():
     c = Comp("04 Now clients chase you", W, H, 165)
     background(c)
-    glow(c, W / 2, 2080, 1150, alphas=(0.5, 0.28, 0.0))
+    feature_glow(c)
     sb = armature_headline(c, fonts, "NOW CLIENTS", "CHASE YOU.", "Clubs, brands and players search one place.")
     y0 = sb + 64
     # search field (the client's own input -> typing is allowed here)
@@ -271,7 +292,7 @@ def scene_clients():
 def scene_portfolio():
     c = Comp("05 Portfolio, organised", W, H, 135)
     background(c)
-    glow(c, W / 2, 2080, 1150, alphas=(0.5, 0.28, 0.0))
+    feature_glow(c)
     sb = armature_headline(c, fonts, "YOUR PORTFOLIO,", "ORGANISED.", "Every shot in one place, sorted by sport.")
     y0 = sb + 60
     g = c.null("profile header", p=anim([(18, [0, 50, 0], "entrance-sharp"), (32, [0, 0, 0])]), ip=18)
@@ -322,7 +343,7 @@ def scene_portfolio():
 def scene_booking():
     c = Comp("06 Booked at your rate", W, H, 150)
     background(c)
-    glow(c, W / 2, 2080, 1150, alphas=(0.5, 0.28, 0.0))
+    feature_glow(c)
     sb = armature_headline(c, fonts, "BOOKED AT", "YOUR RATE.", "Systemised bookings. No lowball DMs.")
     y0 = sb + 60
     # the lowball DM gets struck out and thrown away
@@ -386,7 +407,7 @@ def scene_booking():
 def scene_invoices():
     c = Comp("07 Invoices, done for you", W, H, 135)
     background(c)
-    glow(c, W / 2, 2080, 1150, alphas=(0.5, 0.28, 0.0))
+    feature_glow(c)
     sb = armature_headline(c, fonts, "INVOICES,", "DONE FOR YOU.", "Proper invoices for every client, big or small.")
     y0 = sb + 56
     ph = 760
@@ -432,7 +453,7 @@ def scene_invoices():
 def scene_payments():
     c = Comp("08 Paid, even if they cancel", W, H, 150)
     background(c)
-    glow(c, W / 2, 2080, 1150, alphas=(0.5, 0.28, 0.0))
+    feature_glow(c)
     sb = armature_headline(c, fonts, "PAID. EVEN IF", "THEY CANCEL.", "Secure payments make sure you get paid.")
     y0 = sb + 56
     c1 = c.null("payment card", p=anim([(18, [0, 260, 0], "settle-soft"), (34, [0, 0, 0])]), ip=18)
@@ -470,7 +491,7 @@ def scene_payments():
 def scene_exposure():
     c = Comp("09 Free exposure, built in", W, H, 150)
     background(c)
-    glow(c, W / 2, 2080, 1150, alphas=(0.5, 0.28, 0.0))
+    feature_glow(c)
     sb = armature_headline(c, fonts, "FREE EXPOSURE,", "BUILT IN.", "Shot of the Week puts you in front of clients.")
     y0 = sb + 56
     mh = 520
@@ -517,34 +538,49 @@ def scene_cta():
     background(c)
     glow(c, W / 2, 2100, 1300, colors=[(0, COL["sky"]), (0.45, COL["violet"]), (1, COL["violetDeep"])],
          alphas=(0.55, 0.42, 0.0))
-    s1 = fonts.fit("OT Display", ["SIGN UP", "FREE."], 920, 180)
-    b1 = 860
-    rise_line(c, fonts, "SIGN UP", "OT Display", s1, "white", W / 2, b1, j=2, start=8, exit_at=56, slot="cta1",
-              label="Sign-up line 1")
-    rise_line(c, fonts, "FREE.", "OT Display", s1, "green", W / 2, b1 + s1 * 1.02, j=2, start=16, exit_at=58,
-              slot="cta2", label="Sign-up line 2")
-    c.cue(8, "tick", 0.6)
-    lines = ["SET UP YOUR", "PROFILE FROM", "16 NOV."]
-    s2 = fonts.fit("OT Display", lines, 920, 112)
-    for i, ln in enumerate(lines):
-        rise_line(c, fonts, ln, "OT Display", s2, "green" if i == 2 else "white", W / 2, 760 + i * s2 * 1.08, j=2,
-                  start=66 + i * 8, exit_at=116 + i * 2, slot="profilesOpen" if i == 2 else f"setup{i + 1}",
-                  label="Profiles-open date" if i == 2 else f"Setup line {i + 1}")
+    if LANDSCAPE:
+        s1 = fonts.fit("OT Display", ["SIGN UP FREE."], 1500, 200)
+        rise_pair(c, fonts, "SIGN UP", "FREE.", "OT Display", s1, W / 2, H / 2 + CAP * s1 / 2, start=8, exit_at=56,
+                  slot1="cta1", slot2="cta2", label1="Sign-up line 1", label2="Sign-up line 2")
+        c.cue(8, "tick", 0.6)
+        s2 = fonts.fit("OT Display", ["SET UP YOUR PROFILE", "FROM 16 NOV."], 1500, 130)
+        b1 = H / 2 - s2 * 0.12
+        rise_line(c, fonts, "SET UP YOUR PROFILE", "OT Display", s2, "white", W / 2, b1, j=2, start=66, exit_at=116,
+                  slot="setup1", label="Setup line 1")
+        rise_pair(c, fonts, "FROM", "16 NOV.", "OT Display", s2, W / 2, b1 + s2 * 1.08, start=74, exit_at=118,
+                  slot1="setup2", slot2="profilesOpen", label1="Setup line 2", label2="Profiles-open date")
+    else:
+        s1 = fonts.fit("OT Display", ["SIGN UP", "FREE."], 920, 180)
+        b1 = 860
+        rise_line(c, fonts, "SIGN UP", "OT Display", s1, "white", W / 2, b1, j=2, start=8, exit_at=56, slot="cta1",
+                  label="Sign-up line 1")
+        rise_line(c, fonts, "FREE.", "OT Display", s1, "green", W / 2, b1 + s1 * 1.02, j=2, start=16, exit_at=58,
+                  slot="cta2", label="Sign-up line 2")
+        lines = ["SET UP YOUR", "PROFILE FROM", "16 NOV."]
+        s2 = fonts.fit("OT Display", lines, 920, 112)
+        for i, ln in enumerate(lines):
+            rise_line(c, fonts, ln, "OT Display", s2, "green" if i == 2 else "white", W / 2, 760 + i * s2 * 1.08, j=2,
+                      start=66 + i * 8, exit_at=116 + i * 2, slot="profilesOpen" if i == 2 else f"setup{i + 1}",
+                      label="Profiles-open date" if i == 2 else f"Setup line {i + 1}")
+        c.cue(8, "tick", 0.6)
     c.cue(66, "tick", 0.6)
     c.cue(112, "riser:16", 0.7)
     # the date hits
     crash = 128
-    dg = c.null("date group", p=anim([(172, [0, 0, 0], "travel-balanced"), (188, [0, -230, 0])]), ip=crash, op=206)
-    dsize = fonts.fit("OT Display", ["20.11"], 860, 320)
-    wordmark_crash(c, "20.11", "OT Display", dsize, W / 2, 860, crash, 206, color="green", start_scale=320,
+    dy_up = -150 if LANDSCAPE else -230
+    dcy = H / 2 - 60 if LANDSCAPE else 860
+    dg = c.null("date group", p=anim([(172, [0, 0, 0], "travel-balanced"), (188, [0, dy_up, 0])]), ip=crash, op=206)
+    dsize = fonts.fit("OT Display", ["20.11"], 900 if LANDSCAPE else 860, 300 if LANDSCAPE else 320)
+    wordmark_crash(c, "20.11", "OT Display", dsize, W / 2, dcy, crash, 206, color="green", start_scale=320,
                    parent=dg, settle_end_scale=96, slot="liveDate", label="Live date")
-    rise_line(c, fonts, "WE GO LIVE · 5PM SGT", "OT Body Medium", 52, "white", W / 2, 860 + CAP * dsize / 2 + 112,
+    rise_line(c, fonts, "WE GO LIVE · 5PM SGT", "OT Body Medium", 52, "white", W / 2,
+              dcy + CAP * dsize / 2 + (96 if LANDSCAPE else 112),
               j=2, start=138, parent=dg, op=206, slot="liveLine", label="Live time line")
     flash(c, crash, peak=25, dur=3)
     c.cue(crash, "boom", 1.0)
     c.cue(crash, "shutter_big", 0.9)
     # the button, pressed by a finger
-    bcy = 1050
+    bcy = (H / 2 + 270) if LANDSCAPE else 1050
     btn = c.null("cta button", p=(W / 2, bcy), a=(W / 2, bcy), ip=180, op=206,
                  s=anim([(180, [70, 70, 100], "expressive-pop"), (190, [104, 104, 100], "settle-soft"),
                          (196, [100, 100, 100], "hold"), (200, [95, 95, 100], "hold"), (205, [100, 100, 100])]))
@@ -554,13 +590,15 @@ def scene_cta():
     tap(c, x0 + total - bh / 2, bcy + 4, appear=192, press=200)
     # end card on the site's signature gradient
     fin = 206
-    brand_gradient_rect(c, -200, H + 260, ip=fin)
-    wsize = fonts.fit("OT Wordmark", ["OUTTAKES"], 760, 240)
+    brand_gradient_rect(c, -120 if LANDSCAPE else -200, H + (160 if LANDSCAPE else 260), ip=fin)
+    wsize = fonts.fit("OT Wordmark", ["OUTTAKES"], 900 if LANDSCAPE else 760, 260 if LANDSCAPE else 240)
     cap = CAP * wsize
-    c.text("end wordmark", text_doc("OUTTAKES", "OT Wordmark", wsize, c_("white"), justify=2), p=(W / 2, 880),
+    wy = H / 2 - 40 if LANDSCAPE else 880
+    c.text("end wordmark", text_doc("OUTTAKES", "OT Wordmark", wsize, c_("white"), justify=2), p=(W / 2, wy),
            a=(0, -cap / 2), ip=fin, s=anim([(fin, [110, 110, 100], "entrance-sharp"), (fin + 10, [100, 100, 100], "linear"),
                                            (240, [96, 96, 100])]), slot="endBrand", label="End brand")
-    fade_line(c, "outtakes.sg · 20.11 · 5PM SGT", "OT Body Medium", 40, "white", W / 2, 1000, j=2, start=fin + 8)
+    fade_line(c, "outtakes.sg · 20.11 · 5PM SGT", "OT Body Medium", 40, "white", W / 2,
+              (wy + cap / 2 + 100) if LANDSCAPE else 1000, j=2, start=fin + 8)
     flash(c, fin, peak=30, dur=3)
     c.cue(fin, "shutter_big", 0.9)
     c.cue(fin, "boom_small", 0.5)

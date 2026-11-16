@@ -1,21 +1,39 @@
-"""Reusable parts for the Outtakes launch film (portrait 1080x1920, 30 fps).
+"""Reusable parts for the Outtakes launch film (30 fps), portrait or landscape.
 
 Design system = the new Outtakes website ("Outtakes Dark"): near-black ground,
 one green accent, cream sections, night->violet->sky->cream gradient, white
 condensed-italic wordmark, Archivo Expanded headlines, Archivo body text.
 
-Portrait safe zones (Reels/TikTok UI): keep copy and proof between y=260 and
-y=1500 and inside x=80..940.
+Format comes from the OT_FORMAT environment variable:
+  portrait  (default) 1080x1920 - Reels/TikTok safe zones: copy and proof between
+            y=260 and y=1500 and inside x=80..940 (clear of the app's side buttons).
+  landscape 1920x1080 - feature beats put the headline block in a left column and
+            the product proof in a right column (L..R below).
 """
 from __future__ import annotations
+
+import os
 
 from lottie_kit import (CAP, Comp, Fonts, anim, ellipse, fill, gradient, group, hexc, path, rect,
                         static, stroke, text_doc, trim)
 
-W, H = 1080, 1920
-L, R = 80, 940            # content column (clear of the right-hand app buttons)
+FORMAT = os.environ.get("OT_FORMAT", "portrait")
+LANDSCAPE = FORMAT == "landscape"
+if LANDSCAPE:
+    W, H = 1920, 1080
+    L, R = 1000, 1800         # proof column (right half)
+    TOP, BOTTOM = 100, 1000   # vertical safe area
+    HEAD_X, HEAD_W = 120, 780  # headline column (left half)
+    PROOF_TOP = 130
+    DRIFT_ANCHOR = (W / 2, H / 2)
+else:
+    W, H = 1080, 1920
+    L, R = 80, 940            # content column (clear of the right-hand app buttons)
+    TOP, BOTTOM = 260, 1500   # vertical safe area
+    HEAD_X, HEAD_W = 80, 860
+    PROOF_TOP = None          # portrait: proof follows the headline block
+    DRIFT_ANCHOR = (W / 2, 1000)
 CW = R - L
-TOP, BOTTOM = 260, 1500   # vertical safe area
 
 COL = {
     "bg": "#111113", "surface": "#23202a", "green": "#74f260", "cream": "#f0ebe4",
@@ -151,17 +169,50 @@ HEAD_TOP = 330
 
 
 def armature_headline(c: Comp, fonts: Fonts, line1, line2, support, start=6, slot_prefix="head"):
-    size = fonts.fit("OT Display", [line1, line2], CW, 98)
+    """Headline (white line + green line) and a muted support line.
+
+    Returns the y the proof area hangs from, minus ~60 (scenes add their own 56-64 px gap):
+    portrait = the support baseline (proof sits under the headline);
+    landscape = PROOF_TOP - 60 (proof sits in the right column, headline block is
+    vertically centred in the left column).
+    """
+    size = fonts.fit("OT Display", [line1, line2], HEAD_W, 112 if LANDSCAPE else 98)
     cap = CAP * size
-    b1 = HEAD_TOP + cap
+    sup = 38 if LANDSCAPE else 34
+    if LANDSCAPE:
+        block = cap + size * 1.04 + 72
+        b1 = H / 2 - block / 2 - 24 + cap
+    else:
+        b1 = HEAD_TOP + cap
     b2 = b1 + size * 1.04
-    rise_line(c, fonts, line1, "OT Display", size, "white", L, b1, j=0, start=start, slot=f"{slot_prefix}1",
+    rise_line(c, fonts, line1, "OT Display", size, "white", HEAD_X, b1, j=0, start=start, slot=f"{slot_prefix}1",
               label="Headline line 1")
-    rise_line(c, fonts, line2, "OT Display", size, "green", L, b2, j=0, start=start + 8, slot=f"{slot_prefix}2",
+    rise_line(c, fonts, line2, "OT Display", size, "green", HEAD_X, b2, j=0, start=start + 8, slot=f"{slot_prefix}2",
               label="Headline line 2")
-    fade_line(c, support, "OT Body", 34, "white", L, b2 + 66, j=0, start=start + 18, o=62)
+    fade_line(c, support, "OT Body", sup, "white", HEAD_X, b2 + (72 if LANDSCAPE else 66), j=0, start=start + 18,
+              o=62)
     c.cue(start, "tick", 0.5)
-    return b2 + 66  # support baseline
+    return (PROOF_TOP - 60) if LANDSCAPE else b2 + 66
+
+
+def feature_glow(c: Comp):
+    """The violet light under the proof (portrait: bottom centre; landscape: under the right column)."""
+    if LANDSCAPE:
+        return glow(c, (L + R) / 2, H + 220, 1100, alphas=(0.5, 0.28, 0.0))
+    return glow(c, W / 2, 2080, 1150, alphas=(0.5, 0.28, 0.0))
+
+
+def rise_pair(c: Comp, fonts: Fonts, t1, t2, font, size, cx, baseline, start, gap_frames=8, exit_at=None,
+              slot1=None, slot2=None, label1=None, label2=None, parent=None, op=None, colors=("white", "green")):
+    """One centred line in two colours (white phrase + green phrase), each half its own masked reveal."""
+    w1 = fonts.width(font, size, t1 + " ")
+    w2 = fonts.width(font, size, t2)
+    x0 = cx - (w1 + w2) / 2
+    rise_line(c, fonts, t1, font, size, colors[0], x0, baseline, j=0, start=start, exit_at=exit_at, slot=slot1,
+              label=label1, parent=parent, op=op)
+    rise_line(c, fonts, t2, font, size, colors[1], x0 + w1, baseline, j=0, start=start + gap_frames,
+              exit_at=None if exit_at is None else exit_at + 2, slot=slot2, label=label2, parent=parent, op=op)
+    return w1 + w2
 
 
 # --------------------------------------------------------------------------- UI pieces
@@ -295,7 +346,7 @@ def cta_button(c: Comp, fonts: Fonts, label, cx, cy, size=40, parent=None, ip=0,
     return x0, total, h
 
 
-def drift(c: Comp, scale=103.5, dy=-16, anchor=(W / 2, 1000)):
+def drift(c: Comp, scale=103.5, dy=-16, anchor=DRIFT_ANCHOR):
     """Slow push-in for the whole scene: camera calmer than the objects, keeps holds alive."""
     ax, ay = anchor
     c.camera(p=anim([(0, [ax, ay, 0], "linear"), (c.frames, [ax, ay + dy, 0])]), a=(ax, ay),

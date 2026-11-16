@@ -34,3 +34,4 @@ canvaskit.wasm
 # Outtakes film build outputs
 /out
 /audio
+__pycache__/

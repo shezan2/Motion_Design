@@ -4,7 +4,9 @@ The Outtakes launch film rebuilt as **Lottie animations**, using
 [diffusionstudio/lottie](https://github.com/diffusionstudio/lottie) (text-to-lottie): its skill, its
 Skia Skottie player, and its authoring rules.
 
-- **Format:** portrait 1080×1920, 30 fps, 56 s.
+- **Formats:** two cuts from one timeline, 30 fps, 56 s each:
+  - portrait 1080×1920 (`public/projects/outtakes-launch`) for Reels, TikTok and Shorts
+  - landscape 1920×1080 (`public/projects/outtakes-launch-16x9`) for YouTube, the website and X
 - **Sound:** sound effects only, no voiceover (add your new VO on top).
 - **Branding:** the new "Outtakes Dark" site.
 
@@ -40,11 +42,21 @@ Skia Skottie player, and its authoring rules.
 
 No real photographer's name is attached to any photo.
 
+## Landscape layout
+
+The 16:9 cut is laid out for the wide frame; it isn't the portrait one cropped.
+
+- **Feature beats:** the headline block sits in a left column, centred vertically. The proof (search, profile, booking form, invoice, payment cards, Shot of the Week) sits in a right column at x 1000–1800. That column is almost the same size as the portrait proof area, so the same UI pieces are reused.
+- **Hook, CTA and DM beats:** the hook and the CTA set their two-colour lines on one line ("YOU GOT **THE SHOT.**", "SIGN UP **FREE.**", "SOUND **FAMILIAR?**"). The DM thread is centred.
+- **Timing and sound:** identical in both formats, so they share one sound-effects track.
+
+`OT_FORMAT=landscape` switches `tools/build_film.py` and `tools/film_parts.py` to the 16:9 layout. The portrait output is unchanged by this switch; the portrait JSON was verified numerically identical.
+
 ## Edit it in the player
 
 ```bash
 npm install
-npm run dev        # http://localhost:3030/outtakes-launch/scene-1
+npm run dev        # http://localhost:3030/outtakes-launch/scene-1  (16:9: /outtakes-launch-16x9/scene-1)
 ```
 
 Every scene exposes **slots** in the player's Properties panel. You can retype these without touching code:
@@ -60,7 +72,8 @@ Each `public/projects/outtakes-launch/scene-N/lottie.json` is a standard Lottie 
 ```bash
 pip install fonttools brotli scipy pillow numpy
 python3 tools/make_fonts.py <archivo woff2 folder> brand/fonts   # one-off: static Archivo cuts for Skottie
-bash tools/export.sh                                             # build scenes -> SFX -> render -> out/outtakes-launch-lottie-9x16.mp4
+bash tools/export.sh                                             # portrait:  build -> SFX -> render -> out/outtakes-launch-lottie-9x16.mp4
+OT_FORMAT=landscape bash tools/export.sh                         # landscape: -> out/outtakes-launch-lottie-16x9.mp4
 ```
 
 - `tools/build_film.py`: authors all scenes (with `tools/film_parts.py` and `tools/lottie_kit.py`).
@@ -74,6 +87,8 @@ bash tools/export.sh                                             # build scenes 
 - **Fonts:** Skottie can't pick axes from a variable font, so `tools/make_fonts.py` cuts static instances: OT Display (Archivo Expanded ExtraBold), OT Wordmark (condensed black italic), OT Body, OT Body Medium and OT Label.
 
 ## Checks on the export (motionmaxxing `look.py`)
+
+Both cuts give the same results below. The one exception is motion: 2.6 in landscape, 2.4 in portrait.
 
 - **G0 render exists:** PASS. 56.00 s, audio present.
 - **G2 no empty frame:** PASS. No run of more than 3 flat frames.

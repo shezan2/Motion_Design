@@ -9,6 +9,7 @@ effects never sit on digital silence.
     python3 tools/sfx.py  ->  audio/sfx.wav
 """
 import json
+import os
 import wave
 from pathlib import Path
 
@@ -17,7 +18,9 @@ from scipy.ndimage import maximum_filter1d, uniform_filter1d
 from scipy.signal import butter, resample_poly, sosfilt
 
 ROOT = Path(__file__).resolve().parent.parent
-CUES = json.loads((ROOT / "public/projects/outtakes-launch/cues.json").read_text())
+# Both formats share one timeline; read the cues of whichever format was built last.
+_PROJECT = "outtakes-launch-16x9" if os.environ.get("OT_FORMAT") == "landscape" else "outtakes-launch"
+CUES = json.loads((ROOT / "public/projects" / _PROJECT / "cues.json").read_text())
 SR = 48000
 FPS = CUES["fps"]
 DUR = CUES["total"] / FPS
