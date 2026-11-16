@@ -34,9 +34,9 @@ fonts = Fonts(FONTS_DIR)
 
 SIZES = {p.name: Image.open(p).size for p in PHOTOS.glob("*.jpg")}
 FOCUS = {
-    "celebrate-fists": (0.5, 0.4), "kids-duel": (0.55, 0.5), "sepak-takraw": (0.42, 0.4),
+    "celebrate-fists": (0.5, 0.4), "kids-duel": (0.40, 0.5), "sepak-takraw": (0.42, 0.4),
     "celebrate-run": (0.44, 0.45), "basketball": (0.5, 0.4), "smile-orange": (0.48, 0.4),
-    "point-orange": (0.46, 0.4), "stretch-ball": (0.55, 0.5), "heart-hands": (0.5, 0.4),
+    "point-orange": (0.46, 0.4), "stretch-ball": (0.42, 0.45), "heart-hands": (0.5, 0.4),
     "number-10": (0.45, 0.5), "team-backs": (0.5, 0.5), "portrait-flare": (0.5, 0.32),
     "tackle-night": (0.5, 0.5), "floodlight-profile": (0.45, 0.32), "motion-blur": (0.52, 0.5),
     "team-talk": (0.6, 0.5),
