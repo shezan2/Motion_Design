@@ -29,6 +29,8 @@ ANCHORS = {
     "linear": (0.0, 0.0, 1.0, 1.0),
     # crash-in from oversize: most of the travel in the first frames, long tail
     "crash": (0.05, 0.70, 0.10, 1.00),
+    # the website's smooth page scroll: eases in, long settle, rests on both ends (seamless cut)
+    "scroll": (0.55, 0.00, 0.15, 1.00),
 }
 
 
@@ -192,6 +194,7 @@ class Comp:
         self.cues = []  # (frame, kind, gain) for the sound-effects pass
         self.no_camera = set()  # layer inds that must stay locked to the frame (ground, seams)
         self.camera_ind = None
+        self.has3d = False
 
     # ---- infrastructure
     def _next(self):
@@ -244,10 +247,17 @@ class Comp:
         layer["bm"] = blend
         return self.add(layer)
 
-    def image(self, name, file, w, h, p=(0, 0), s=(100, 100), r=0, o=100, ip=0, op=None,
-              parent=None, matted=False, blend=0):
+    def _asset(self, file, w, h):
+        for a in self.assets:
+            if a["p"] == file:
+                return a["id"]
         aid = f"img_{len(self.assets)}_{Path(file).stem}"
         self.assets.append({"id": aid, "w": w, "h": h, "u": "", "p": file, "e": 0})
+        return aid
+
+    def image(self, name, file, w, h, p=(0, 0), s=(100, 100), r=0, o=100, ip=0, op=None,
+              parent=None, matted=False, blend=0):
+        aid = self._asset(file, w, h)
         layer = self._base(2, name, self.ks(p=p, a=(w / 2, h / 2), s=s, r=r, o=o), ip, op, parent)
         layer["refId"] = aid
         if matted:
@@ -256,7 +266,7 @@ class Comp:
         return self.add(layer)
 
     def text(self, name, doc, p=(0, 0), s=(100, 100), r=0, o=100, ip=0, op=None, parent=None,
-             matted=False, slot=None, label=None, keyed_docs=None, a=(0, 0)):
+             matted=False, slot=None, label=None, keyed_docs=None, a=(0, 0), animators=None):
         """Native text layer. `doc` from text_doc(); `slot` makes it editable in the player."""
         self.fonts_used.add(doc["f"])
         layer = self._base(5, name, self.ks(p=p, a=a, s=s, r=r, o=o), ip, op, parent)
@@ -265,6 +275,8 @@ class Comp:
         else:
             k = [{"s": doc, "t": 0}]
         layer["t"] = {"d": {"k": k}, "p": {}, "m": {"g": 1, "a": static([0, 0])}, "a": []}
+        if animators:
+            layer["t"]["a"] = animators
         if slot:
             layer["t"]["d"]["sid"] = slot
             self.slots[slot] = {"p": {"a": 1, "k": [{"t": 0, "s": json.loads(json.dumps(doc))}]}}
@@ -276,6 +288,53 @@ class Comp:
     def color_slot(self, sid, color, label):
         self.slots[sid] = {"p": {"a": 0, "k": color}}
         self.controls.append({"sid": sid, "label": label})
+
+    # ---- 3D (Skottie draws 3D layers in LAYER ORDER, not by depth: add far layers first)
+    @staticmethod
+    def ks3(p=(0, 0, 0), a=(0, 0, 0), s=(100, 100, 100), rx=0, ry=0, rz=0, o=100):
+        def v3(v):
+            return v if isinstance(v, dict) else static(list(v))
+        return {"o": prop(o), "rx": prop(rx), "ry": prop(ry), "rz": prop(rz), "or": static([0, 0, 0]),
+                "p": v3(p), "a": v3(a), "s": v3(s)}
+
+    def camera3d(self, zoom=1400, p=None, poi=None):
+        """One-node camera looking straight down -Z: z=0 layers render 1:1 with 2D layers."""
+        self.has3d = True
+        cx, cy = self.w / 2, self.h / 2
+        layer = {"ddd": 1, "ind": self._next(), "ty": 13, "nm": "3D camera", "sr": 1, "ao": 0, "ip": 0,
+                 "op": self.frames, "st": 0, "pe": static(zoom),
+                 "ks": {"p": p or static([cx, cy, -zoom]), "a": poi or static([cx, cy, 0]), "or": static([0, 0, 0]),
+                        "rx": static(0), "ry": static(0), "rz": static(0), "o": static(100)}}
+        self._layers.append(layer)
+        self.no_camera.add(layer["ind"])
+        return layer["ind"]
+
+    def _3d(self, layer):
+        self.has3d = True
+        layer["ddd"] = 1
+        self.no_camera.add(layer["ind"])
+        return layer
+
+    def null3d(self, name, ks, ip=0, op=None, parent=None):
+        layer = self._3d(self._base(3, name, ks, ip, op, parent))
+        return self.add(layer)
+
+    def shape3d(self, name, shapes, ks, ip=0, op=None, parent=None):
+        layer = self._3d(self._base(4, name, ks, ip, op, parent))
+        layer["shapes"] = shapes
+        return self.add(layer)
+
+    def image3d(self, name, file, w, h, ks, ip=0, op=None, parent=None):
+        aid = self._asset(file, w, h)
+        layer = self._3d(self._base(2, name, ks, ip, op, parent))
+        layer["refId"] = aid
+        return self.add(layer)
+
+    def text3d(self, name, doc, ks, ip=0, op=None, parent=None):
+        self.fonts_used.add(doc["f"])
+        layer = self._3d(self._base(5, name, ks, ip, op, parent))
+        layer["t"] = {"d": {"k": [{"s": doc, "t": 0}]}, "p": {}, "m": {"g": 1, "a": static([0, 0])}, "a": []}
+        return self.add(layer)
 
     def camera(self, p, a, s):
         """One dominant, slow camera move for the whole scene (recipe-camera-scene-motion)."""
@@ -292,7 +351,7 @@ class Comp:
         layers = list(reversed(self._layers))
         doc = {
             "v": "5.7.0", "fr": self.fps, "ip": 0, "op": self.frames, "w": self.w, "h": self.h,
-            "nm": self.name, "ddd": 0, "assets": self.assets, "layers": layers,
+            "nm": self.name, "ddd": 1 if self.has3d else 0, "assets": self.assets, "layers": layers,
             "fonts": {"list": [
                 {"fName": f, "fFamily": f, "fStyle": "Regular", "ascent": 75} for f in sorted(self.fonts_used)
             ]},
@@ -300,3 +359,13 @@ class Comp:
         if self.slots:
             doc["slots"] = self.slots
         return doc
+
+
+def letter_reveal(start, end, ghost=14, ease="linear"):
+    """Text animator: characters switch from `ghost` opacity to full, one after another
+    (the website's letter-by-letter opacity load). Range selector based on characters,
+    square shape, its start sweeping 0 -> 100 %; characters inside the range are ghosted."""
+    return [{"nm": "letter reveal",
+             "s": {"t": 0, "xe": static(0), "ne": static(0), "a": static(100), "b": 1, "rn": 0, "sh": 1,
+                   "s": anim([(start, [0], ease), (end, [100])]), "e": static(100), "o": static(0), "r": 1},
+             "a": {"o": static(ghost)}}]

@@ -5,40 +5,12 @@
       "label": "Background"
     },
     {
-      "sid": "cta1",
-      "label": "Sign-up line 1"
+      "sid": "head1",
+      "label": "Headline line 1"
     },
     {
-      "sid": "cta2",
-      "label": "Sign-up line 2"
-    },
-    {
-      "sid": "setup1",
-      "label": "Setup line 1"
-    },
-    {
-      "sid": "setup2",
-      "label": "Setup line 2"
-    },
-    {
-      "sid": "profilesOpen",
-      "label": "Profiles-open date"
-    },
-    {
-      "sid": "liveDate",
-      "label": "Live date"
-    },
-    {
-      "sid": "liveLine",
-      "label": "Live time line"
-    },
-    {
-      "sid": "ctaButton",
-      "label": "Button label"
-    },
-    {
-      "sid": "endBrand",
-      "label": "End brand"
+      "sid": "head2",
+      "label": "Headline line 2"
     }
   ]
 }

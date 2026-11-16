@@ -11,6 +11,10 @@
     {
       "sid": "head2",
       "label": "Headline line 2"
+    },
+    {
+      "sid": "profileName",
+      "label": "Profile name"
     }
   ]
 }

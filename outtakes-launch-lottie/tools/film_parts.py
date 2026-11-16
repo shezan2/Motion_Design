@@ -1,8 +1,9 @@
 """Reusable parts for the Outtakes launch film (30 fps), portrait or landscape.
 
-Design system = the new Outtakes website ("Outtakes Dark"): near-black ground,
-one green accent, cream sections, night->violet->sky->cream gradient, white
-condensed-italic wordmark, Archivo Expanded headlines, Archivo body text.
+Design system = the live Outtakes website (outtakes.ozendigital.co, Nov 2026):
+near-black and cream sections, one green accent, a cream -> green -> black glow,
+white condensed-italic display type for statements (same face as the wordmark),
+Archivo Expanded for small titles, Archivo body text, italic section labels.
 
 Format comes from the OT_FORMAT environment variable:
   portrait  (default) 1080x1920 - Reels/TikTok safe zones: copy and proof between
@@ -70,9 +71,19 @@ def _lock(c, ind):
     return ind
 
 
+SITE_GLOW = [(0, COL["cream"]), (0.26, "#e4f2d6"), (0.42, COL["green"]), (0.58, "#2f7a2c"),
+             (0.76, COL["bg"]), (1, COL["bg"])]
+
+
+def site_gradient(c: Comp, y0, y1, p=(0, 0), ip=0, op=None, flip=False):
+    """The site's signature section ground: cream -> soft green -> bright green -> black."""
+    stops = [(1 - pos, col) for pos, col in reversed(SITE_GLOW)] if flip else SITE_GLOW
+    return _lock(c, c.shape("site glow", [group([rect(W, y1 - y0, W / 2, (y0 + y1) / 2),
+                                                 gradient(stops, [W / 2, y0], [W / 2, y1])])], p=p, ip=ip, op=op))
+
+
 def brand_gradient_rect(c: Comp, y0=0, y1=H, ip=0, op=None, parent=None, o=100):
-    stops = [(0, COL["bg"]), (0.22, "#1c1a3a"), (0.38, COL["violetDeep"]), (0.55, COL["violet"]),
-             (0.68, "#7f95f8"), (0.8, COL["sky"]), (0.9, "#cfe3ea"), (1, COL["cream"])]
+    stops = [(1 - pos, col) for pos, col in reversed(SITE_GLOW)]
     return _lock(c, c.shape("brand gradient", [group([rect(W, y1 - y0, W / 2, (y0 + y1) / 2),
                                                       gradient(stops, [W / 2, y0], [W / 2, y1])])], ip=ip, op=op,
                             parent=parent, o=o))
@@ -176,18 +187,20 @@ def armature_headline(c: Comp, fonts: Fonts, line1, line2, support, start=6, slo
     landscape = PROOF_TOP - 60 (proof sits in the right column, headline block is
     vertically centred in the left column).
     """
-    size = fonts.fit("OT Display", [line1, line2], HEAD_W, 112 if LANDSCAPE else 98)
+    # statements use the site's condensed italic display face (the wordmark's face)
+    size = fonts.fit("OT Wordmark", [line1, line2], HEAD_W, 170 if LANDSCAPE else 150)
     cap = CAP * size
     sup = 38 if LANDSCAPE else 34
+    lead = 0.98
     if LANDSCAPE:
-        block = cap + size * 1.04 + 72
+        block = cap + size * lead + 72
         b1 = H / 2 - block / 2 - 24 + cap
     else:
         b1 = HEAD_TOP + cap
-    b2 = b1 + size * 1.04
-    rise_line(c, fonts, line1, "OT Display", size, "white", HEAD_X, b1, j=0, start=start, slot=f"{slot_prefix}1",
+    b2 = b1 + size * lead
+    rise_line(c, fonts, line1, "OT Wordmark", size, "white", HEAD_X, b1, j=0, start=start, slot=f"{slot_prefix}1",
               label="Headline line 1")
-    rise_line(c, fonts, line2, "OT Display", size, "green", HEAD_X, b2, j=0, start=start + 8, slot=f"{slot_prefix}2",
+    rise_line(c, fonts, line2, "OT Wordmark", size, "green", HEAD_X, b2, j=0, start=start + 8, slot=f"{slot_prefix}2",
               label="Headline line 2")
     fade_line(c, support, "OT Body", sup, "white", HEAD_X, b2 + (72 if LANDSCAPE else 66), j=0, start=start + 18,
               o=62)
@@ -195,11 +208,14 @@ def armature_headline(c: Comp, fonts: Fonts, line1, line2, support, start=6, slo
     return (PROOF_TOP - 60) if LANDSCAPE else b2 + 66
 
 
+GREEN_GLOW = [(0, COL["green"]), (0.5, "#1d4a20"), (1, COL["bg"])]
+
+
 def feature_glow(c: Comp):
-    """The violet light under the proof (portrait: bottom centre; landscape: under the right column)."""
+    """A low green light under the proof, the site's glow (portrait: bottom centre; landscape: right column)."""
     if LANDSCAPE:
-        return glow(c, (L + R) / 2, H + 220, 1100, alphas=(0.5, 0.28, 0.0))
-    return glow(c, W / 2, 2080, 1150, alphas=(0.5, 0.28, 0.0))
+        return glow(c, (L + R) / 2, H + 260, 1100, colors=GREEN_GLOW, alphas=(0.34, 0.16, 0.0))
+    return glow(c, W / 2, 2140, 1150, colors=GREEN_GLOW, alphas=(0.34, 0.16, 0.0))
 
 
 def rise_pair(c: Comp, fonts: Fonts, t1, t2, font, size, cx, baseline, start, gap_frames=8, exit_at=None,
@@ -351,3 +367,18 @@ def drift(c: Comp, scale=103.5, dy=-16, anchor=DRIFT_ANCHOR):
     ax, ay = anchor
     c.camera(p=anim([(0, [ax, ay, 0], "linear"), (c.frames, [ax, ay + dy, 0])]), a=(ax, ay),
              s=anim([(0, [100, 100, 100], "linear"), (c.frames, [scale, scale, 100])]))
+
+
+def site_button(c: Comp, fonts: Fonts, label, cx, cy, width=None, size=32, style="green", parent=None, ip=0, op=None,
+                slot=None):
+    """The live site's button: one rounded rectangle, label plus an arrow inside it (green or white)."""
+    tw = fonts.width("OT Body Medium", size, label)
+    h = size * 2.25
+    w = width or tw + size * 4.4
+    x0 = cx - w / 2
+    box(c, f"button {label}", x0, cy - h / 2, w, h, "green" if style == "green" else "white", r=size * 0.32,
+        parent=parent, ip=ip, op=op)
+    label_text(c, label, "OT Body Medium", size, "ink", cx - size * 0.55, cy + CAP * size / 2, j=2, ip=ip, op=op,
+               parent=parent, slot=slot, label="Button label" if slot else None)
+    arrow_icon(c, x0 + w - size * 1.25, cy, size * 1.1, "ink", parent=parent, ip=ip, op=op)
+    return x0, w, h

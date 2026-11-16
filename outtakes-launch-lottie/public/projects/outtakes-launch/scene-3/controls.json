@@ -5,12 +5,12 @@
       "label": "Background"
     },
     {
-      "sid": "tag1",
-      "label": "Tagline line 1"
+      "sid": "brand",
+      "label": "Wordmark"
     },
     {
-      "sid": "tag2",
-      "label": "Tagline line 2"
+      "sid": "tagline",
+      "label": "Tagline"
     }
   ]
 }

@@ -35,3 +35,4 @@ canvaskit.wasm
 /out
 /audio
 __pycache__/
+/brand/photos/panel-*.jpg

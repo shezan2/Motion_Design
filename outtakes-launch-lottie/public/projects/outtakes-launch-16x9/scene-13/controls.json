@@ -1,0 +1,16 @@
+{
+  "controls": [
+    {
+      "sid": "bgColor",
+      "label": "Background"
+    },
+    {
+      "sid": "frame",
+      "label": "Get in the frame"
+    },
+    {
+      "sid": "endBrand",
+      "label": "Footer wordmark"
+    }
+  ]
+}

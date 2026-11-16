@@ -1,66 +1,84 @@
 {
  "fps": 30,
- "total": 1680,
+ "total": 1925,
  "scenes": [
   {
    "scene": 1,
    "name": "01 Hook - burst mode",
-   "frames": 180,
+   "frames": 140,
    "start": 0
   },
   {
    "scene": 2,
    "name": "02 Problem - the DMs",
-   "frames": 240,
-   "start": 180
+   "frames": 195,
+   "start": 140
   },
   {
    "scene": 3,
-   "name": "03 Reveal - OUTTAKES",
+   "name": "03 Hero - OUTTAKES",
    "frames": 135,
-   "start": 420
+   "start": 335
   },
   {
    "scene": 4,
-   "name": "04 Now clients chase you",
-   "frames": 165,
-   "start": 555
+   "name": "04 Every sideline shot starts with a search",
+   "frames": 135,
+   "start": 470
   },
   {
    "scene": 5,
-   "name": "05 Portfolio, organised",
-   "frames": 135,
-   "start": 720
+   "name": "05 Now clients chase you",
+   "frames": 150,
+   "start": 605
   },
   {
    "scene": 6,
-   "name": "06 Booked at your rate",
+   "name": "06 Your portfolio, organised",
    "frames": 150,
-   "start": 855
+   "start": 755
   },
   {
    "scene": 7,
-   "name": "07 Invoices, done for you",
-   "frames": 135,
-   "start": 1005
+   "name": "07 Booked at your rate",
+   "frames": 165,
+   "start": 905
   },
   {
    "scene": 8,
-   "name": "08 Paid, even if they cancel",
-   "frames": 150,
-   "start": 1140
+   "name": "08 How a booking goes",
+   "frames": 135,
+   "start": 1070
   },
   {
    "scene": 9,
-   "name": "09 Free exposure, built in",
-   "frames": 150,
-   "start": 1290
+   "name": "09 Invoices, done for you",
+   "frames": 120,
+   "start": 1205
   },
   {
    "scene": 10,
-   "name": "10 Sign up free - 20.11 5PM",
-   "frames": 240,
-   "start": 1440
+   "name": "10 Paid, even if they cancel",
+   "frames": 135,
+   "start": 1325
+  },
+  {
+   "scene": 11,
+   "name": "11 Free exposure, built in",
+   "frames": 135,
+   "start": 1460
+  },
+  {
+   "scene": 12,
+   "name": "12 Sign up free - 16 Nov - 20.11 5PM",
+   "frames": 165,
+   "start": 1595
+  },
+  {
+   "scene": 13,
+   "name": "13 Get in the frame",
+   "frames": 165,
+   "start": 1760
   }
  ],
  "cues": [
@@ -70,467 +88,542 @@
    "gain": 0.55
   },
   {
-   "frame": 16,
+   "frame": 14,
    "kind": "shutter",
    "gain": 0.5900000000000001
   },
   {
-   "frame": 28,
+   "frame": 24,
    "kind": "shutter",
    "gain": 0.63
   },
   {
-   "frame": 39,
+   "frame": 33,
    "kind": "shutter",
    "gain": 0.67
   },
   {
-   "frame": 49,
+   "frame": 42,
    "kind": "shutter",
    "gain": 0.7100000000000001
   },
   {
-   "frame": 58,
+   "frame": 50,
    "kind": "shutter",
    "gain": 0.75
   },
   {
-   "frame": 66,
+   "frame": 57,
    "kind": "shutter",
    "gain": 0.79
   },
   {
-   "frame": 73,
+   "frame": 63,
    "kind": "shutter",
    "gain": 0.8300000000000001
   },
   {
-   "frame": 80,
+   "frame": 69,
    "kind": "shutter",
    "gain": 0.8700000000000001
   },
   {
-   "frame": 86,
+   "frame": 74,
    "kind": "shutter",
    "gain": 0.91
   },
   {
-   "frame": 92,
+   "frame": 80,
    "kind": "shutter_big",
    "gain": 1.0
   },
   {
-   "frame": 92,
+   "frame": 80,
    "kind": "boom_small",
    "gain": 0.45
   },
   {
-   "frame": 108,
+   "frame": 92,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 117,
+   "frame": 101,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 179,
+   "frame": 139,
    "kind": "shutter",
    "gain": 0.9
   },
   {
-   "frame": 194,
+   "frame": 152,
    "kind": "blip_in",
    "gain": 0.9
   },
   {
-   "frame": 222,
+   "frame": 176,
    "kind": "blip_out",
    "gain": 0.9
   },
   {
-   "frame": 252,
+   "frame": 202,
    "kind": "blip_in",
    "gain": 0.9
   },
   {
-   "frame": 288,
+   "frame": 232,
    "kind": "blip_in",
    "gain": 0.9
   },
   {
-   "frame": 326,
+   "frame": 264,
    "kind": "blip_out",
    "gain": 0.9
   },
   {
-   "frame": 356,
+   "frame": 290,
    "kind": "tick",
    "gain": 0.4
   },
   {
-   "frame": 376,
+   "frame": 304,
    "kind": "tick",
+   "gain": 0.55
+  },
+  {
+   "frame": 308,
+   "kind": "riser:25",
    "gain": 0.6
   },
   {
-   "frame": 384,
-   "kind": "riser:33",
-   "gain": 0.6
-  },
-  {
-   "frame": 419,
+   "frame": 334,
    "kind": "shutter",
    "gain": 0.9
   },
   {
-   "frame": 422,
+   "frame": 337,
    "kind": "boom",
    "gain": 1.0
   },
   {
-   "frame": 422,
+   "frame": 337,
    "kind": "shutter_big",
    "gain": 1.0
   },
   {
-   "frame": 460,
+   "frame": 357,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 470,
+   "frame": 381,
+   "kind": "pop",
+   "gain": 0.5
+  },
+  {
+   "frame": 435,
+   "kind": "whoosh",
+   "gain": 0.6
+  },
+  {
+   "frame": 472,
+   "kind": "whoosh",
+   "gain": 0.6
+  },
+  {
+   "frame": 482,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 554,
+   "frame": 500,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 574,
+   "kind": "whoosh",
+   "gain": 0.5
+  },
+  {
+   "frame": 604,
    "kind": "shutter",
    "gain": 0.9
   },
   {
-   "frame": 561,
+   "frame": 611,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 581,
+   "frame": 627,
    "kind": "key",
    "gain": 0.35
   },
   {
-   "frame": 583,
+   "frame": 629,
    "kind": "key",
    "gain": 0.35
   },
   {
-   "frame": 584,
+   "frame": 630,
    "kind": "key",
    "gain": 0.35
   },
   {
-   "frame": 586,
+   "frame": 631,
    "kind": "key",
    "gain": 0.35
   },
   {
-   "frame": 587,
+   "frame": 632,
    "kind": "key",
    "gain": 0.35
   },
   {
-   "frame": 589,
+   "frame": 634,
    "kind": "key",
    "gain": 0.35
   },
   {
-   "frame": 592,
+   "frame": 636,
    "kind": "key",
    "gain": 0.35
   },
   {
-   "frame": 593,
+   "frame": 637,
    "kind": "key",
    "gain": 0.35
   },
   {
-   "frame": 595,
+   "frame": 638,
    "kind": "key",
    "gain": 0.35
-  },
-  {
-   "frame": 596,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 598,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 599,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 600,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 602,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 605,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 606,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 608,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 609,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 610,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 612,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 613,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 613,
-   "kind": "blip_in",
-   "gain": 0.6
   },
   {
    "frame": 639,
-   "kind": "whoosh",
-   "gain": 0.4
+   "kind": "key",
+   "gain": 0.35
+  },
+  {
+   "frame": 641,
+   "kind": "key",
+   "gain": 0.35
+  },
+  {
+   "frame": 642,
+   "kind": "key",
+   "gain": 0.35
+  },
+  {
+   "frame": 643,
+   "kind": "key",
+   "gain": 0.35
+  },
+  {
+   "frame": 644,
+   "kind": "key",
+   "gain": 0.35
+  },
+  {
+   "frame": 646,
+   "kind": "key",
+   "gain": 0.35
+  },
+  {
+   "frame": 647,
+   "kind": "key",
+   "gain": 0.35
+  },
+  {
+   "frame": 648,
+   "kind": "key",
+   "gain": 0.35
+  },
+  {
+   "frame": 649,
+   "kind": "key",
+   "gain": 0.35
+  },
+  {
+   "frame": 650,
+   "kind": "key",
+   "gain": 0.35
+  },
+  {
+   "frame": 651,
+   "kind": "key",
+   "gain": 0.35
+  },
+  {
+   "frame": 652,
+   "kind": "key",
+   "gain": 0.35
   },
   {
    "frame": 655,
    "kind": "blip_in",
-   "gain": 0.9
+   "gain": 0.6
   },
   {
-   "frame": 671,
-   "kind": "blip_in",
-   "gain": 0.9
-  },
-  {
-   "frame": 687,
-   "kind": "blip_in",
-   "gain": 0.9
-  },
-  {
-   "frame": 719,
-   "kind": "shutter",
-   "gain": 0.9
-  },
-  {
-   "frame": 726,
-   "kind": "tick",
-   "gain": 0.5
-  },
-  {
-   "frame": 760,
+   "frame": 679,
    "kind": "whoosh",
    "gain": 0.4
   },
   {
-   "frame": 816,
-   "kind": "tap",
-   "gain": 0.8
+   "frame": 693,
+   "kind": "blip_in",
+   "gain": 0.9
   },
   {
-   "frame": 854,
+   "frame": 707,
+   "kind": "blip_in",
+   "gain": 0.9
+  },
+  {
+   "frame": 721,
+   "kind": "blip_in",
+   "gain": 0.9
+  },
+  {
+   "frame": 754,
    "kind": "shutter",
    "gain": 0.9
   },
   {
-   "frame": 861,
+   "frame": 761,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 869,
+   "frame": 771,
+   "kind": "whoosh",
+   "gain": 0.5
+  },
+  {
+   "frame": 803,
+   "kind": "whoosh",
+   "gain": 0.3
+  },
+  {
+   "frame": 904,
+   "kind": "shutter",
+   "gain": 0.9
+  },
+  {
+   "frame": 911,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 913,
    "kind": "blip_in",
    "gain": 0.8
   },
   {
-   "frame": 883,
+   "frame": 923,
    "kind": "whoosh",
    "gain": 0.35
   },
   {
-   "frame": 899,
+   "frame": 935,
    "kind": "whoosh",
    "gain": 0.6
   },
   {
-   "frame": 903,
+   "frame": 941,
    "kind": "whoosh",
    "gain": 0.5
   },
   {
-   "frame": 959,
+   "frame": 942,
+   "kind": "tick",
+   "gain": 0.45
+  },
+  {
+   "frame": 1002,
    "kind": "tap",
    "gain": 0.8
   },
   {
-   "frame": 967,
+   "frame": 1031,
+   "kind": "tap",
+   "gain": 0.8
+  },
+  {
+   "frame": 1039,
    "kind": "chime",
    "gain": 0.9
   },
   {
-   "frame": 1004,
+   "frame": 1069,
    "kind": "shutter",
    "gain": 0.9
   },
   {
-   "frame": 1011,
+   "frame": 1070,
+   "kind": "whoosh",
+   "gain": 0.45
+  },
+  {
+   "frame": 1076,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 1023,
+   "frame": 1110,
    "kind": "whoosh",
-   "gain": 0.5
+   "gain": 0.45
   },
   {
-   "frame": 1103,
-   "kind": "chime",
-   "gain": 0.9
-  },
-  {
-   "frame": 1139,
-   "kind": "shutter",
-   "gain": 0.9
-  },
-  {
-   "frame": 1146,
-   "kind": "tick",
-   "gain": 0.5
-  },
-  {
-   "frame": 1158,
+   "frame": 1140,
    "kind": "whoosh",
-   "gain": 0.5
+   "gain": 0.45
   },
   {
    "frame": 1170,
+   "kind": "whoosh",
+   "gain": 0.45
+  },
+  {
+   "frame": 1204,
+   "kind": "shutter",
+   "gain": 0.9
+  },
+  {
+   "frame": 1211,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 1221,
+   "kind": "whoosh",
+   "gain": 0.5
+  },
+  {
+   "frame": 1291,
+   "kind": "chime",
+   "gain": 0.9
+  },
+  {
+   "frame": 1324,
+   "kind": "shutter",
+   "gain": 0.9
+  },
+  {
+   "frame": 1331,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 1341,
+   "kind": "whoosh",
+   "gain": 0.5
+  },
+  {
+   "frame": 1351,
    "kind": "chime_soft",
    "gain": 0.6
   },
   {
-   "frame": 1204,
+   "frame": 1381,
    "kind": "blip_in",
    "gain": 0.7
   },
   {
-   "frame": 1238,
+   "frame": 1411,
    "kind": "chime",
    "gain": 0.9
   },
   {
-   "frame": 1289,
+   "frame": 1459,
    "kind": "shutter",
    "gain": 0.9
   },
   {
-   "frame": 1296,
+   "frame": 1466,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 1308,
+   "frame": 1476,
    "kind": "whoosh",
    "gain": 0.5
   },
   {
-   "frame": 1340,
+   "frame": 1504,
    "kind": "whoosh",
    "gain": 0.35
   },
   {
-   "frame": 1386,
+   "frame": 1544,
    "kind": "chime",
    "gain": 0.8
   },
   {
-   "frame": 1439,
+   "frame": 1594,
    "kind": "shutter",
    "gain": 0.9
   },
   {
-   "frame": 1448,
+   "frame": 1601,
+   "kind": "tick",
+   "gain": 0.55
+  },
+  {
+   "frame": 1649,
    "kind": "tick",
    "gain": 0.6
   },
   {
-   "frame": 1506,
-   "kind": "tick",
-   "gain": 0.6
-  },
-  {
-   "frame": 1552,
-   "kind": "riser:16",
+   "frame": 1695,
+   "kind": "riser:14",
    "gain": 0.7
   },
   {
-   "frame": 1568,
+   "frame": 1709,
    "kind": "boom",
    "gain": 1.0
   },
   {
-   "frame": 1568,
+   "frame": 1709,
    "kind": "shutter_big",
    "gain": 0.9
   },
   {
-   "frame": 1620,
-   "kind": "pop",
+   "frame": 1759,
+   "kind": "shutter",
+   "gain": 0.9
+  },
+  {
+   "frame": 1760,
+   "kind": "whoosh",
    "gain": 0.6
   },
   {
-   "frame": 1640,
+   "frame": 1800,
+   "kind": "pop",
+   "gain": 0.5
+  },
+  {
+   "frame": 1853,
    "kind": "tap",
    "gain": 0.8
   },
   {
-   "frame": 1646,
+   "frame": 1864,
    "kind": "shutter_big",
    "gain": 0.9
   },
   {
-   "frame": 1646,
+   "frame": 1864,
    "kind": "boom_small",
    "gain": 0.5
   },
   {
-   "frame": 1679,
+   "frame": 1924,
    "kind": "shutter",
    "gain": 0.9
   }
