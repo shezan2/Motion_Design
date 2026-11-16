@@ -130,14 +130,16 @@ OT_FORMAT=landscape bash tools/export.sh                         # landscape: ->
 
 ## Checks on the export (motionmaxxing `look.py`)
 
-Run with `--expect 64.17 --expect-audio` (first v3 portrait export):
+Run on both final exports with `--expect 64.17 --expect-audio`. Both cuts give the same results:
 
-- **G0 render exists:** PASS. 64.17 s, audio present.
+- **G0 render exists:** PASS. 64.17 s, 1925 frames, audio present.
 - **G2 no empty frame:** PASS. No run of more than 3 flat frames.
 - **G3 end card hold:** PASS. The film ends mid-motion as the shutter closes over the footer.
-- **Audio:** −16.3 LUFS, true peak −3.3 dBTP, no flags. 93 % of cuts land within ±80 ms of a sound.
-- **Motion:** mean luma change 3.4, up from 2.4 in v2 but still below the human band of 4.4–9.8. This is a note, not a
-  gate. It reflects the slower pace you asked for and the reading holds left for the voiceover.
+- **Audio:** −16.3 LUFS, true peak −2.8 dBTP, no flags. 93 % of cuts land within ±80 ms of a sound.
+- **Motion:** mean luma change 3.5, up from 2.4 in v2 but still below the human band of 4.4–9.8. This is a note, not a
+  gate. It reflects the slower pace you asked for and the reading holds left for the voiceover. The step carousel creeps
+  and the hero plate pans, so those holds are not flagged as still.
 
 The official player renders the 3D scenes (4, 8, 13) and the letter-by-letter load the same as the Node export, checked
-on pinned frames.
+on pinned frames. The hero → sideline carry is frame-exact: the last frame of chapter 3 and the first frame of chapter 4
+differ by 0.0 on average.
