@@ -1,18 +1,23 @@
-# W5 Recovery Club website
+# Outtakes launch films
 
-A responsive, multi-page static website for W5 Recovery Club, Carpmael Rd, Joo Chiat, Singapore — built with HTML, CSS and a small amount of JavaScript. Brand colours (orange on charcoal) and the "Five experiences. One recovery club." positioning follow the club's Instagram identity.
+Motion-design launch films for **[Outtakes](https://outtakes.sg)**, a platform that helps sports photographers get found, booked and paid. The films have one job: get photographers to sign up for free and set up a profile before the platform goes live on **20 Nov 2026, 5PM SGT**.
 
-## Pages
-- `index.html` — Home
-- `facilities.html` — The five experiences: cryotherapy, sauna room, steam room, ice bath, thermal pool (plus body scan on arrival)
-- `protocol.html` — The recommended contrast-therapy circuit
-- `membership.html` — Passes and membership tiers
-- `visit.html` — Location and booking via Instagram
+Both films were built in the same style (shutter clicks as the beat, sound effects only, no music) and use the same photos and brand. They are two separate projects, one per folder.
 
-## Deployment
-Upload the whole folder to Netlify, Vercel, Cloudflare Pages or any static web host. No build command is required.
+| Folder | Built with | Length | Cuts | Status |
+| --- | --- | --- | --- | --- |
+| [`outtakes-launch-lottie`](outtakes-launch-lottie/) | [text-to-lottie](https://github.com/diffusionstudio/lottie), Lottie animations in a React and Vite player | 64 s, 30 fps | 9:16 (primary) and 16:9 | **Current version** |
+| [`outtakes-launch-video`](outtakes-launch-video/) | [Remotion](https://www.remotion.dev/), video as React code | 47 s, 30 fps | 9:16 (primary) and 16:9 | Superseded, kept for reference |
 
-## Placeholders to fill in
-- **Unit number and hours** (`visit.html`) — the street (Carpmael Rd) is shown; the exact unit number and opening hours aren't public, so the page directs visitors to Instagram DM.
-- **Pricing** (`membership.html`) — tiers are described without prices; all CTAs say "Enquire for rates". Replace with real prices when confirmed.
-- **Photos** — the club's own Instagram photos (cropped from supplied screenshots) live in `assets/images/`: hero background, one per experience card, and the visit-page banner. Replace with higher-resolution originals from the club when available for crisper large-screen rendering.
+## The story, in one line
+
+A photographer gets the shot, then spends days chasing payment over DMs. Outtakes flips that: clients find you through search, book your package, pay securely, and you get free exposure through Shot of the Week.
+
+## Which one should I open?
+
+- **Want the latest film?** Use the Lottie edition. Start with [`OUTTAKES.md`](outtakes-launch-lottie/OUTTAKES.md), which lists all 13 scenes.
+- **Want the original build?** The Remotion edition has a 7-beat breakdown and an easy way to edit copy and dates in one file. See its [README](outtakes-launch-video/README.md).
+
+## Other branches
+
+The W5 Recovery Club website that used to live on `main` is saved on the [`website`](../../tree/website) branch.
