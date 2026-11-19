@@ -3,9 +3,9 @@
 ## What the launch post now does
 
 - It targets one search: "sports photographer Singapore", with football variants ("football photographer Singapore", "hire a photographer for a football match"). These are service-plus-location phrases, which people type when they're ready to book.
-- The keyword is in the SEO title (50 characters), the H1, the URL slug, the first paragraph and one H2. It isn't repeated beyond that, because stuffing hurts more than it helps.
+- The keyword is in the SEO title (50 characters), the H1, the URL slug, the first paragraph and one question heading. It isn't repeated beyond that, because stuffing hurts more than it helps and makes the post read like it was written for Google.
 - The first paragraph answers the search on its own: what Outtakes is, where, when, and what you can do. Google's AI Overviews and snippets tend to quote this kind of self-contained opening.
-- "Questions people ask" is written as visible page copy. Google stopped showing FAQ rich results in May 2026, so the questions are there for readers and AI answers, not for a special search display.
+- "A few questions" is written as visible page copy. Google stopped showing FAQ rich results in May 2026, so the questions are there for readers and AI answers, not for a special search display.
 - `BlogPosting` structured data (JSON-LD) is at the bottom of the file, ready to paste into the page head.
 - Two calls to action link into the product ("Find a photographer", "Join as a photographer"). Point them at the real search and sign-up pages once you know those URLs.
 - Image alt text is written for the two suggested images. Use real Outtakes photos, compressed to under about 200 KB each.
