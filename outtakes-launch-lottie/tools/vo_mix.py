@@ -1,7 +1,7 @@
 """Lay the ElevenLabs voiceover onto the film: one take, cut into its 17 lines,
 each placed on its beat, with the sound effects ducked under the voice.
 
-    python3 tools/vo_mix.py   ->  audio/mix_vo.wav  (then mux with tools/vo_mux.sh)
+    OT_NO_BED=1 python3 tools/sfx.py && python3 tools/vo_mix.py   ->  audio/mix_vo.wav  (then mux with tools/vo_mux.sh)
 """
 import subprocess
 import wave
@@ -44,7 +44,7 @@ def load(path, ch):
 
 
 take = load(VO, 1)[:, 0]
-sfx = load(ROOT / "audio/sfx.wav", 2)
+sfx = load(ROOT / "audio/sfx_nobed.wav", 2)   # OT_NO_BED=1 python3 tools/sfx.py
 N = len(sfx)
 vo = np.zeros(N)
 

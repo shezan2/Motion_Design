@@ -175,8 +175,10 @@ for cue in CUES["cues"]:
         i = int(cue["frame"] / FPS * SR)
         n = min(int(1.2 * SR), N - i)
         duck[i:i + n] = np.minimum(duck[i:i + n], 1 - 0.7 * np.exp(-np.arange(n) / SR * 3))
-L += bed[:, 0] * duck
-R += bed[:, 1] * duck
+NO_BED = os.environ.get("OT_NO_BED") == "1"   # the voiceover mix runs without the crowd bed
+if not NO_BED:
+    L += bed[:, 0] * duck
+    R += bed[:, 1] * duck
 
 # ------------------------------------------------------------------ master: true-peak-aware limiter
 mix = np.stack([L, R], axis=1)[: int(DUR * SR)]
@@ -190,7 +192,7 @@ mix *= np.minimum(uniform_filter1d(g, size=int(0.003 * SR)), g)[:, None]
 fade = int(0.2 * SR)
 mix[-fade:] *= np.linspace(1, 0, fade)[:, None]
 
-out = ROOT / "audio" / "sfx.wav"
+out = ROOT / "audio" / ("sfx_nobed.wav" if NO_BED else "sfx.wav")
 out.parent.mkdir(exist_ok=True)
 with wave.open(str(out), "wb") as w:
     w.setnchannels(2)
