@@ -12,27 +12,27 @@ from scipy.ndimage import uniform_filter1d
 
 ROOT = Path(__file__).resolve().parent.parent
 SR = 48000
-VO = ROOT / "brand/vo/vo-v3.mp3"
+VO = ROOT / "brand/vo/vo-v4.mp3"   # second take (new voice)
 
 # (start, end) of each line in the take (from silence detection), and where it lands in the film (s)
 LINES = [
-    ((0.00, 0.99), 3.00, "You got the shot."),
-    ((1.40, 2.58), 5.50, "Then came the DMs."),
-    ((2.96, 3.63), 10.10, "Sound familiar?"),
-    ((4.08, 5.08), 11.85, "This is Outtakes."),
-    ((5.40, 7.88), 13.15, "Made by photographers, for photographers."),
-    ((8.26, 10.42), 16.50, "Every sideline shot starts with a search."),
-    ((10.77, 12.09), 21.00, "Now the clients come to you."),
-    ((12.46, 14.43), 26.00, "Your work, all on one page."),
-    ((14.79, 17.92), 31.00, "They pick a date, they book your package. At your rate."),
-    ((18.31, 20.51), 36.50, "Call. Book. Pay. Shoot."),
-    ((20.91, 22.39), 41.00, "Invoices? Done for you."),
-    ((22.75, 24.77), 45.00, "And if they cancel, you still get paid."),
-    ((25.25, 28.05), 49.50, "Shot of the Week puts your best frame in front of everyone."),
-    ((28.38, 30.61), 53.50, "Sign up free. Profiles are open now."),
-    ((30.93, 33.51), 56.40, "We go live the twentieth of November, five PM."),
-    ((33.91, 34.64), 59.30, "Get in the frame."),
-    ((35.00, 36.52), 62.30, "outtakes dot S G."),
+    ((0.00, 0.96), 3.00, "You got the shot."),
+    ((1.37, 2.84), 5.50, "Then came the DMs."),
+    ((3.12, 4.28), 10.10, "Sound familiar?"),
+    ((4.67, 5.98), 11.85, "This is Outtakes."),
+    ((6.14, 8.54), 13.35, "Made by photographers, for photographers."),
+    ((8.81, 11.06), 16.50, "Every sideline shot starts with a search."),
+    ((11.34, 12.91), 21.00, "Now the clients come to you."),
+    ((13.26, 15.27), 26.00, "Your work, all on one page."),
+    ((15.57, 18.70), 31.00, "They pick a date, they book your package. At your rate."),
+    ((19.06, 21.16), 36.50, "Call. Book. Pay. Shoot."),
+    ((21.46, 23.46), 41.00, "Invoices? Done for you."),
+    ((23.81, 26.01), 45.00, "And if they cancel, you still get paid."),
+    ((26.39, 29.64), 49.50, "Shot of the Week puts your best frame in front of everyone."),
+    ((29.97, 32.36), 53.50, "Sign up free. Profiles are open now."),
+    ((32.71, 35.36), 56.40, "We go live the twentieth of November, five PM."),
+    ((35.69, 36.59), 59.30, "Get in the frame."),
+    ((36.88, 38.43), 62.30, "outtakes dot S G."),
 ]
 PRE, POST = 0.04, 0.10
 
