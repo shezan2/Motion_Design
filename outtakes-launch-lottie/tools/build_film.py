@@ -775,7 +775,7 @@ def scene_exposure():
 
 # =========================================================================== 12 DATES
 def scene_dates():
-    c = Comp("12 Sign up free - 16 Nov - 20.11 5PM", W, H, 165)
+    c = Comp("12 Sign up free - 16 Nov - 22.11 5PM", W, H, 165)
     background(c)
     glow(c, W / 2, H + 260, 1300 if not LANDSCAPE else 1150, colors=[(0, COL["green"]), (0.5, "#1d4a20"), (1, COL["bg"])],
          alphas=(0.42, 0.2, 0.0))
@@ -799,9 +799,9 @@ def scene_dates():
     c.cue(54, "tick", 0.6)
     c.cue(100, "riser:14", 0.7)
     crash = 114
-    dsize = fonts.fit(STATE, ["20.11"], 900 if LANDSCAPE else 840, 440)
+    dsize = fonts.fit(STATE, ["22.11"], 900 if LANDSCAPE else 840, 440)
     dcy = H / 2 - (40 if LANDSCAPE else 80)
-    wordmark_crash(c, "20.11", STATE, dsize, W / 2, dcy, crash, 165, color="green", start_scale=320,
+    wordmark_crash(c, "22.11", STATE, dsize, W / 2, dcy, crash, 165, color="green", start_scale=320,
                    settle_end_scale=95, slot="liveDate", label="Live date")
     rise_line(c, fonts, "WE GO LIVE · 5PM SGT", "OT Body Medium", 56, "white", W / 2, dcy + CAP * dsize / 2 + 110, j=2,
               start=124, slot="liveLine", label="Live time line")
@@ -905,7 +905,7 @@ def scene_frame():
     us = fonts.fit(TITLE, ["outtakes.sg"], 760, us)
     fade_line(c, "Sign up free at", "OT Body", 44, INK55, tx, ty, j=j, start=fin + 8)
     fade_line(c, "outtakes.sg", TITLE, us, ink, tx, ty + 30 + us, j=j, start=fin + 10)
-    fade_line(c, "Live 20.11 · 5PM SGT", "OT Body Medium", 44, ink, tx, ty + 100 + us, j=j, start=fin + 14)
+    fade_line(c, "Live 22.11 · 5PM SGT", "OT Body Medium", 44, ink, tx, ty + 100 + us, j=j, start=fin + 14)
     curtain_open(c)
     curtain_close(c, dur=6)
     return c

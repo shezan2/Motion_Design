@@ -41,10 +41,10 @@ font = lambda f, size: ImageFont.truetype(str(ROOT / "brand/fonts" / f), size)
 if MORE:
     c = S // 2
     d.rectangle([c - 30, c - 21, c + 30, c + 21], outline=(240, 235, 228), width=2)   # a lone focus point
-    d.text((S / 2, S - 150), "20.11", font=font("ot-wordmark.ttf", 96), fill=(116, 242, 96), anchor="ms")
+    d.text((S / 2, S - 150), "22.11", font=font("ot-wordmark.ttf", 96), fill=(116, 242, 96), anchor="ms")
     d.text((S / 2, S - 104), "5PM SGT", font=font("ot-body-medium.ttf", 24), fill=(240, 235, 228), anchor="ms")
 else:
-    d.text((S / 2, S - 120), "20 . 11", font=font("ot-body-medium.ttf", 30), fill=(116, 242, 96), anchor="ms")
+    d.text((S / 2, S - 120), "22 . 11", font=font("ot-body-medium.ttf", 30), fill=(116, 242, 96), anchor="ms")
 
 out = ROOT / ("out/teaser-1x1-mid.png" if MORE else "out/teaser-1x1-minimal.png")
 im.save(out)

@@ -22,7 +22,7 @@
 
 Search takes weeks to pick up a new site, so the first traffic will come from your own channels:
 
-- Link the post from the launch Reel caption, your bio link and the story on 20 Nov.
+- Link the post from the launch Reel caption, your bio link and the story on 22 Nov.
 - Ask every photographer on the platform to link to Outtakes from their own Instagram bio and website. Links from real Singapore sports accounts are the strongest signal a new site can get.
 - Ask the clubs and leagues you already shoot for (school teams, amateur leagues, futsal groups) to link to their photographers' Outtakes pages.
 - Post a short version on LinkedIn for brands and companies, who are the clients that need invoices.

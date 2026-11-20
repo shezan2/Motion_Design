@@ -27,8 +27,8 @@ Skottie player and its authoring rules.
 | 9 | **Invoices, done for you** | 120 | A proper invoice builds itself (billed to, items, S$70.00 total), then is stamped Sent. *Invoice generation for big clients.* |
 | 10 | **Paid. Even if they cancel.** | 135 | Payment secured (S$70.00). The client cancels, and the cancellation fee is paid to you. *Secure payments.* |
 | 11 | **Free exposure, built in** | 135 | Shot of the Week feature, the Featured chip and the nominees strip. *Free built-in exposure and marketing.* |
-| 12 | Dates | 165 | "SIGN UP / FREE." → "SET UP YOUR / PROFILE FROM / 16 NOV." → **20.11** crash → "WE GO LIVE · 5PM SGT". |
-| 13 | **Get in the frame (site, 3D) + footer** | 165 | A 3D corridor of photo walls glides past. Over it: "GET IN / THE FRAME", the site's two audience lines and buttons ("Join as Photographer" gets tapped). Then the site footer: cream page, "Sign up free at outtakes.sg · Live 20.11 · 5PM SGT", and the giant green OUTTAKES. |
+| 12 | Dates | 165 | "SIGN UP / FREE." → "SET UP YOUR / PROFILE FROM / 16 NOV." → **22.11** crash → "WE GO LIVE · 5PM SGT". |
+| 13 | **Get in the frame (site, 3D) + footer** | 165 | A 3D corridor of photo walls glides past. Over it: "GET IN / THE FRAME", the site's two audience lines and buttons ("Join as Photographer" gets tapped). Then the site footer: cream page, "Sign up free at outtakes.sg · Live 22.11 · 5PM SGT", and the giant green OUTTAKES. |
 
 ### Site animations ported to Lottie
 
@@ -94,7 +94,7 @@ Every scene exposes **slots** in the player's Properties panel. You can retype t
 - `sideline1` and `sideline2`
 - `profileName`
 - `sotw`
-- in scene 12: `profilesOpen` (`16 NOV.`), `liveDate` (`20.11`) and `liveLine` (`WE GO LIVE · 5PM SGT`)
+- in scene 12: `profilesOpen` (`16 NOV.`), `liveDate` (`22.11`) and `liveLine` (`WE GO LIVE · 5PM SGT`)
 - `endBrand` (footer wordmark)
 
 `?frame=N` pins a frame.
