@@ -1,6 +1,6 @@
 {
  "fps": 30,
- "total": 1781,
+ "total": 1787,
  "scenes": [
   {
    "scene": 1,
@@ -70,8 +70,8 @@
   },
   {
    "scene": 12,
-   "name": "12 Footer - outtakes.sg",
-   "frames": 90,
+   "name": "12 End card - in focus",
+   "frames": 96,
    "start": 1691
   }
  ],
@@ -488,11 +488,31 @@
   },
   {
    "frame": 1691,
-   "kind": "boom_small",
+   "kind": "whoosh",
    "gain": 0.5
   },
   {
-   "frame": 1780,
+   "frame": 1706,
+   "kind": "af",
+   "gain": 0.6
+  },
+  {
+   "frame": 1711,
+   "kind": "shutter_big",
+   "gain": 0.9
+  },
+  {
+   "frame": 1711,
+   "kind": "boom_small",
+   "gain": 0.35
+  },
+  {
+   "frame": 1723,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 1786,
    "kind": "shutter",
    "gain": 0.9
   }

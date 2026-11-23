@@ -4,7 +4,7 @@ The Outtakes launch film, built as **Lottie animations** with
 [diffusionstudio/lottie](https://github.com/diffusionstudio/lottie) (text-to-lottie). It uses that project's skill, its
 Skia Skottie player and its authoring rules.
 
-- **Formats:** two cuts from one timeline, 30 fps, **60 s** each:
+- **Formats:** two cuts from one timeline, 30 fps, **60 s** each (59.6 s):
   - portrait 1080×1920 (`public/projects/outtakes-launch`), the primary cut for Reels, TikTok and Shorts
   - landscape 1920×1080 (`public/projects/outtakes-launch-16x9`) for YouTube, the website and X
 - **Sound:** sound effects only, no voiceover.
@@ -17,7 +17,7 @@ Skia Skottie player and its authoring rules.
   - the new photographer profile page
   - the photographer Studio, with its orange accents
   - the holographic "How a booking goes" cards
-  - the light "Get in the frame" corridor and the footer
+  - the light "Get in the frame" corridor
 
 ## How it is directed
 
@@ -36,7 +36,7 @@ graphic match cut from Nike's "You Can't Stop Us" (Wieden+Kennedy):
 - **A custom cursor with press physics.** The black arrow with a white edge enters oversized, travels on eased paths and
   squashes on each press. The button it presses squashes a frame later.
 - **Motivated seams.** Transitions use shutter flashes, the site's own film strip as a wipe, a fly-through into the
-  profile page, whips that cut at peak speed, and the site's green glow into the footer.
+  profile page, whips that cut at peak speed, and the site's glow carries into a dark end card that echoes the opening's focus lock.
 
 ## The film: 12 Lottie scenes
 
@@ -52,8 +52,8 @@ graphic match cut from Nike's "You Can't Stop Us" (Wieden+Kennedy):
 | 8 | Paid, even if they cancel | 165 | In the Studio, the photos are delivered and Earnings this month counts S$0.00 → S$70.00. An invoice is sent automatically. A second client cancels, and the cancellation fee is paid to you. *Secure payments, invoices.* |
 | 9 | Your shot, featured | 135 | "PHOTOS OF THE WEEK" with the shot from the hook, your card, and the Shot of the Week chip. *Free built-in exposure.* |
 | 10 | How a booking goes | 135 | The holographic green step cards (foil lettering) in a 3D carousel, using the site's copy. |
-| 11 | Get in the frame | 150 | The light corridor of photo walls, "Live now · Sign up free", "GET IN / THE FRAME", and the two site buttons. "Join as Photographer" is clicked, and the site's green glow rises. |
-| 12 | Footer | 90 | The site footer: links, "Sign up free at outtakes.sg", the giant green OUTTAKES, then the shutter closes. |
+| 11 | Get in the frame | 150 | The light corridor of photo walls, "Live now · Sign up free", "GET IN / THE FRAME", and the two site buttons. "Join as Photographer" is clicked; the site's glow sweeps light, then green, then dark. |
+| 12 | End card | 96 | The OUTTAKES wordmark starts out of focus. The hook's focus brackets lock onto it in green (beep), it snaps sharp, and the shutter fires. Then "STORIES TOLD THROUGH FRAMES" and "Sign up free at outtakes.sg", and the shutter closes. The film opens on black, lives in the light pages, and closes on black. |
 
 **Prices:** UI uses the site's format (S$70). The DM keeps "$70 for the full game".
 
@@ -77,7 +77,7 @@ Every scene exposes **slots** in the player's Properties panel, so you can retyp
 - the wordmark and tagline
 - the profile name and the step title
 - "Get in the frame"
-- the footer wordmark
+- the end card's wordmark and tagline
 
 `?frame=N` pins a frame. Each `scene-N/lottie.json` is a standard Lottie file.
 
@@ -109,15 +109,15 @@ OT_FORMAT=landscape bash tools/export.sh                         # landscape -> 
 
 ## Checks on the export (motionmaxxing `look.py`)
 
-Run on both final exports with `--expect 59.37 --expect-audio`:
+Run on both final exports with `--expect 59.57 --expect-audio`:
 
 | Gate | Portrait 9:16 | Landscape 16:9 |
 |---|---|---|
-| G0 render exists | PASS (59.37 s, audio present) | PASS |
+| G0 render exists | PASS (59.57 s, audio present) | PASS |
 | G2 no empty frame | PASS | PASS |
 | G3 end card hold | PASS (ends mid-motion as the shutter closes) | PASS |
-| Loudness | −15.6 LUFS, true peak −2.7 dBTP, no flags | −15.7 LUFS, true peak −3.2 dBTP, no flags |
-| Cut sync | 75 % of cuts within ±80 ms of a sound | 65 % |
+| Loudness | −15.8 LUFS, true peak −3.0 dBTP, no flags | −15.8 LUFS, true peak −3.2 dBTP, no flags |
+| Cut sync | 68 % of cuts within ±80 ms of a sound | 61 % |
 | Motion (a note, not a gate) | mean luma change 3.7 | 3.3 |
 
 Motion sits below the human band of 4.4–9.8. That reflects the light pages and the slower pace you asked for; the holds

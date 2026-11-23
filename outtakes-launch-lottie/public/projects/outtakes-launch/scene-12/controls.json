@@ -6,7 +6,11 @@
     },
     {
       "sid": "endBrand",
-      "label": "Footer wordmark"
+      "label": "End wordmark"
+    },
+    {
+      "sid": "endTagline",
+      "label": "End tagline"
     }
   ]
 }

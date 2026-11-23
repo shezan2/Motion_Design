@@ -986,12 +986,8 @@ def scene_frame():
     c.cue(40, "pop", 0.5)
     tx, ty = W / 2 + bw * 0.18, b1y + 6
     cursor(c, [(84, (tx + 260, ty + 360)), (press - 6, (tx, ty)), (150, (tx, ty))], presses=[press])
-    # the site's green glow rises and carries us into the footer
-    gh = H * 1.6
-    c.shape("glow wipe", [group([rect(W * 1.2, gh, W / 2, gh / 2),
-                                 gradient([(0, C_LIGHT), (0.28, "#4bff2c"), (0.5, "#b8ffa8"), (0.72, C_LIGHT), (1, C_LIGHT)],
-                                          [0, 0], [0, gh])])],
-            p=anim([(press + 6, [0, H, 0], "exit-accelerate"), (150, [0, H - gh * 0.98, 0])]), ip=press + 6)
+    # the site's green glow rises and carries us into the dark end card
+    glow_wipe(c, [(press + 6, H, "travel-balanced"), (150, -GLOW_END * GLOW_H)], ip=press + 6)
     c.cue(press + 6, "riser:30", 0.5)
     return c
 
@@ -999,41 +995,81 @@ def scene_frame():
 C_LIGHT = "#e5e9ec"
 
 
-# =========================================================================== 12 FOOTER
-def scene_footer():
-    c = Comp("12 Footer - outtakes.sg", W, H, 90)
-    ground(c, "light")
+GLOW_H = H * 3.2      # tall enough that the dark tail still covers the frame when the green has passed
+GLOW_END = 0.27       # gradient position at the top of the frame on the cut (the green is just leaving)
+
+
+def glow_wipe(c, y_keys, ip=0, op=None):
+    """The site's glow (light -> green -> near-black) as a rising band; y_keys move its top edge."""
+    gh = GLOW_H
+    c.no_camera.add(c.shape("glow wipe", [group([rect(W * 1.2, gh, W / 2, gh / 2),
+                                                 gradient([(0, C_LIGHT), (0.10, "#b8ffa8"), (0.17, "#4bff2c"),
+                                                           (0.25, "#1d5a1a"), (0.33, "#0f0f11"), (1, "#0f0f11")],
+                                                          [0, 0], [0, gh])])],
+                            p=anim([(k[0], [0, k[1], 0]) + tuple(k[2:]) for k in y_keys]), ip=ip, op=op))
+
+
+# =========================================================================== 12 END CARD: the brand, in focus
+def corner_frame(c, cx, cy, w, h, arm, width, scale_keys, colour_keys, ip, op, o=None):
+    """Viewfinder corners around a w x h box (the hook's focus brackets, stretched to frame the wordmark)."""
+    items = []
+    ck = sorted(colour_keys, key=lambda k: k[0])
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            x, y = sx * w / 2, sy * h / 2
+            g = [path([[x, y - sy * arm], [x, y], [x - sx * arm, y]]),
+                 {"ty": "st", "c": anim([(f, col(cc)[:3] + [1], e) for f, cc, e in ck]), "o": static(100),
+                  "w": static(width), "lc": 2, "lj": 2}]
+            items.append(group(g))
+    return c.shape("viewfinder", items, p=(cx, cy), s=anim(scale_keys), ip=ip, op=op, o=o if o is not None else 100)
+
+
+def scene_end():
+    c = Comp("12 End card - in focus", W, H, 96)
+    ground(c, "#0f0f11")
+    # the glow's tail keeps rising out of frame for the first frames (the cut sits inside the wipe)
+    v_end = 0.45 * (H + GLOW_END * GLOW_H) / 40
+    glow_wipe(c, [(0, -GLOW_END * GLOW_H, "linear"), (12, -GLOW_END * GLOW_H - 12 * v_end)], ip=0, op=13)
     if LANDSCAPE:
-        gs = fonts.fit(STATE, ["OUTTAKES"], W * 1.0, 700)
-        gb = H + gs * 0.05
+        size = fonts.fit(STATE, ["OUTTAKES"], 1240, 330)
+        cy = 440
     else:
-        gs = fonts.fit(STATE, ["OUTTAKES"], W * 0.96, 520)
-        gb = 1450
-    c.text("footer wordmark", text_doc("OUTTAKES", STATE, gs, col("green"), justify=2),
-           p=anim([(0, [W / 2, gb + gs * 0.6, 0], "settle-soft"), (20, [W / 2, gb, 0], "linear"), (90, [W / 2, gb - 10, 0])]),
-           slot="endBrand", label="Footer wordmark")
-    c.cue(0, "boom_small", 0.5)
-    links = ["Find a photographer", "Community", "Blog", "About", "Join", "FAQ"]
-    lx, ly = (120, 170) if LANDSCAPE else (80, 330)
-    for k, t in enumerate(links):
-        fp.fade_line(c, t, BODY, 30, "ink", lx, ly + k * 46, start=6 + k)
-    rx = W - (120 if LANDSCAPE else 80)
-    for k, t in enumerate(["2026 Outtakes SG", "Privacy Policy", "Terms", "hello@outtakes.sg"]):
-        fp.fade_line(c, t, BODY, 30, "ink", rx, ly + k * 46, j=1, start=8 + k)
-    if LANDSCAPE:
-        cx, cy = W / 2, 560
-    else:
-        cx, cy = W / 2, 820
-    fp.fade_line(c, "Sign up free at", BODY, 46, "grey", cx, cy, j=2, start=14)
-    us = fonts.fit(TITLE, ["outtakes.sg"], 820, 96)
-    fp.fade_line(c, "outtakes.sg", TITLE, us, "ink", cx, cy + 30 + us, j=2, start=16)
-    fp.drift(c, scale=104.5, dy=-14, anchor=(W / 2, H * 0.62))
+        size = fonts.fit(STATE, ["OUTTAKES"], 860, 330)
+        cy = 840
+    tw = fonts.width(STATE, size, "OUTTAKES")
+    cap = CAP * size
+    lock, shot = 15, 20
+    # the wordmark starts out of focus and snaps sharp as the focus point locks on it
+    wm = c.text("end wordmark", text_doc("OUTTAKES", STATE, size, col("white"), justify=2), p=(W / 2, cy),
+                a=(0, -cap / 2), s=anim([(0, [107, 107, 100], "settle-soft"), (lock + 3, [100, 100, 100], "linear"),
+                                         (96, [97.5, 97.5, 100])]), slot="endBrand", label="End wordmark")
+    with_fx(c, wm, gblur(anim([(0, [55], "settle-soft"), (lock + 1, [0])])))
+    fw, fh = tw + 150, cap + 170
+    corner_frame(c, W / 2, cy, fw, fh, arm=min(90, fh * 0.32), width=7,
+                 scale_keys=[(0, [150, 150, 100], "crash"), (lock - 1, [104, 104, 100], "crash"),
+                             (lock + 2, [99, 99, 100], "hold"), (96, [99, 99, 100])],
+                 colour_keys=[(0, "white", "hold"), (lock, "green", "hold")], ip=0, op=96,
+                 o=anim([(0, 0, "settle-soft"), (4, 100)]))
+    c.cue(0, "whoosh", 0.5)
+    c.cue(lock, "af", 0.6)
+    fp.flash(c, shot, peak=26, dur=3)
+    c.cue(shot, "shutter_big", 0.9)
+    c.cue(shot, "boom_small", 0.35)
+    ts = fonts.fit(TITLE, ["STORIES TOLD THROUGH FRAMES"], tw * 0.78, 44)
+    fp.rise_line(c, fonts, "STORIES TOLD THROUGH FRAMES", TITLE, ts, "#c9ced2", W / 2 + tw / 2 - 6,
+                 cy + cap / 2 + ts * 1.5, j=1, start=shot + 4, slot="endTagline", label="End tagline")
+    uy = cy + cap / 2 + (330 if not LANDSCAPE else 250)
+    fp.fade_line(c, "Sign up free at", BODY, 40 if not LANDSCAPE else 34, "#9aa0a6", W / 2, uy, j=2, start=shot + 10)
+    us = fonts.fit(TITLE, ["outtakes.sg"], 760, 84 if not LANDSCAPE else 70)
+    fp.fade_line(c, "outtakes.sg", TITLE, us, "white", W / 2, uy + 26 + us, j=2, start=shot + 12)
+    c.cue(shot + 12, "tick", 0.5)
+    fp.drift(c, scale=103, dy=-10, anchor=(W / 2, cy))
     fp.curtain_close(c, dur=6)
     return c
 
 
 SCENES = [scene_hook, scene_problem, scene_hero, scene_studio, scene_profile, scene_search, scene_book, scene_paid,
-          scene_featured, scene_steps, scene_frame, scene_footer]
+          scene_featured, scene_steps, scene_frame, scene_end]
 
 
 def main():
