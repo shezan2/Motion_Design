@@ -1,6 +1,6 @@
 {
  "fps": 30,
- "total": 1790,
+ "total": 1781,
  "scenes": [
   {
    "scene": 1,
@@ -17,62 +17,62 @@
   {
    "scene": 3,
    "name": "03 Hero - OUTTAKES",
-   "frames": 150,
+   "frames": 141,
    "start": 330
   },
   {
    "scene": 4,
    "name": "04 Set up your Studio",
    "frames": 140,
-   "start": 480
+   "start": 471
   },
   {
    "scene": 5,
    "name": "05 Your portfolio, organised",
    "frames": 150,
-   "start": 620
+   "start": 611
   },
   {
    "scene": 6,
    "name": "06 Now clients find you",
    "frames": 180,
-   "start": 770
+   "start": 761
   },
   {
    "scene": 7,
    "name": "07 Booked at your rate",
    "frames": 165,
-   "start": 950
+   "start": 941
   },
   {
    "scene": 8,
    "name": "08 Paid, even if they cancel",
    "frames": 165,
-   "start": 1115
+   "start": 1106
   },
   {
    "scene": 9,
    "name": "09 Your shot, featured",
    "frames": 135,
-   "start": 1280
+   "start": 1271
   },
   {
    "scene": 10,
    "name": "10 How a booking goes",
    "frames": 135,
-   "start": 1415
+   "start": 1406
   },
   {
    "scene": 11,
    "name": "11 Get in the frame",
    "frames": 150,
-   "start": 1550
+   "start": 1541
   },
   {
    "scene": 12,
    "name": "12 Footer - outtakes.sg",
    "frames": 90,
-   "start": 1700
+   "start": 1691
   }
  ],
  "cues": [
@@ -267,237 +267,237 @@
    "gain": 0.5
   },
   {
-   "frame": 484,
+   "frame": 471,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 532,
+   "frame": 523,
    "kind": "tick",
    "gain": 0.55
   },
   {
-   "frame": 538,
+   "frame": 529,
    "kind": "tick",
    "gain": 0.55
   },
   {
-   "frame": 544,
+   "frame": 535,
    "kind": "tick",
    "gain": 0.55
   },
   {
-   "frame": 550,
+   "frame": 541,
    "kind": "tick",
    "gain": 0.55
   },
   {
-   "frame": 556,
+   "frame": 547,
    "kind": "tick",
    "gain": 0.55
   },
   {
-   "frame": 562,
+   "frame": 553,
    "kind": "tick",
    "gain": 0.55
   },
   {
-   "frame": 568,
+   "frame": 559,
    "kind": "tick",
    "gain": 0.55
   },
   {
-   "frame": 574,
+   "frame": 565,
    "kind": "tick",
    "gain": 0.55
   },
   {
-   "frame": 580,
+   "frame": 571,
    "kind": "pop",
    "gain": 0.5
   },
   {
-   "frame": 596,
+   "frame": 587,
    "kind": "tap",
    "gain": 0.9
   },
   {
-   "frame": 604,
+   "frame": 595,
    "kind": "whoosh",
    "gain": 0.7
   },
   {
-   "frame": 654,
+   "frame": 645,
    "kind": "whoosh",
    "gain": 0.4
   },
   {
-   "frame": 724,
+   "frame": 715,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 774,
+   "frame": 761,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 810,
+   "frame": 801,
    "kind": "whoosh",
    "gain": 0.7
   },
   {
-   "frame": 842,
+   "frame": 833,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 858,
+   "frame": 849,
    "kind": "tap",
    "gain": 0.9
   },
   {
-   "frame": 872,
+   "frame": 863,
    "kind": "whoosh",
    "gain": 0.6
   },
   {
-   "frame": 912,
+   "frame": 903,
    "kind": "pop",
    "gain": 0.6
   },
   {
-   "frame": 912,
+   "frame": 903,
    "kind": "tap",
    "gain": 0.9
   },
   {
-   "frame": 954,
+   "frame": 941,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 1038,
+   "frame": 1029,
    "kind": "tap",
    "gain": 0.9
   },
   {
-   "frame": 1038,
+   "frame": 1029,
    "kind": "tick",
    "gain": 0.6
   },
   {
-   "frame": 1070,
+   "frame": 1061,
    "kind": "tap",
    "gain": 0.9
   },
   {
-   "frame": 1074,
+   "frame": 1065,
    "kind": "chime",
    "gain": 0.9
   },
   {
-   "frame": 1102,
+   "frame": 1093,
    "kind": "whoosh",
    "gain": 0.6
   },
   {
-   "frame": 1119,
+   "frame": 1106,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 1189,
+   "frame": 1180,
    "kind": "pop",
    "gain": 0.6
   },
   {
-   "frame": 1203,
+   "frame": 1194,
    "kind": "blip_in",
    "gain": 0.5
   },
   {
-   "frame": 1215,
+   "frame": 1206,
    "kind": "chime_soft",
    "gain": 0.7
   },
   {
-   "frame": 1227,
+   "frame": 1218,
    "kind": "blip_in",
    "gain": 0.6
   },
   {
-   "frame": 1243,
+   "frame": 1234,
    "kind": "chime",
    "gain": 0.85
   },
   {
-   "frame": 1269,
+   "frame": 1260,
    "kind": "whoosh",
    "gain": 0.6
   },
   {
-   "frame": 1284,
+   "frame": 1271,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 1358,
+   "frame": 1349,
    "kind": "chime",
    "gain": 0.8
   },
   {
-   "frame": 1414,
+   "frame": 1405,
    "kind": "shutter",
    "gain": 0.9
   },
   {
-   "frame": 1415,
+   "frame": 1406,
    "kind": "whoosh",
    "gain": 0.45
   },
   {
-   "frame": 1455,
+   "frame": 1446,
    "kind": "whoosh",
    "gain": 0.45
   },
   {
-   "frame": 1485,
+   "frame": 1476,
    "kind": "whoosh",
    "gain": 0.45
   },
   {
-   "frame": 1515,
+   "frame": 1506,
    "kind": "whoosh",
    "gain": 0.45
   },
   {
-   "frame": 1550,
+   "frame": 1541,
    "kind": "whoosh",
    "gain": 0.5
   },
   {
-   "frame": 1590,
+   "frame": 1581,
    "kind": "pop",
    "gain": 0.5
   },
   {
-   "frame": 1654,
+   "frame": 1645,
    "kind": "tap",
    "gain": 0.9
   },
   {
-   "frame": 1660,
+   "frame": 1651,
    "kind": "riser:30",
    "gain": 0.5
   },
   {
-   "frame": 1700,
+   "frame": 1691,
    "kind": "boom_small",
    "gain": 0.5
   },
   {
-   "frame": 1789,
+   "frame": 1780,
    "kind": "shutter",
    "gain": 0.9
   }

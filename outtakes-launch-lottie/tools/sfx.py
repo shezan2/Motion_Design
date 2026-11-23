@@ -51,6 +51,9 @@ def place(sig, t, gain=1.0, pan=0.0):
     if i >= N:
         return
     s = sig[: N - i] * gain
+    a = min(len(s), int(0.0025 * SR))  # 2.5 ms raised-cosine attack: no instant onsets for the codec to overshoot
+    s = s.copy()
+    s[:a] *= 0.5 - 0.5 * np.cos(np.linspace(0, np.pi, a))
     L[i:i + len(s)] += s * np.cos((pan + 1) * np.pi / 4) * 1.414
     R[i:i + len(s)] += s * np.sin((pan + 1) * np.pi / 4) * 1.414
 
@@ -194,6 +197,7 @@ if not NO_BED:
 
 # ------------------------------------------------------------------ master: true-peak-aware limiter
 mix = np.stack([L, R], axis=1)[: int(DUR * SR)]
+mix = sosfilt(butter(2, 15500, btype="low", fs=SR, output="sos"), mix, axis=0)  # tame codec-unfriendly top end
 mix *= 0.5 / np.max(np.abs(mix))
 mix *= 10 ** (17.5 / 20)  # make-up gain toward the -14 LUFS social target (sparse SFX need a lot)
 ceil = 0.63

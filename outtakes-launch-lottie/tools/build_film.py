@@ -67,8 +67,9 @@ def sz(name):
     return SIZES[name]
 
 
-def flat_pt(cx, cy, w, h, lx, ly, s=UI_S):
+def flat_pt(cx, cy, w, h, lx, ly, s=None):
     """Screen position of a plane-local point while the plane is flat at z=0."""
+    s = UI_S if s is None else s
     return cx + (lx - w / 2) * s, cy + (ly - h / 2) * s
 
 
@@ -91,12 +92,21 @@ def claim(c, lines, start=6, colors=None, slots=None, exit_at=None):
                      exit_at=exit_at)
 
 
-def rise_plane(c, name, w, h, t0, dur=22, ip=None, op=None, z0=260, rx0=16, drop=None):
-    """A UI plane that rises from below with a tilt and settles flat at z=0 (UI_X, UI_Y)."""
+def rise_plane(c, name, w, h, t0, dur=22, ip=None, op=None, z0=260, rx0=16, drop=None, drift=34, whip=None):
+    """A UI plane that rises from below with a tilt, settles flat at z=0 (UI_X, UI_Y), then keeps drifting up slowly
+    so a held frame stays alive. whip = (frame, dx, dy) for an accelerating exit. pl.center_at(f) gives its centre."""
     drop = drop if drop is not None else (H * 0.75 if not LANDSCAPE else H * 0.9)
-    p = anim([(t0, [UI_X, UI_Y + drop, z0], "settle-soft"), (t0 + dur, [UI_X, UI_Y, 0])])
-    rx = anim([(t0, rx0, "settle-soft"), (t0 + dur, 0)])
-    return Plane(c, name, w, h, p, rx=rx, s=(UI_S * 100, UI_S * 100, 100), ip=t0 if ip is None else ip, op=op)
+    settle = t0 + dur
+    end = whip[0] if whip else c.frames
+    keys = [(t0, [UI_X, UI_Y + drop, z0], "settle-soft"), (settle, [UI_X, UI_Y, 0], "linear"),
+            (end, [UI_X, UI_Y - drift, 0])]
+    if whip:
+        keys[-1] = (end, [UI_X, UI_Y - drift, 0], "exit-accelerate")
+        keys.append((end + 9, [UI_X + whip[1] * W, UI_Y - drift + whip[2] * H, 0]))
+    rx = anim([(t0, rx0, "settle-soft"), (settle, 0)])
+    pl = Plane(c, name, w, h, anim(keys), rx=rx, s=(UI_S * 100, UI_S * 100, 100), ip=t0 if ip is None else ip, op=op)
+    pl.center_at = lambda f: (UI_X, UI_Y - drift * max(0.0, min(1.0, (f - settle) / max(1, end - settle))))
+    return pl
 
 
 def whip_out(plane_ind, c, t0, dx=-1.25, dy=0.0, dur=9):
@@ -282,13 +292,14 @@ def scene_problem():
                   max_w=860, max_size=260, stagger=9, slots=["problem1", "problem2"])
     c.cue(dim_at + 8, "riser:20", 0.55)
     fp.curtain_open(c)
+    fp.drift(c, scale=104, dy=-18)
     fp.curtain_close(c)
     return c
 
 
 # =========================================================================== 3 HERO: OUTTAKES (the new site)
 def scene_hero():
-    c = Comp("03 Hero - OUTTAKES", W, H, 150)
+    c = Comp("03 Hero - OUTTAKES", W, H, 141)
     ground(c, "#000000")
     crash = 2
     plate = "v4-hero-l.jpg" if LANDSCAPE else "v4-hero-p.jpg"
@@ -368,7 +379,7 @@ def scene_studio():
     ground(c, "light")
     soft_vignette(c)
     c.camera3d(zoom=1400)
-    claim(c, ["SET UP ONCE.", "GET BOOKED."], start=4, slots=["studio1", "studio2"], exit_at=None if LANDSCAPE else 34)
+    claim(c, ["SET UP ONCE.", "GET BOOKED."], start=0, slots=["studio1", "studio2"], exit_at=None if LANDSCAPE else 34)
     pw, ph = 960, 1190
     t_in = 30
     pl = rise_plane(c, "studio card", pw, ph, t_in, op=140)
@@ -408,14 +419,16 @@ def scene_studio():
     press = 116
     g = button(pl, fonts, "Preview profile", 56, by, 848, 100, style="ink", size=34, ip=swap, press=press)
     c.cue(swap, "pop", 0.5)
-    tx, ty = flat_pt(UI_X, UI_Y, pw, ph, 56 + 848 * 0.62, by + 54)
-    cursor(c, [(swap + 2, (tx + 260, ty + 420)), (press - 6, (tx, ty)), (140, (tx, ty))], presses=[press], op=140)
-    # fly-through: the card rushes past the camera into the profile
+    # fly-through: the card drifts while you work, then rushes past the camera into the profile
+    d4 = 30
     for lyr in c._layers:
         if lyr["ind"] == pl.ind:
             lyr["ks"]["p"] = anim([(t_in, [UI_X, UI_Y + (H * 0.75 if not LANDSCAPE else H * 0.9), 260], "settle-soft"),
-                                   (t_in + 22, [UI_X, UI_Y, 0], "hold"), (press + 6, [UI_X, UI_Y, 0], "exit-accelerate"),
-                                   (140, [UI_X, UI_Y + 120, -1150])])
+                                   (t_in + 22, [UI_X, UI_Y, 0], "linear"), (press + 6, [UI_X, UI_Y - d4, 0], "exit-accelerate"),
+                                   (140, [UI_X, UI_Y - d4 + 120, -1150])])
+    cy_at = lambda f: UI_Y - d4 * max(0.0, min(1.0, (f - t_in - 22) / (press + 6 - t_in - 22)))
+    tx, ty = flat_pt(UI_X, cy_at(press), pw, ph, 56 + 848 * 0.62, by + 54)
+    cursor(c, [(swap + 2, (tx + 260, ty + 420)), (press - 6, (tx, ty)), (140, (tx, ty))], presses=[press], op=140)
     c.cue(press + 8, "whoosh", 0.7)
     return c
 
@@ -534,7 +547,7 @@ def scene_search():
     ground(c, "light")
     soft_vignette(c)
     c.camera3d(zoom=1400)
-    claim(c, ["NOW CLIENTS", "FIND YOU."], start=4, slots=["search1", "search2"], exit_at=40)
+    claim(c, ["NOW CLIENTS", "FIND YOU."], start=0, slots=["search1", "search2"], exit_at=40)
     CX = W / 2 if LANDSCAPE else UI_X  # the claim clears, so the browse row and results take the centre
     # Browse by sport: the row whips in and stops on Football (the stop is the choice)
     cw_, ch_ = 400, 560
@@ -592,8 +605,10 @@ def scene_search():
     you_idx = 1
     track_final = CX - (you_idx * (cwr + gapr) + cwr / 2)
     lift = 0.58 if LANDSCAPE else 0.38
+    track_drift = 40
     track = c.null("result track", p=anim([(t_strip + 4, [track_final + 900, band_y - chr_ * lift, 0], "settle-soft"),
-                                           (t_strip + 30, [track_final, band_y - chr_ * lift, 0])]), ip=t_strip)
+                                           (t_strip + 30, [track_final, band_y - chr_ * lift, 0], "linear"),
+                                           (180, [track_final - track_drift, band_y - chr_ * lift, 0])]), ip=t_strip)
     c.no_camera.add(track)
     title_y = band_y - sh / 2 + 120
     fp.fade_line(c, "FEATURED PHOTOGRAPHERS", TITLE, 38 if not LANDSCAPE else 32, "white",
@@ -636,10 +651,10 @@ def scene_search():
                 "o": [[0, 0], [0, 0], [0, -4 * hk], [4 * hk, 0], [0, 0], [6 * hk, 0], [0, 5 * hk], [0, 0]],
                 "v": [[hx + px * hk, hy + py * hk] for px, py in pts], "c": True}}}, st("ink", 3)])], parent=track, ip=t_strip)
     # the client's pointer: picks Football, then hearts your card
-    you_hx = CX + cwr / 2 - 46
+    you_hx = CX + cwr / 2 - 46 - track_drift * (heart_t - t_strip - 30) / (180 - t_strip - 30)
     you_hy = band_y - chr_ * lift + 46
     cursor(c, [(row_stop + 2, (fx + 220, fy + 380)), (click_fb - 4, (fx, fy)), (row_out - 2, (fx, fy)),
-               (heart_t - 6, (you_hx, you_hy)), (180, (you_hx + 40, you_hy + 120))],
+               (heart_t - 6, (you_hx, you_hy)), (heart_t + 8, (you_hx, you_hy)), (180, (you_hx + 40, you_hy + 120))],
            presses=[click_fb, heart_t], op=180)
     return c
 
@@ -651,9 +666,9 @@ def scene_book():
     soft_vignette(c)
     c.camera3d(zoom=1400)
     t_in = 32
-    claim(c, ["BOOKED AT", "YOUR RATE."], start=4, slots=["book1", "book2"], exit_at=None if LANDSCAPE else t_in + 4)
+    claim(c, ["BOOKED AT", "YOUR RATE."], start=0, slots=["book1", "book2"], exit_at=None if LANDSCAPE else t_in + 4)
     pw, ph = 960, 1230
-    pl = rise_plane(c, "booking", pw, ph, t_in, op=165)
+    pl = rise_plane(c, "booking", pw, ph, t_in, op=165, whip=(152, -1.3, 0))
     pl.text("BOOK " + YOUR.upper(), TITLE, 50, "ink", 0, 50)
     # package
     pl.box(0, 90, pw, 330, "panel", r=18, shadow=SHADOW_SOFT)
@@ -702,13 +717,12 @@ def scene_book():
     ring.circle(px_, py_, 84, None, line="ink", line_w=4)
     pl.circle(gx + 14, ay + 712, 22, "green")
     pl.text("Available, tap to pick", BODY, 26, "grey", gx + 40, ay + 721)
-    tpx, tpy = flat_pt(UI_X, UI_Y, pw, ph, px_, py_)
-    tbx, tby = flat_pt(UI_X, UI_Y, pw, ph, bx + bw_ * 0.5, byy + bh_ * 0.55)
+    tpx, tpy = flat_pt(*pl.center_at(pick_t), pw, ph, px_, py_)
+    tbx, tby = flat_pt(*pl.center_at(press_book), pw, ph, bx + bw_ * 0.5, byy + bh_ * 0.55)
     cursor(c, [(66, (tpx + 300, tpy + 380)), (pick_t - 6, (tpx, tpy)), (pick_t + 10, (tpx, tpy)),
                (press_book - 7, (tbx, tby)), (165, (tbx + 30, tby + 40))], presses=[pick_t, press_book], op=165)
     c.cue(pick_t, "tick", 0.6)
     c.cue(press_book + 4, "chime", 0.9)
-    whip_out(pl.ind, c, 152, dx=-1.3)
     c.cue(152, "whoosh", 0.6)
     return c
 
@@ -720,9 +734,9 @@ def scene_paid():
     soft_vignette(c)
     c.camera3d(zoom=1400)
     t_in = 32
-    claim(c, ["PAID.", "EVEN IF THEY CANCEL."], start=4, slots=["paid1", "paid2"], exit_at=None if LANDSCAPE else t_in + 4)
+    claim(c, ["PAID.", "EVEN IF THEY CANCEL."], start=0, slots=["paid1", "paid2"], exit_at=None if LANDSCAPE else t_in + 4)
     pw, ph = 960, 1110
-    pl = rise_plane(c, "studio money", pw, ph, t_in, op=165)
+    pl = rise_plane(c, "studio money", pw, ph, t_in, op=165, whip=(154, 0, -1.1))
     # earnings card
     pl.box(0, 0, pw, 300, "card", r=24, shadow=SHADOW_SOFT)
     pl.text("Earnings this month", BODY, 32, "grey", 44, 76)
@@ -785,7 +799,6 @@ def scene_paid():
             g2.check(44 + w + 26, ry + 225, 30, "ink", draw_at=t_fee + 2)
             c.cue(t_flip, "blip_in", 0.6)
             c.cue(t_fee, "chime", 0.85)
-    whip_out(pl.ind, c, 154, dy=-1.1)
     c.cue(154, "whoosh", 0.6)
     return c
 
@@ -797,9 +810,9 @@ def scene_featured():
     soft_vignette(c)
     c.camera3d(zoom=1400)
     t_in = 30
-    claim(c, ["YOUR SHOT.", "FEATURED."], start=4, slots=["sotw1", "sotw2"], exit_at=None if LANDSCAPE else t_in + 4)
+    claim(c, ["YOUR SHOT.", "FEATURED."], start=0, slots=["sotw1", "sotw2"], exit_at=None if LANDSCAPE else t_in + 4)
     pw, ph = 960, 1240
-    pl = rise_plane(c, "photos of the week", pw, ph, t_in, op=135)
+    pl = rise_plane(c, "photos of the week", pw, ph, t_in, op=135, whip=(126, 0, -1.1))
     pl.text("PHOTOS OF THE WEEK", TITLE, 46, "ink", 0, 52)
     pl.box(0, 88, pw, 1152, "panel", r=0, shadow=SHADOW)
     iw, ih = sz("celebrate-run.jpg")
@@ -829,7 +842,6 @@ def scene_featured():
     feat.box(30, 120, 220, 54, "green", r=8)
     feat.text("Shot of the Week", MED, 26, "ink", 140, 156, j=2)
     c.cue(78, "chime", 0.8)
-    whip_out(pl.ind, c, 126, dy=-1.1, dur=9)
     fp.curtain_close(c)
     return c
 
@@ -1014,6 +1026,7 @@ def scene_footer():
     fp.fade_line(c, "Sign up free at", BODY, 46, "grey", cx, cy, j=2, start=14)
     us = fonts.fit(TITLE, ["outtakes.sg"], 820, 96)
     fp.fade_line(c, "outtakes.sg", TITLE, us, "ink", cx, cy + 30 + us, j=2, start=16)
+    fp.drift(c, scale=104.5, dy=-14, anchor=(W / 2, H * 0.62))
     fp.curtain_close(c, dur=6)
     return c
 
