@@ -12,29 +12,29 @@ from scipy.ndimage import uniform_filter1d
 
 ROOT = Path(__file__).resolve().parent.parent
 SR = 48000
-VO = ROOT / "brand/vo/vo-v5.mp3"   # v4 film (60 s cut)
+VO = ROOT / "brand/vo/vo-v6.mp3"   # latest take for the 60 s cut (vo-v5.mp3 was the previous one)
 
 # (start, end) of each line in the take (from silence detection), and where it lands in the film (s)
 LINES = [
-    ((0.00, 0.83), 3.15, "You got the shot."),
-    ((1.29, 2.45), 5.60, "Then came the DMs."),
-    ((2.87, 3.47), 10.35, "Sound familiar?"),
-    ((4.08, 5.36), 11.30, "This is Outtakes."),
-    ((5.73, 8.03), 12.80, "Made by photographers, for photographers."),
-    ((8.46, 10.10), 15.85, "Set up once. Get booked."),
-    ((10.52, 12.22), 23.85, "Your portfolio, organised."),
-    ((12.66, 14.14), 25.85, "Now clients find you."),
-    ((14.75, 17.35), 31.60, "Booked at your rate. No lowball DMs."),
-    ((17.87, 19.47), 37.00, "Paid. Even if they cancel."),
-    ((20.01, 21.46), 39.55, "Invoices, done for you."),
-    ((21.96, 23.44), 42.55, "Your shot. Featured."),
-    ((23.89, 24.30), 47.35, "Call."),
-    ((24.56, 24.86), 48.65, "Book."),
-    ((25.17, 25.50), 49.65, "Pay."),
-    ((25.62, 26.06), 50.65, "Shoot."),
-    ((26.55, 27.25), 51.75, "Get in the frame."),
-    ((27.74, 30.54), 52.90, "Set up your profile free, from the twenty-fourth of November."),
-    ((31.05, 32.21), 57.45, "outtakes dot S G."),
+    ((0.00, 0.91), 3.15, "You got the shot."),
+    ((1.29, 3.05), 5.60, "Then came the DMs."),
+    ((3.33, 4.17), 10.25, "Sound familiar?"),
+    ((4.48, 6.16), 11.25, "This is Outtakes."),
+    ((6.43, 9.11), 13.08, "Made by photographers, for photographers."),
+    ((9.33, 11.22), 15.95, "Set up once. Get booked."),
+    ((11.42, 13.42), 23.60, "Your portfolio, organised."),
+    ((13.63, 15.40), 25.80, "Now clients find you."),
+    ((15.67, 18.75), 31.55, "Booked at your rate. No lowball DMs."),
+    ((18.95, 21.03), 37.00, "Paid. Even if they cancel."),
+    ((21.29, 23.17), 39.55, "Invoices, done for you."),
+    ((23.41, 25.04), 42.55, "Your shot. Featured."),
+    ((25.32, 25.76), 47.35, "Call."),
+    ((26.00, 26.33), 48.65, "Book."),
+    ((26.55, 26.97), 49.65, "Pay."),
+    ((27.14, 27.71), 50.65, "Shoot."),
+    ((27.91, 28.92), 51.75, "Get in the frame."),
+    ((29.15, 32.65), 52.90, "Set up your profile free, from the twenty-fourth of November."),
+    ((32.88, 34.37), 57.45, "outtakes dot S G."),
 ]
 PRE, POST = 0.04, 0.08
 
@@ -65,7 +65,7 @@ for (a, b), at, text in LINES:
     assert not np.any(vo[j:j + len(seg)]), f"overlap at {text}"
     vo[j:j + len(seg)] += seg
 
-# duck the effects ~13 dB while the voice talks (fast attack, slow release)
+# duck the effects ~17 dB while the voice talks (fast attack, slow release)
 active = uniform_filter1d((np.abs(vo) > 0.01).astype(float), int(0.12 * SR))
 active = np.clip(active * 4, 0, 1)
 env = np.zeros(N)
@@ -75,7 +75,7 @@ for k in range(0, N, 48):  # control rate 1 kHz
     t = active[k]
     e = t + (e - t) * (att ** 48 if t > e else rel ** 48)
     env[k:k + 48] = e
-duck = 1 - env * (1 - 10 ** (-13 / 20))
+duck = 1 - env * (1 - 10 ** (-17 / 20))
 mix = sfx * duck[:, None] + vo[:, None] * 1.0
 
 out = ROOT / "audio/mix_vo_raw.wav"
