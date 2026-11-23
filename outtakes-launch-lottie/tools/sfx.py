@@ -194,6 +194,14 @@ NO_BED = os.environ.get("OT_NO_BED") == "1"   # the voiceover mix runs without t
 if not NO_BED:
     L += bed[:, 0] * duck
     R += bed[:, 1] * duck
+else:
+    # an inaudible room-tone floor (about -58 dBFS after mastering, low frequencies only): no audible noise, but the
+    # track never drops to digital zero between sounds, which plays as a dropout
+    tone = np.cumsum(rng.standard_normal((N, 2)), axis=0)
+    tone = lp(hp(tone, 30), 380)
+    tone /= np.sqrt(np.mean(tone ** 2)) + 1e-12
+    L += tone[:, 0] * 0.0018
+    R += tone[:, 1] * 0.0018
 
 # ------------------------------------------------------------------ master: true-peak-aware limiter
 mix = np.stack([L, R], axis=1)[: int(DUR * SR)]
