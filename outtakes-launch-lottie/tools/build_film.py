@@ -1,23 +1,23 @@
 """Author the Outtakes launch film as Lottie scenes for the text-to-lottie player.
 
-    python3 tools/build_film.py                        # portrait  -> public/projects/outtakes-launch/scene-1..13
-    OT_FORMAT=landscape python3 tools/build_film.py    # landscape -> public/projects/outtakes-launch-16x9/scene-1..13
+    python3 tools/build_film.py                        # portrait  -> public/projects/outtakes-launch/scene-1..12
+    OT_FORMAT=landscape python3 tools/build_film.py    # landscape -> public/projects/outtakes-launch-16x9/scene-1..12
 
-v3 - rebuilt to the LIVE website interface (outtakes.ozendigital.co, Nov 2026) and its
-signature animations:
-  * hero: giant wordmark over a warm panning-blur photo, "STORIES TOLD THROUGH FRAMES",
-    then the page scrolls into the next section (continuous carry, no cut)
-  * "EVERY SIDELINE SHOT STARTS WITH A SEARCH": tilted 3D photo cards orbiting while the
-    headline loads letter by letter, on the cream -> green -> black glow
-  * the photographer profile page (hero, stats, featured), packages + availability calendar
-  * "HOW A BOOKING GOES": 3D carousel of the green step cards ONE..FOUR (site copy)
-  * "GET IN THE FRAME": 3D corridor of photo panels + the two site buttons, then the footer
-    with the giant green OUTTAKES
+v4: rebuilt for the REDESIGNED website (Nov 2026: light editorial pages, neon green, film-strip dividers, duotone
+sport cards, the new profile page, the photographer Studio, holographic step cards) and directed as one case
+followed end to end instead of a feature tour:
 
-Chapters (skills/text-to-lottie/references/chapterization-transition-grammar.md):
-hook -> problem -> hero -> sideline -> six feature proofs -> booking steps -> dates -> frame.
-Seams: camera-shutter occlusion wipes, except hero -> sideline -> clients, which scroll like
-the site. Also writes cues.json (sound-effect cues in film frames).
+  the shot -> the DMs -> OUTTAKES -> set up your Studio -> your profile -> clients find you -> booked at your
+  rate -> paid, even if they cancel -> your shot, featured -> how a booking goes -> get in the frame -> footer
+
+Craft notes (motionmaxxing references: ui-demo.md, transitions.md, judgment.md):
+* hook = a photographer's focus point hopping subject to subject (ball, ball, ball ... face), locking green on
+  each shutter; the last shot is the one that comes back as Shot of the Week (a carried object across the film)
+* UI is built as 3D planes (Lottie camera + ddd layers) with real perspective and soft drop shadows, magnified
+  so copy reads on a phone, and driven by a custom cursor with press physics
+* each feature beat states its claim big, then a surface rises over it with the proof (occlusion), or shows the
+  proof first and lands the claim after
+* seams: shutter flashes, the site's film strip as a wipe, a fly-through, whips, and the site's green glow
 """
 from __future__ import annotations
 
@@ -31,68 +31,45 @@ from pathlib import Path
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).parent))
-from lottie_kit import (CAP, Comp, Fonts, anim, ease_value, ellipse, gradient, group, hexc, letter_reveal,  # noqa: E402
-                        path, rect, static, stroke, text_doc, trim)
-from film_parts import (BOTTOM, COL, CW, H, L, LANDSCAPE, R, W, armature_headline, background, box,  # noqa: E402
-                        c_, check_icon, curtain_close, curtain_open, drift, fade_line, feature_glow, flash, glow,
-                        label_text, lock_icon, photo, rise_line, rise_pair, search_icon, site_button, site_gradient,
-                        tag, tap)
+import film_parts as fp  # noqa: E402
+from lottie_kit import CAP, Comp, Fonts, anim, ease_value, ellipse, gradient, group, path, rect, static, text_doc  # noqa: E402
+from parts4 import (Plane, brackets, button, col, cursor, film_strip, fl, gblur, ground, group3d, soft_vignette,  # noqa: E402
+                    st, statement, txt, with_fx)
+
+from parts4 import C as PALETTE  # noqa: E402
+fp.COL.update(PALETTE)  # the redesign's palette (neon green, ink, greys) for the shared helpers
+W, H, LANDSCAPE = fp.W, fp.H, fp.LANDSCAPE
 
 ROOT = Path(__file__).resolve().parent.parent
 PHOTOS = ROOT / "brand" / "photos"
 FONTS_DIR = ROOT / "brand" / "fonts"
 OUT = ROOT / "public" / "projects" / ("outtakes-launch-16x9" if LANDSCAPE else "outtakes-launch")
 fonts = Fonts(FONTS_DIR)
+META = json.loads((PHOTOS / "v4-meta.json").read_text())
+SIZES = {p.name: Image.open(p).size for p in list(PHOTOS.glob("*.jpg")) + list(PHOTOS.glob("*.png"))}
 
-STATE = "OT Wordmark"   # statements: the site's condensed italic display face
-TITLE = "OT Display"    # small titles: Archivo Expanded
+STATE, TITLE, BODY, MED = "OT Wordmark", "OT Display", "OT Body", "OT Body Medium"
+SHADOW = dict(opacity=70, distance=40, softness=150, color="#1d2a33")
+SHADOW_SOFT = dict(opacity=45, distance=22, softness=90, color="#1d2a33")
 
-SIZES = {p.name: Image.open(p).size for p in PHOTOS.glob("*.jpg")}
-FOCUS = {
-    "celebrate-fists": (0.5, 0.4), "kids-duel": (0.40, 0.5), "sepak-takraw": (0.42, 0.4),
-    "celebrate-run": (0.44, 0.45), "basketball": (0.5, 0.4), "smile-orange": (0.48, 0.4),
-    "point-orange": (0.46, 0.4), "stretch-ball": (0.42, 0.45), "heart-hands": (0.5, 0.4),
-    "number-10": (0.45, 0.5), "team-backs": (0.5, 0.5), "portrait-flare": (0.5, 0.32),
-    "tackle-night": (0.5, 0.5), "floodlight-profile": (0.45, 0.32), "motion-blur": (0.52, 0.5),
-    "team-talk": (0.6, 0.5),
-}
-GREY = hexc("#8d8996")
-INK55 = hexc("#6f6a64")
-PANEL = "#e8e2d9"  # the profile page's package / calendar panels (one step darker than cream)
+# UI plane placement: designed at portrait size, scaled into the right half in landscape
+if LANDSCAPE:
+    UI_X, UI_Y, UI_S = 1385, 545, 0.82
+    ST_X, ST_W = 120, 740
+else:
+    UI_X, UI_Y, UI_S = 540, 990, 1.0
 
-# sample job used across the film (illustrative): $70, Saturday 21 Nov 2026
+YOUR = "Your name"
 PRICE = "S$70"
-PRICE_DEC = "S$70.00"
-JOB_DATE = "Sat 21 Nov"
 
 
-def P(name):
-    return f"{name}.jpg", SIZES[f"{name}.jpg"]
+def sz(name):
+    return SIZES[name]
 
 
-PANEL_W, PANEL_H = 800, 1000
-
-
-def panel_photo(name):
-    """4:5 cover crop of a photo around its focus, baked next to the photos (git-ignored, rebuilt on demand)."""
-    out = PHOTOS / f"panel-{name}.jpg"
-    if not out.exists():
-        im = Image.open(PHOTOS / f"{name}.jpg").convert("RGB")
-        iw, ih = im.size
-        k = max(PANEL_W / iw, PANEL_H / ih)
-        cw, chh = PANEL_W / k, PANEL_H / k
-        fx, fy = FOCUS.get(name, (0.5, 0.5))
-        x0 = min(max(fx * iw - cw / 2, 0), iw - cw)
-        y0 = min(max(fy * ih - chh / 2, 0), ih - chh)
-        im.crop((round(x0), round(y0), round(x0 + cw), round(y0 + chh))).resize(
-            (PANEL_W, PANEL_H), Image.LANCZOS).save(out, quality=86)
-    SIZES[out.name] = (PANEL_W, PANEL_H)
-    return out.name
-
-
-def pic(c, name, x, y, w, h, **kw):
-    file, size = P(name)
-    photo(c, name, file, size, x, y, w, h, focus=kw.pop("focus", FOCUS.get(name, (0.5, 0.5))), **kw)
+def flat_pt(cx, cy, w, h, lx, ly, s=UI_S):
+    """Screen position of a plane-local point while the plane is flat at z=0."""
+    return cx + (lx - w / 2) * s, cy + (ly - h / 2) * s
 
 
 def members_opacity(layers, keys):
@@ -100,115 +77,177 @@ def members_opacity(layers, keys):
         lyr["ks"]["o"] = anim(keys)
 
 
-def layers_since(c, start_index):
-    return c._layers[start_index:]
+def since(c, n):
+    return c._layers[n:]
 
 
-def fill_(color, opacity=100):
-    col = c_(color) if isinstance(color, str) else color
-    return {"ty": "fl", "c": {"a": 0, "k": col[:3] + [1]}, "o": {"a": 0, "k": opacity}, "r": 1}
+def claim(c, lines, start=6, colors=None, slots=None, exit_at=None):
+    """The feature's claim, big. Portrait: centred, to be covered by the rising UI. Landscape: left column."""
+    colors = colors or ["ink"] * (len(lines) - 1) + ["gtext"]
+    if LANDSCAPE:
+        return statement(c, fonts, lines, start, colors=colors, x=ST_X, j=0, max_w=ST_W, max_size=200,
+                         center_y=H / 2, slots=slots, exit_at=exit_at)
+    return statement(c, fonts, lines, start, colors=colors, center_y=720, max_w=900, max_size=230, slots=slots,
+                     exit_at=exit_at)
 
 
-def wordmark_crash(c, text, family, size, cx, cy, crash, end, color="white", streaks=4, start_scale=350,
-                   parent=None, settle_end_scale=94, slot=None, label=None, op=None):
-    """Arrival from oversize with decaying streak copies (the reveal / the date hit)."""
+def rise_plane(c, name, w, h, t0, dur=22, ip=None, op=None, z0=260, rx0=16, drop=None):
+    """A UI plane that rises from below with a tilt and settles flat at z=0 (UI_X, UI_Y)."""
+    drop = drop if drop is not None else (H * 0.75 if not LANDSCAPE else H * 0.9)
+    p = anim([(t0, [UI_X, UI_Y + drop, z0], "settle-soft"), (t0 + dur, [UI_X, UI_Y, 0])])
+    rx = anim([(t0, rx0, "settle-soft"), (t0 + dur, 0)])
+    return Plane(c, name, w, h, p, rx=rx, s=(UI_S * 100, UI_S * 100, 100), ip=t0 if ip is None else ip, op=op)
+
+
+def whip_out(plane_ind, c, t0, dx=-1.25, dy=0.0, dur=9):
+    """Accelerating exit of a plane (the cut lands at peak velocity)."""
+    for lyr in c._layers:
+        if lyr["ind"] == plane_ind:
+            p = lyr["ks"]["p"]
+            keys = p["k"] if p.get("a") else None
+            start = keys[-1]["s"] if keys else p["k"]
+            new = [
+                {"t": t0, "s": list(start), "o": {"x": [1.0] * 3, "y": [0.02] * 3}, "i": {"x": [0.54] * 3, "y": [0.42] * 3}},
+                {"t": t0 + dur, "s": [start[0] + dx * W, start[1] + dy * H, start[2]]}]
+            if keys:
+                lyr["ks"]["p"] = {"a": 1, "k": [k for k in keys if k["t"] < t0] + new}
+            else:
+                lyr["ks"]["p"] = {"a": 1, "k": new}
+            return
+
+
+def panel_photo(name, w=800, h=1000):
+    out = PHOTOS / f"panel-{name}.jpg"
+    if not out.exists():
+        im = Image.open(PHOTOS / f"{name}.jpg").convert("RGB")
+        iw, ih = im.size
+        k = max(w / iw, h / ih)
+        cw, chh = w / k, h / k
+        x0, y0 = (iw - cw) / 2, (ih - chh) / 2
+        im.crop((round(x0), round(y0), round(x0 + cw), round(y0 + chh))).resize((w, h), Image.LANCZOS).save(
+            out, quality=86)
+    SIZES[out.name] = (w, h)
+    return out.name
+
+
+def wordmark_crash(c, text, size, cx, cy, crash, end, color="white", streaks=4, start_scale=340, parent=None,
+                   settle_end=96, slot=None, label=None):
     cap = CAP * size
-    doc = text_doc(text, family, size, c_(color), justify=2)
+    doc = text_doc(text, STATE, size, col(color), justify=2)
     k_main = [(crash, [start_scale, start_scale, 100], "crash"), (crash + 14, [100, 100, 100], "linear"),
-              (end, [settle_end_scale, settle_end_scale, 100])]
+              (end, [settle_end, settle_end, 100])]
     for k in range(streaks, 0, -1):
         at6 = start_scale + (100 - start_scale) * ease_value("crash", 6 / 14)
         sc0 = start_scale * (1 + 0.16 * k)
         c.text(f"streak {k}", doc, p=(cx, cy), a=(0, -cap / 2), ip=crash, op=crash + 7, parent=parent,
                s=anim([(crash, [sc0, sc0, 100], "crash"), (crash + 6, [at6, at6, 100])]),
                o=anim([(crash, 22, "settle-soft"), (crash + 6, 0)]))
-    return c.text(f"crash: {text}", doc, p=(cx, cy), a=(0, -cap / 2), ip=crash, op=op, parent=parent,
-                  s=anim(k_main), slot=slot, label=label)
+    return c.text(f"crash: {text}", doc, p=(cx, cy), a=(0, -cap / 2), ip=crash, parent=parent, s=anim(k_main),
+                  slot=slot, label=label)
 
 
-def statement(c, line1, line2, start, slots=("s1", "s2"), labels=("Line 1", "Line 2"), exit_at=None,
-              port_max=260, land_max=250, center_y=None, port_lines=True):
-    """Two-colour statement in the condensed display face: two centred lines (portrait) or one line (landscape)."""
-    cy = H / 2 if center_y is None else center_y
-    if LANDSCAPE or not port_lines:
-        size = fonts.fit(STATE, [f"{line1} {line2}"], 1560 if LANDSCAPE else 860, land_max if LANDSCAPE else port_max)
-        rise_pair(c, fonts, line1, line2, STATE, size, W / 2, cy + CAP * size / 2, start=start, gap_frames=9,
-                  exit_at=exit_at, slot1=slots[0], slot2=slots[1], label1=labels[0], label2=labels[1])
-    else:
-        size = fonts.fit(STATE, [line1, line2], 860, port_max)
-        b1 = cy - size * 0.98 / 2 + CAP * size / 2
-        rise_line(c, fonts, line1, STATE, size, "white", W / 2, b1, j=2, start=start, exit_at=exit_at,
-                  slot=slots[0], label=labels[0])
-        rise_line(c, fonts, line2, STATE, size, "green", W / 2, b1 + size * 0.98, j=2, start=start + 9,
-                  exit_at=None if exit_at is None else exit_at + 2, slot=slots[1], label=labels[1])
-    c.cue(start, "tick", 0.55)
-    return size
-
-
-# =========================================================================== 1 HOOK
+# =========================================================================== 1 HOOK: the photographer's eye
 def scene_hook():
-    c = Comp("01 Hook - burst mode", W, H, 140)
-    background(c, "#000000")
-    burst = ["tackle-night", "kids-duel", "point-orange", "sepak-takraw", "number-10", "motion-blur",
-             "smile-orange", "heart-hands", "stretch-ball", "portrait-flare"]
-    times = [3, 14, 24, 33, 42, 50, 57, 63, 69, 74]
-    land = 80
-    for i, (name, t0) in enumerate(zip(burst, times)):
-        t1 = times[i + 1] if i + 1 < len(times) else land
-        pic(c, name, 0, 0, W, H, clip=False, ip=t0, op=t1,
-            zoom=[(t0, 1.07, "settle-soft"), (t0 + 8, 1.0, "linear"), (t1, 0.995)])
-        flash(c, t0, peak=28, dur=2)
-        c.cue(t0, "shutter", 0.55 + 0.4 * i / len(times))
-    pic(c, "celebrate-run", 0, 0, W, H, clip=False, ip=land,
-        zoom=[(land, 1.14, "entrance-sharp"), (land + 8, 1.0, "linear"), (140, 1.05)])
-    flash(c, land, peak=40, dur=3)
-    c.cue(land, "shutter_big", 1.0)
-    c.cue(land, "boom_small", 0.45)
-    lh = 620 if LANDSCAPE else 1100
+    c = Comp("01 Hook - the photographer's eye", W, H, 150)
+    ground(c, "#000000")
+    shots = META["landscape" if LANDSCAPE else "portrait"]
+    cuts = [3, 17, 29, 40, 50, 59, 67, 74, 80]
+    end = 150
+    shot_at = 93  # the decisive frame on the last subject
+    pos, scl, colk = [], [], []
+    prev = None
+    for i, sh in enumerate(shots):
+        t0 = cuts[i]
+        t1 = cuts[i + 1] if i + 1 < len(cuts) else end
+        last = i == len(shots) - 1
+        sx, sy = sh["subject"]
+        base = 100 / 1.1
+        push = 1.07 if last else 1.03
+        ind = c.image(f"shot {sh['name']}", sh["file"], sh["w"], sh["h"], p=(sx, sy), a=(sx * 1.1, sy * 1.1),
+                      s=anim([(t0, [base, base, 100], "settle-soft" if last else "linear"),
+                              (t1, [base * push, base * push, 100])]), ip=t0, op=t1)
+        with_fx(c, ind, gblur(anim([(t0, [18], "settle-soft"), (t0 + 3, [0])])))
+        fp.flash(c, t0, peak=18, dur=2)
+        c.cue(t0, "shutter", 0.42 + 0.4 * i / len(shots))
+        S = max(130, min(330, sh["subject_size"] * 1.3))
+        dur = t1 - t0
+        if last:
+            arrive, lock, contract = t0 + 3, t0 + 9, t0 + 11
+        elif dur >= 9:
+            arrive, lock, contract = t0 + 3, t0 + 5, t0 + 7
+        else:
+            arrive, lock, contract = t0 + 2, t0 + 2, t0 + 3
+        if prev is None:
+            pos.append((t0, [sx, sy, 0], "hold"))
+            scl.append((t0, [S * 1.6, S * 1.6, 100], "crash"))
+        else:
+            pos.append((t0 - 2, prev[0], "crash"))
+            pos.append((arrive, [sx, sy, 0], "hold"))
+            scl.append((t0 - 2, [prev[1] * 0.9, prev[1] * 0.9, 100], "crash"))
+            scl.append((arrive, [S * 1.18, S * 1.18, 100], "hold" if lock > arrive else "crash"))
+        if lock > arrive or prev is None:
+            scl.append((lock, [S * 1.18, S * 1.18, 100], "crash"))
+        scl.append((contract, [S * 0.9, S * 0.9, 100], "hold"))
+        colk.append((lock, "green", "hold"))
+        if not last:
+            colk.append((t1 - 2, "white", "hold"))
+        c.cue(lock, "af", 0.5)
+        prev = ([sx, sy, 0], S)
+    pos.append((end, prev[0]))
+    scl.append((end, [prev[1] * 0.9, prev[1] * 0.9, 100]))
+    colk.insert(0, (cuts[0], "white", "hold"))
+    fb = brackets(c, pos, scl, colk, ip=cuts[0], op=shot_at + 12)
+    for lyr in c._layers:
+        if lyr["ind"] == fb:
+            lyr["ks"]["o"] = anim([(shot_at + 2, 100, "exit-accelerate"), (shot_at + 10, 0)])
+    # the decisive frame
+    fp.flash(c, shot_at, peak=38, dur=3)
+    c.cue(shot_at, "shutter_big", 1.0)
+    c.cue(shot_at, "boom_small", 0.4)
+    lh = 620 if LANDSCAPE else 1000
     c.shape("legibility", [group([rect(W, lh, W / 2, H - lh / 2),
                                    gradient([(0, "#000000"), (1, "#000000")], [W / 2, H - lh], [W / 2, H],
-                                            alpha_stops=[(0, 0), (0.55, 0.55), (1, 0.8)])])], ip=land)
+                                            alpha_stops=[(0, 0), (0.55, 0.5), (1, 0.82)])])], ip=shot_at)
     if LANDSCAPE:
-        size = fonts.fit(STATE, ["YOU GOT THE SHOT."], 1560, 230)
-        rise_pair(c, fonts, "YOU GOT", "THE SHOT.", STATE, size, W / 2, H - 120, start=92, gap_frames=9,
-                  slot1="hook1", slot2="hook2", label1="Hook line 1", label2="Hook line 2")
+        size = fonts.fit(STATE, ["YOU GOT THE SHOT."], 1500, 220)
+        fp.rise_pair(c, fonts, "YOU GOT", "THE SHOT.", STATE, size, W / 2, H - 110, start=shot_at + 9,
+                     gap_frames=9, slot1="hook1", slot2="hook2", label1="Hook line 1", label2="Hook line 2")
     else:
-        size = fonts.fit(STATE, ["YOU GOT", "THE SHOT."], 860, 230)
-        b2 = 1430
-        rise_line(c, fonts, "YOU GOT", STATE, size, "white", W / 2, b2 - size * 0.98, j=2, start=92, slot="hook1",
-                  label="Hook line 1")
-        rise_line(c, fonts, "THE SHOT.", STATE, size, "green", W / 2, b2, j=2, start=101, slot="hook2",
-                  label="Hook line 2")
-    c.cue(92, "tick", 0.5)
-    c.cue(101, "tick", 0.5)
-    drift(c)
-    curtain_close(c)
+        size = fonts.fit(STATE, ["YOU GOT", "THE SHOT."], 860, 240)
+        b2 = 1440
+        fp.rise_line(c, fonts, "YOU GOT", STATE, size, "white", W / 2, b2 - size * 0.96, j=2, start=shot_at + 9,
+                     slot="hook1", label="Hook line 1")
+        fp.rise_line(c, fonts, "THE SHOT.", STATE, size, "green", W / 2, b2, j=2, start=shot_at + 18,
+                     slot="hook2", label="Hook line 2")
+    c.cue(shot_at + 9, "tick", 0.5)
+    c.cue(shot_at + 18, "tick", 0.5)
+    fp.curtain_close(c)
     return c
 
 
-# =========================================================================== 2 PROBLEM
+# =========================================================================== 2 PROBLEM: the DMs
 def scene_problem():
-    c = Comp("02 Problem - the DMs", W, H, 195)
-    background(c)
+    c = Comp("02 Problem - the DMs", W, H, 180)
+    ground(c, "#000000")
     if LANDSCAPE:
         c.image("plate", "plate-celebrate-blur-land.jpg", 1920, 1080, p=(W / 2, H / 2))
-        cl, cr = (W - 900) / 2, (W + 900) / 2
+        cl, cr = (W - 940) / 2, (W + 940) / 2
     else:
         c.image("plate", "plate-celebrate-blur.jpg", 1080, 1920, p=(W / 2, H / 2))
-        cl, cr = L, R
-    msgs = [("them", "how much for saturday's match?", 12), ("me", "$70 for the full game", 36),
-            ("them", "can do $30?", 62), ("them", "game cancelled, no need to pay ya", 92),
+        cl, cr = 80, 1000
+    msgs = [("them", "how much for saturday's match?", 14), ("me", "$70 for the full game", 40),
+            ("them", "can do $30?", 66), ("them", "game cancelled, no need to pay ya", 94),
             ("me", "just following up on the invoice :)", 124)]
-    seen_at, dim_at = 146, 160
-    size = 42
-    while max(fonts.width("OT Body", size, m[1]) for m in msgs) > (cr - cl) - 70:
+    seen_at, dim_at = 146, 156
+    size = 46
+    while max(fonts.width(BODY, size, m[1]) for m in msgs) > (cr - cl) - 76:
         size -= 1
-    bh = size * 1.25 + 52
-    gap, seen_h = 16, 52
+    bh = size * 1.25 + 54
+    gap, seen_h = 16, 54
     YB = 930 if LANDSCAPE else 1400
     for i, (who, text, at) in enumerate(msgs):
-        tw = fonts.width("OT Body", size, text)
-        bw = tw + 68
+        tw = fonts.width(BODY, size, text)
+        bw = tw + 72
         bx = cl if who == "them" else cr - bw
         ax = bx if who == "them" else cr
         keys = [(at, [ax, YB + 40, 0], "entrance-sharp"), (at + 9, [ax, YB, 0])]
@@ -221,56 +260,45 @@ def scene_problem():
             keys.append((t + 10, [ax, YB + cur, 0]))
         g = c.null(f"bubble {i}", p=anim(keys), a=(ax, YB), ip=at,
                    s=anim([(at, [92, 92, 100], "entrance-sharp"), (at + 9, [100, 100, 100])]))
-        start = len(c._layers)
+        n0 = len(c._layers)
         c.shape(f"bubble bg {i}", [group([rect(bw, bh, bx + bw / 2, YB - bh / 2, bh / 2),
-                                          fill_("green" if who == "me" else "surface")])], ip=at, parent=g)
-        label_text(c, text, "OT Body", size, "ink" if who == "me" else "white", bx + 34,
-                   YB - bh / 2 + CAP * size / 2, j=0, ip=at, parent=g)
-        members_opacity(layers_since(c, start), [(at, 0, "settle-soft"), (at + 6, 100, "hold"),
-                                                 (dim_at, 100, "travel-balanced"), (dim_at + 10, 22)])
+                                          fl("green" if who == "me" else "strip")])], ip=at, parent=g)
+        txt(c, text, BODY, size, "ink" if who == "me" else "white", bx + 36, YB - bh / 2 + CAP * size / 2,
+            ip=at, parent=g)
+        members_opacity(since(c, n0), [(at, 0, "settle-soft"), (at + 6, 100, "hold"),
+                                       (dim_at, 100, "travel-balanced"), (dim_at + 10, 20)])
         c.cue(at, "blip_out" if who == "me" else "blip_in", 0.9)
-    s0 = len(c._layers)
-    label_text(c, "Seen", "OT Body", 28, GREY, cr - 8, YB - 12, j=1, ip=seen_at + 4)
-    members_opacity(layers_since(c, s0), [(seen_at + 4, 0, "settle-soft"), (seen_at + 10, 100, "hold"),
-                                          (dim_at, 100, "travel-balanced"), (dim_at + 10, 22)])
+    n0 = len(c._layers)
+    txt(c, "Seen", BODY, 28, "#9aa0a6", cr - 8, YB - 12, j=1, ip=seen_at + 4)
+    members_opacity(since(c, n0), [(seen_at + 4, 0, "settle-soft"), (seen_at + 10, 100, "hold"),
+                                   (dim_at, 100, "travel-balanced"), (dim_at + 10, 20)])
     c.cue(seen_at + 4, "tick", 0.4)
-    statement(c, "SOUND", "FAMILIAR?", dim_at + 4, slots=("problem1", "problem2"), port_max=260, land_max=250)
-    c.cue(168, "riser:25", 0.6)
-    curtain_open(c)
-    drift(c)
-    curtain_close(c)
+    if LANDSCAPE:
+        s2 = fonts.fit(STATE, ["SOUND FAMILIAR?"], 1500, 250)
+        fp.rise_pair(c, fonts, "SOUND", "FAMILIAR?", STATE, s2, W / 2, H / 2 + CAP * s2 / 2, start=dim_at + 4,
+                     gap_frames=9, slot1="problem1", slot2="problem2", label1="Line 1", label2="Line 2")
+    else:
+        statement(c, fonts, ["SOUND", "FAMILIAR?"], dim_at + 4, colors=["white", "green"], center_y=H / 2,
+                  max_w=860, max_size=260, stagger=9, slots=["problem1", "problem2"])
+    c.cue(dim_at + 8, "riser:20", 0.55)
+    fp.curtain_open(c)
+    fp.curtain_close(c)
     return c
 
 
-# =========================================================================== 3 HERO (site)
-SCROLL_A, SCROLL_B = 100, 134   # the hero page scroll lands exactly on the cut into chapter 4
-GLOW_H = 1.3                     # height of the sideline-section glow, in screen heights
-
-
-def sideline_headline():
-    """The sideline section's headline (shared by the hero's scroll-in and chapter 4)."""
-    l1, l2 = "EVERY SIDELINE SHOT", "STARTS WITH A SEARCH"
-    size = fonts.fit(STATE, [l1, l2], 1500 if LANDSCAPE else 860, 175 if LANDSCAPE else 150)
-    return l1, l2, size, H / 2 - size * 0.08
-
-
-GHOST = 12  # opacity of the not-yet-loaded letters
-
-
+# =========================================================================== 3 HERO: OUTTAKES (the new site)
 def scene_hero():
-    c = Comp("03 Hero - OUTTAKES", W, H, 135)
-    background(c, "#000000")
+    c = Comp("03 Hero - OUTTAKES", W, H, 150)
+    ground(c, "#000000")
     crash = 2
-    page = c.null("page scroll", p=anim([(SCROLL_A, [0, 0, 0], "scroll"), (SCROLL_B, [0, -H, 0])]))
-    plate = "plate-hero-land.jpg" if LANDSCAPE else "plate-hero.jpg"
-    c.image("hero plate", plate, W, H, ip=crash, parent=page,
-            p=anim([(crash, [W / 2 + 16, H / 2, 0], "linear"), (135, [W / 2 - 16, H / 2, 0])]),
+    plate = "v4-hero-l.jpg" if LANDSCAPE else "v4-hero-p.jpg"
+    c.image("hero plate", plate, W, H, ip=crash,
+            p=anim([(crash, [W / 2 + 16, H / 2, 0], "linear"), (150, [W / 2 - 16, H / 2, 0])]),
             s=anim([(crash, [112, 112, 100], "settle-soft"), (crash + 30, [106, 106, 100], "linear"),
-                    (135, [104, 104, 100])]))
+                    (150, [104, 104, 100])]))
     c.shape("hero shade", [group([rect(W, H, W / 2, H / 2),
                                    gradient([(0, "#000000"), (1, "#000000")], [W / 2, 0], [W / 2, H],
-                                            alpha_stops=[(0, 0.25), (0.5, 0.05), (1, 0.45)])])], ip=crash, parent=page)
-    # the wordmark crashes into its hero position
+                                            alpha_stops=[(0, 0.30), (0.45, 0.05), (1, 0.55)])])], ip=crash)
     if LANDSCAPE:
         size = fonts.fit(STATE, ["OUTTAKES"], 1000, 300)
         tw = fonts.width(STATE, size, "OUTTAKES")
@@ -279,355 +307,557 @@ def scene_hero():
         size = fonts.fit(STATE, ["OUTTAKES"], 900, 330)
         tw = fonts.width(STATE, size, "OUTTAKES")
         cx, cy = W / 2, 560
-    wordmark_crash(c, "OUTTAKES", STATE, size, cx, cy, crash, 135, parent=page, settle_end_scale=97,
-                   slot="brand", label="Wordmark")
+    wordmark_crash(c, "OUTTAKES", size, cx, cy, crash, 150, slot="brand", label="Wordmark")
     c.cue(crash, "boom", 1.0)
-    c.cue(crash, "shutter_big", 1.0)
-    ts = fonts.fit(TITLE, ["STORIES TOLD THROUGH FRAMES"], tw * 0.82, 52)
-    if LANDSCAPE:
-        rise_line(c, fonts, "STORIES TOLD THROUGH FRAMES", TITLE, ts, "white", cx + tw / 2 - 10,
-                  cy + CAP * size / 2 + ts * 1.25, j=1, start=22, parent=page, slot="tagline", label="Tagline")
-    else:
-        rise_line(c, fonts, "STORIES TOLD THROUGH FRAMES", TITLE, ts, "white", W / 2,
-                  cy + CAP * size / 2 + ts * 1.5, j=2, start=22, parent=page, slot="tagline", label="Tagline")
-    c.cue(22, "tick", 0.5)
-    # site chrome: Sign In / Menu box
-    nbw, nbh = 330, 68
-    nx, ny = (W - 120 - nbw, 92) if LANDSCAPE else (R - nbw, 300)
-    s0 = len(c._layers)
-    box(c, "nav", nx, ny, nbw, nbh, "#1a181f", r=10, parent=page, ip=28)
-    box(c, "sign in", nx + 8, ny + 8, 130, nbh - 16, "white", r=6, parent=page, ip=28)
-    label_text(c, "Sign In", "OT Body", 24, "ink", nx + 73, ny + nbh / 2 + CAP * 24 / 2, j=2, parent=page, ip=28)
-    label_text(c, "Menu", "OT Body", 24, "white", nx + nbw - 70, ny + nbh / 2 + CAP * 24 / 2, j=1, parent=page, ip=28)
+    c.cue(crash, "shutter_big", 0.9)
+    ts = fonts.fit(TITLE, ["STORIES TOLD THROUGH FRAMES"], tw * 0.8, 50)
+    fp.rise_line(c, fonts, "STORIES TOLD THROUGH FRAMES", TITLE, ts, "white", cx + tw / 2 - 8,
+                 cy + CAP * size / 2 + ts * 1.3, j=1, start=20, slot="tagline", label="Tagline")
+    c.cue(20, "tick", 0.5)
+    # site chrome: Sign In / Menu
+    nbw, nbh = 330, 70
+    nx, ny = (W - 110 - nbw, 92) if LANDSCAPE else (1000 - nbw, 300)
+    n0 = len(c._layers)
+    fp.box(c, "nav", nx, ny, nbw, nbh, "#151517", r=10, ip=26)
+    fp.box(c, "sign in", nx + 8, ny + 8, 130, nbh - 16, "white", r=6, ip=26)
+    txt(c, "Sign In", BODY, 24, "ink", nx + 73, ny + nbh / 2 + CAP * 24 / 2, j=2, ip=26)
+    txt(c, "Menu", BODY, 24, "white", nx + nbw - 70, ny + nbh / 2 + CAP * 24 / 2, j=1, ip=26)
     c.shape("menu icon", [group([path([[nx + nbw - 52, ny + nbh / 2 + d], [nx + nbw - 28, ny + nbh / 2 + d]]),
-                                 stroke(c_("white"), 2.4)]) for d in (-7, 0, 7)], parent=page, ip=28)
-    members_opacity(layers_since(c, s0), [(28, 0, "settle-soft"), (36, 100)])
-    # bottom-right block: the positioning line + the site's green button
+                                 st("white", 2.4)]) for d in (-6, 6)], ip=26)
+    members_opacity(since(c, n0), [(26, 0, "settle-soft"), (34, 100)])
+    # Shot of the Week credit (bottom left) + positioning line and the site's button
     if LANDSCAPE:
-        bx0, by0, bw = 1300, 790, 500
-        fade_line(c, "Made by photographers,", "OT Body Medium", 40, "white", bx0, by0, start=36, parent=page)
-        fade_line(c, "for photographers.", "OT Body Medium", 40, "white", bx0, by0 + 50, start=40, parent=page)
-        bcx, bcy = bx0 + bw / 2, by0 + 140
+        sx0, sy0 = 110, 820
+        bx0, by0, bw = 1310, 760, 500
+        lines = ["A platform where photographers", "and athletes can meet in one", "searchable place."]
+        ls = 34
     else:
-        bw = 600
-        fade_line(c, "Made by photographers,", "OT Body Medium", 46, "white", W / 2, 1210, j=2, start=36, parent=page)
-        fade_line(c, "for photographers.", "OT Body Medium", 46, "white", W / 2, 1268, j=2, start=40, parent=page)
-        bcx, bcy = W / 2, 1380
-    s1 = len(c._layers)
-    site_button(c, fonts, "Find a Photographer", bcx, bcy, width=bw, size=30, parent=page, ip=46)
-    members_opacity(layers_since(c, s1), [(46, 0, "settle-soft"), (54, 100)])
-    c.cue(46, "pop", 0.5)
-    # the next section rises in underneath as the page scrolls (continuous carry into chapter 4)
-    site_gradient(c, 0, H * GLOW_H, p=anim([(SCROLL_A, [0, H, 0], "scroll"), (SCROLL_B, [0, 0, 0])]),
-                  ip=SCROLL_A)
-    # ...carrying the section's headline in, still unloaded (ghost letters), exactly as chapter 4 opens
-    nxt = c.null("next section", p=anim([(SCROLL_A, [0, H, 0], "scroll"), (SCROLL_B, [0, 0, 0])]), ip=SCROLL_A)
-    l1, l2, hsz, hb1 = sideline_headline()
-    for k, txt in enumerate((l1, l2)):
-        c.text(f"ghost line {k + 1}", text_doc(txt, STATE, hsz, c_("white"), justify=2),
-               p=(W / 2, hb1 + k * hsz * 0.98), o=GHOST, ip=SCROLL_A, parent=nxt)
-    c.cue(SCROLL_A, "whoosh", 0.6)
+        sx0, sy0 = 80, 1110
+        bx0, by0, bw = 80, 1230, 920
+        lines = ["A platform where photographers and", "athletes can meet in one searchable", "place."]
+        ls = 38
+    fp.fade_line(c, "SHOT OF THE WEEK", TITLE, 30 if LANDSCAPE else 32, "white", sx0, sy0, start=32)
+    fp.fade_line(c, "Kallang Stadium", BODY, 26, "white", sx0, sy0 + 50, start=35, o=88)
+    fp.fade_line(c, "21.11.2026", BODY, 26, "white", sx0 + (260 if LANDSCAPE else 300), sy0 + 50, start=36, o=88)
+    for k, ln in enumerate(lines):
+        fp.fade_line(c, ln, MED, ls, "white", bx0, by0 + k * ls * 1.22, start=38 + 2 * k)
+    btn_y = by0 + len(lines) * ls * 1.22 + 40
+    n1 = len(c._layers)
+    fp.site_button(c, fonts, "Find a Photographer", bx0 + bw / 2, btn_y + 46, width=bw, size=30)
+    members_opacity(since(c, n1), [(46, 0, "settle-soft"), (54, 100)])
+    c.cue(46, "pop", 0.45)
+    # the site's film strip passes up the frame and wipes to the light pages
+    sh = 300 if not LANDSCAPE else 230
+    photos = [(f"{n}.jpg", sz(f"{n}.jpg")) for n in ("stretch-ball", "kids-duel", "sepak-takraw", "tackle-night",
+                                                        "number-10", "smile-orange", "team-backs", "heart-hands",
+                                                        "celebrate-fists", "point-orange")]
+    film_strip(c, [(112, H + sh / 2, "exit-accelerate"), (140, -sh / 2)], sh, photos=photos, ip=112,
+               scroll=(112, 260), ground_below="light")
+    c.cue(112, "whoosh", 0.7)
+    c.cue(126, "shutter", 0.5)
     return c
 
 
-# =========================================================================== 4 SIDELINE (site)
-def scene_sideline():
-    c = Comp("04 Every sideline shot starts with a search", W, H, 135)
-    background(c)
-    # the glow is where the hero's scroll left it (frame-exact carry), drifts, then scrolls away into black
-    site_gradient(c, 0, H * GLOW_H, p=anim([(0, [0, 0, 0], "linear"), (104, [0, -0.08 * H, 0], "exit-accelerate"),
-                                            (135, [0, -0.9 * H, 0])]))
-    c.camera3d(zoom=1500 if LANDSCAPE else 1400)
-    if LANDSCAPE:
-        cards = [  # name, x, y, z, width, rx, ry, rz  (back to front)
-            ("team-backs", 1390, 930, 260, 230, -20, -30, -10), ("heart-hands", 520, 930, 220, 210, 22, 26, 10),
-            ("sepak-takraw", 1650, 250, 120, 340, -12, 38, 10), ("stretch-ball", 1760, 700, 40, 320, -16, -40, 12),
-            ("kids-duel", 170, 650, -40, 320, 10, 44, -8), ("basketball", 270, 230, -120, 220, 18, -32, -14),
-            ("smile-orange", 960, 110, -260, 280, 30, 0, 6)]
-    else:
-        cards = [
-            ("team-backs", 790, 1640, 260, 260, -20, -30, -10), ("heart-hands", 300, 1580, 220, 250, 22, 26, 10),
-            ("sepak-takraw", 900, 560, 120, 360, -12, 38, 10), ("stretch-ball", 960, 1270, 40, 340, -16, -40, 12),
-            ("kids-duel", 110, 1190, -40, 330, 10, 44, -8), ("basketball", 190, 470, -120, 250, 18, -32, -14),
-            ("smile-orange", 560, 300, -260, 300, 30, 0, 6)]
-    cx0, cy0 = W / 2, H / 2
-    for i, (name, x, y, z, w, rx, ry, rz) in enumerate(cards):
-        file, (iw, ih) = P(name)
-        sc = w * 1.25 / iw * 100
-        t_in = 2 + i * 2
-        phase = i * 1.3
-        pk, rk = [], {"rx": [], "ry": [], "rz": []}
-        # fly in from outside the frame and far away, then orbit slowly, then fly out
-        pk.append((t_in, [cx0 + (x - cx0) * 1.7, cy0 + (y - cy0) * 1.7, z + 900], "entrance-sharp"))
-        for f in range(t_in + 22, 105, 8):
-            ph = 2 * math.pi * f / 230 + phase
-            pk.append((f, [x + 46 * math.sin(ph), y + 34 * math.cos(ph * 1.1), z + 90 * math.sin(ph * 0.8)], "linear"))
-        ph = 2 * math.pi * 104 / 230 + phase
-        pk[-1] = (pk[-1][0], pk[-1][1], "exit-accelerate")
-        pk.append((136, [cx0 + (x - cx0) * 2.2, cy0 + (y - cy0) * 1.6 - 0.9 * H, z - 300]))
-        for f in [t_in] + list(range(t_in + 22, 105, 8)) + [136]:
-            ph = 2 * math.pi * f / 230 + phase
-            settle = 0 if f == t_in else 1
-            rk["rx"].append((f, [rx + (1 - settle) * 25 + 6 * math.sin(ph)], "linear"))
-            rk["ry"].append((f, [ry + (1 - settle) * 30 + 10 * math.sin(ph * 0.9)], "linear"))
-            rk["rz"].append((f, [rz + 5 * math.cos(ph)], "linear"))
-        ks = Comp.ks3(p=anim(pk), a=(iw / 2, ih / 2, 0), s=(sc, sc, 100), rx=anim(rk["rx"]), ry=anim(rk["ry"]),
-                      rz=anim(rk["rz"]))
-        c.image3d(f"card {name}", file, iw, ih, ks, ip=t_in)
-    c.cue(2, "whoosh", 0.6)
-    # the headline loads letter by letter (the site's Archivo opacity load)
-    l1, l2, size, b1 = sideline_headline()
-    up = [(104, 0, "exit-accelerate"), (135, -0.8 * H)]
-    for k, (txt, s0, s1) in enumerate([(l1, 12, 62), (l2, 30, 84)]):
-        b = b1 + k * size * 0.98
-        c.text(f"sideline line {k + 1}", text_doc(txt, STATE, size, c_("white"), justify=2),
-               p=anim([(k_[0], [W / 2, b + k_[1], 0]) + tuple(k_[2:]) for k_ in up]),
-               animators=letter_reveal(s0, s1, ghost=GHOST),
-               slot=f"sideline{k + 1}", label=f"Headline line {k + 1}")
-        c.cue(s0, "tick", 0.5)
-    c.cue(104, "whoosh", 0.5)
-    curtain_close(c)   # the shutter catches the scroll mid-motion, like every other chapter seam
+# =========================================================================== 4 STUDIO: set up once
+STEPS = ["Display name", "Profile photo", "At least one specialty", "WhatsApp or Telegram",
+         "At least one active package", "At least 6 portfolio photos", "Set your availability", "Set up payouts"]
+
+
+def scene_studio():
+    c = Comp("04 Set up your Studio", W, H, 140)
+    ground(c, "light")
+    soft_vignette(c)
+    c.camera3d(zoom=1400)
+    claim(c, ["SET UP ONCE.", "GET BOOKED."], start=4, slots=["studio1", "studio2"], exit_at=None if LANDSCAPE else 34)
+    pw, ph = 960, 1190
+    t_in = 30
+    pl = rise_plane(c, "studio card", pw, ph, t_in, op=140)
+    pl.box(0, 0, pw, ph, "card", r=30, shadow=SHADOW)
+    pl.text("Set up your profile", MED, 50, "ink", 56, 112)
+    tick0, pitch_t = 52, 6
+    done_at = [tick0 + i * pitch_t for i in range(len(STEPS))]
+    docs = [(0, "0 of 8 steps done.", BODY, 30, "grey", 0)] + [
+        (f, f"{i + 1} of 8 steps done.", BODY, 30, "grey", 0) for i, f in enumerate(done_at)]
+    pl.keyed_text(docs, 56, 162)
+    pl.box(56, 196, 848, 12, "#e2e6e9", r=6)
+    bar = group3d(pl, "progress", Comp.ks3(p=(56, 202, 0), a=(56, 202, 0),
+                                            s=anim([(0, [3, 100, 100], "hold")] +
+                                                   [(f, [100 * (i + 1) / 8, 100, 100], "settle-soft")
+                                                    for i, f in enumerate(done_at)] +
+                                                   [(done_at[-1] + 6, [100, 100, 100])])))
+    bar.box(56, 196, 848, 12, "orange", r=6)
+    y0, pitch = 262, 98
+    for i, label in enumerate(STEPS):
+        y = y0 + i * pitch
+        f = done_at[i]
+        row = group3d(pl, f"row {i}", Comp.ks3(p=anim([(f - 1, [0, 0, 0], "entrance-sharp"), (f + 2, [14, 0, 0], "settle-soft"),
+                                                       (f + 9, [0, 0, 0])])))
+        row.circle(84, y + 34, 50, None, line="#c9ced2", line_w=2.5, op=f)
+        row.text(str(i + 1), BODY, 26, "grey", 84, y + 34 + CAP * 26 / 2, j=2, op=f)
+        row.circle(84, y + 34, 50, "orange", ip=f)
+        row.check(84, y + 35, 30, "white", draw_at=f, width=5, ip=f)
+        row.text(label, BODY, 38, "ink", 134, y + 34 + CAP * 38 / 2)
+        if i >= 6:
+            row.text("recommended", BODY, 26, "grey", 134 + fonts.width(BODY, 38, label) + 16, y + 34 + CAP * 26 / 2)
+        if i < len(STEPS) - 1:
+            pl.line(134, y + pitch - 16, 904, y + pitch - 16, "#e5e8ea", 2)
+        c.cue(f, "tick", 0.55)
+    swap = done_at[-1] + 6
+    by = ph - 150
+    button(pl, fonts, "Continue: Profile photo", 56, by, 848, 100, style="orange", size=34, op=swap)
+    press = 116
+    g = button(pl, fonts, "Preview profile", 56, by, 848, 100, style="ink", size=34, ip=swap, press=press)
+    c.cue(swap, "pop", 0.5)
+    tx, ty = flat_pt(UI_X, UI_Y, pw, ph, 56 + 848 * 0.62, by + 54)
+    cursor(c, [(swap + 2, (tx + 260, ty + 420)), (press - 6, (tx, ty)), (140, (tx, ty))], presses=[press], op=140)
+    # fly-through: the card rushes past the camera into the profile
+    for lyr in c._layers:
+        if lyr["ind"] == pl.ind:
+            lyr["ks"]["p"] = anim([(t_in, [UI_X, UI_Y + (H * 0.75 if not LANDSCAPE else H * 0.9), 260], "settle-soft"),
+                                   (t_in + 22, [UI_X, UI_Y, 0], "hold"), (press + 6, [UI_X, UI_Y, 0], "exit-accelerate"),
+                                   (140, [UI_X, UI_Y + 120, -1150])])
+    c.cue(press + 8, "whoosh", 0.7)
     return c
 
 
-# =========================================================================== 5 CLIENTS CHASE YOU
-def scene_clients():
-    c = Comp("05 Now clients chase you", W, H, 150)
-    background(c)
-    feature_glow(c)
-    sb = armature_headline(c, fonts, "NOW CLIENTS", "CHASE YOU.", "Clubs, brands and players search one place.")
-    y0 = sb + 64
-    g = c.null("search", p=anim([(16, [0, 40, 0], "entrance-sharp"), (28, [0, 0, 0])]), ip=16)
-    s0 = len(c._layers)
-    box(c, "search field", L, y0, CW, 110, "surface", r=16, parent=g, ip=16)
-    search_icon(c, L + 52, y0 + 55, 40, parent=g, ip=16)
-    query = "football photographer"
-    gaps = [0, 2, 1, 1, 1, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1]
-    tx, ty = L + 96, y0 + 55 + CAP * 40 / 2
-    docs = [(16, text_doc("Search photographers", "OT Body", 40, hexc("#7d7a84"), justify=0))]
-    t = 22
-    for k in range(1, len(query) + 1):
-        t += gaps[k - 1]
-        docs.append((t, text_doc(query[:k], "OT Body", 40, c_("white"), justify=0)))
-        c.cue(t, "key", 0.35)
-    c.text("typed query", docs[0][1], p=(tx, ty), keyed_docs=docs, ip=16, parent=g)
-    members_opacity(layers_since(c, s0), [(16, 0, "settle-soft"), (24, 100, "hold"), (84, 100, "exit-accelerate"),
-                                          (92, 0)])
-    y1 = y0 + 140
-    y2 = y1 + 320
-    ra = c.null("result A", p=anim([(50, [0, 200, 0], "entrance-sharp"), (64, [0, 0, 0], "hold"),
-                                    (84, [0, 0, 0], "exit-accelerate"), (94, [0, -40, 0])]), ip=50, op=95)
-    sa = len(c._layers)
-    pic(c, "celebrate-fists", L, y1, CW, 300, r=18, parent=ra, ip=50, op=95)
-    x = L + 22
-    for sp in ("football", "track"):
-        x += tag(c, fonts, sp, x, y1 + 300 - 58, 24, parent=ra, ip=50, op=95) + 10
-    members_opacity(layers_since(c, sa), [(50, 100, "hold"), (84, 100, "exit-accelerate"), (92, 0)])
-    rb = c.null("result B (you)", p=anim([(56, [0, 200, 0], "entrance-sharp"), (70, [0, 0, 0])]), ip=56)
-    pic(c, "floodlight-profile", L, y2, CW, 300, r=18, parent=rb, ip=56, focus=(0.45, 0.3))
-    box(c, "your profile chip", L + 22, y2 + 22, fonts.width("OT Body Medium", 26, "Your profile") + 36, 46, "green",
-        r=8, parent=rb, ip=56)
-    label_text(c, "Your profile", "OT Body Medium", 26, "ink", L + 40, y2 + 45 + CAP * 26 / 2, ip=56, parent=rb)
-    x = L + 22
-    for sp in ("football", "track", "rugby"):
-        x += tag(c, fonts, sp, x, y2 + 300 - 58, 24, parent=rb, ip=56) + 10
-    c.cue(50, "blip_in", 0.6)
-    c.shape("you outline", [group([rect(CW + 16, 316, L + CW / 2, y2 + 150, 24), stroke(c_("green"), 5),
-                                   {**trim(0, 100), "e": anim([(74, 0, "entrance-sharp"), (86, 100)])}])],
-            ip=74, parent=rb)
-    c.cue(74, "whoosh", 0.4)
-    reqs = ["Sports club · season coverage?", "Brand shoot next Saturday?", "Can you shoot our final?"]
-    for k, (txt, at) in enumerate(zip(reqs, (88, 102, 116))):
-        yt = y0 + 10 + k * 136
-        gt = c.null(f"request {k}", p=anim([(at, [0, -60, 0], "entrance-sharp"), (at + 10, [0, 0, 0])]), ip=at)
-        s1 = len(c._layers)
-        box(c, f"request card {k}", L, yt, CW, 112, "surface", r=22, parent=gt, ip=at,
-            stroke_col=c_("white", 0.1), stroke_w=1.5)
-        c.shape(f"request dot {k}", [group([ellipse(16, 16, L + 42, yt + 56), fill_("green")])], ip=at, parent=gt)
-        label_text(c, txt, "OT Body Medium", 34, "white", L + 72, yt + 56 + CAP * 34 / 2, ip=at, parent=gt)
-        label_text(c, "now", "OT Body", 26, GREY, R - 28, yt + 56 + CAP * 26 / 2, j=1, ip=at, parent=gt)
-        members_opacity(layers_since(c, s1), [(at, 0, "settle-soft"), (at + 6, 100)])
-        c.cue(at, "blip_in", 0.9)
-    curtain_open(c)
-    drift(c)
-    curtain_close(c)
-    return c
+# =========================================================================== 5 PROFILE: your page
+def profile_page(pl, fonts):
+    """The redesigned photographer profile page, mobile layout, 1000 wide."""
+    pl.box(0, 0, pl.w, pl.h, "light", r=0, shadow=SHADOW)
+    pl.text("Photographers", BODY, 30, "grey", 40, 70)
+    x = 40 + fonts.width(BODY, 30, "Photographers") + 18
+    pl.text("›", BODY, 30, "grey", x, 70)
+    pl.text("Football", BODY, 30, "grey", x + 30, 70)
+    x2 = x + 30 + fonts.width(BODY, 30, "Football") + 18
+    pl.text("›", BODY, 30, "grey", x2, 70)
+    pl.text(YOUR, BODY, 30, "ink", x2 + 30, 70)
+    pl.image("v4-avatar.png", 320, 320, 40, 110, 116, 116)
+    pl.text(YOUR.upper(), TITLE, 70, "ink", 180, 194, slot="profileName", label="Photographer name")
+    pl.heart(944, 166, 44, "ink")
+    pl.image("celebrate-run.jpg", *sz("celebrate-run.jpg"), 0, 266, 1000, 666)
+    thumbs = ["stretch-ball", "tackle-night", "kids-duel", "sepak-takraw"]
+    for k, n in enumerate(thumbs):
+        tx = 40 + k * 236
+        pl.image(f"{n}.jpg", *sz(f"{n}.jpg"), tx, 952, 220, 147)
+    pl.box(37, 949, 226, 153, None, r=2, line="green", line_w=6)
+    py = 1132
+    pl.box(0, py, 1000, 700, "panel")
+    pl.text("Match days, finals and the", MED, 44, "ink", 40, py + 86)
+    pl.text("moments between.", MED, 44, "ink", 40, py + 138)
+    rows = [("REVIEWS", "5.0 (3)"), ("PACKAGES FROM", PRICE), ("NEXT FREE DATE", "Sat 28 Nov"),
+            ("COVERS", "North, Central"), ("EXPERIENCE", "3 years")]
+    for k, (lab, val) in enumerate(rows):
+        yy = py + 226 + k * 64
+        pl.text(lab, BODY, 26, "grey", 40, yy, tracking=120)
+        vx = 380
+        if lab == "REVIEWS":
+            pl.star(vx + 14, yy - 11, 30, "ink")
+            vx += 38
+        pl.text(val, MED if lab == "PACKAGES FROM" else BODY, 34, "ink", vx, yy)
+        if lab == "NEXT FREE DATE":
+            pl.line(vx, yy + 10, vx + fonts.width(BODY, 34, val), yy + 10, "ink", 2)
+    tx = 40
+    for t in ("Football", "Events"):
+        tw = fonts.width(BODY, 26, t) + 40
+        pl.box(tx, py + 548, tw, 46, "pill", r=23)
+        pl.text(t, BODY, 26, "ink", tx + tw / 2, py + 579, j=2)
+        tx += tw + 12
+    return py
 
 
-# =========================================================================== 6 PROFILE PAGE (site)
 def scene_profile():
-    c = Comp("06 Your portfolio, organised", W, H, 150)
-    background(c)
-    feature_glow(c)
-    sb = armature_headline(c, fonts, "YOUR PORTFOLIO,", "ORGANISED.", "Your own page: packages, featured shots, dates.")
-    y0 = sb + 60
-    ph = BOTTOM - 30 - y0
-    hb = ph * 0.42
-    pg = c.null("profile page", p=anim([(16, [0, 300, 0], "settle-soft"), (32, [0, 0, 0])]), ip=16)
-    box(c, "page", L, y0, CW, ph, "cream", r=14, parent=pg, ip=16)
-    pic(c, "floodlight-profile", L, y0, CW, hb, r=14, parent=pg, ip=16, focus=(0.5, 0.3),
-        zoom=[(16, 1.12, "settle-soft"), (150, 1.0)])
-    c.shape("hero shade", [group([rect(CW, hb * 0.7, L + CW / 2, y0 + hb * 0.65),
-                                   gradient([(0, "#000000"), (1, "#000000")], [0, y0 + hb * 0.3], [0, y0 + hb],
-                                            alpha_stops=[(0, 0), (1, 0.7)])])], parent=pg, ip=16)
-    av, ax, ay = 96, L + 28, y0 + hb - 226
-    pic(c, "portrait-flare", ax, ay, av, av, r=av / 2, parent=pg, ip=20, focus=(0.5, 0.3))
-    c.shape("avatar ring", [group([ellipse(av + 6, av + 6, ax + av / 2, ay + av / 2), stroke(c_("cream"), 4)])],
-            parent=pg, ip=20)
-    ns = fonts.fit(STATE, ["YOUR NAME"], CW - 60, 84)
-    rise_line(c, fonts, "YOUR NAME", STATE, ns, "white", L + 28, y0 + hb - 52, j=0, start=24, parent=pg,
-              slot="profileName", label="Profile name")
-    fade_line(c, "Match days, finals and everything in between.", "OT Body", 24, "white", L + 28, y0 + hb - 18,
-              start=30, parent=pg, o=85)
-    stats = [("SPECIALISES IN", "Football"), ("PACKAGES FROM", PRICE), ("COVERS", "Island-wide")]
-    for i, (lab, val) in enumerate(stats):
-        sx = L + 28 + i * (CW - 56) / 3
-        fade_line(c, lab, "OT Label", 18, INK55, sx, y0 + hb + 50, start=34 + i * 3, parent=pg)
-        fade_line(c, val, "OT Body Medium", 32, "ink", sx, y0 + hb + 92, start=35 + i * 3, parent=pg)
-    fade_line(c, "FEATURED", "OT Label", 30, "ink", L + 28, y0 + hb + 158, start=44, parent=pg)
-    fy, fh = y0 + hb + 180, ph - hb - 180 - 24
-    bw_ = (CW - 56 - 14) * 0.6
-    sw_ = (CW - 56 - 14) - bw_
-    for k, (name, x, y, w, h) in enumerate([("celebrate-fists", L + 28, fy, bw_, fh),
-                                            ("tackle-night", L + 28 + bw_ + 14, fy, sw_, (fh - 12) / 2),
-                                            ("stretch-ball", L + 28 + bw_ + 14, fy + (fh - 12) / 2 + 12, sw_,
-                                             (fh - 12) / 2)]):
-        at = 48 + k * 5
-        pic(c, name, x, y, w, h, r=6, parent=pg, ip=at, rise=[(at, 60, "entrance-sharp"), (at + 14, 0)],
-            zoom=[(at, 1.15, "settle-soft"), (at + 30, 1.03, "linear"), (150, 1.0)])
-    c.cue(16, "whoosh", 0.5)
-    c.cue(48, "whoosh", 0.3)
-    curtain_open(c)
-    drift(c)
-    curtain_close(c)
+    c = Comp("05 Your portfolio, organised", W, H, 150)
+    ground(c, "light")
+    soft_vignette(c)
+    c.camera3d(zoom=1400)
+    pw, ph = 1000, 1832
+    if LANDSCAPE:
+        top_c, bot_c, s = (1385, 960), (1385, 120), 0.62
+    else:
+        top_c, bot_c, s = (540, 1110), (540, 760), 1.0
+    p = anim([(0, [top_c[0], top_c[1], -260], "settle-soft"), (26, [top_c[0], top_c[1], 0], "hold"),
+              (34, [top_c[0], top_c[1], 0], "scroll"), (96, [bot_c[0], bot_c[1], 0], "settle-soft"),
+              (150, [bot_c[0], bot_c[1] - 30, 0])])
+    pl = Plane(c, "profile page", pw, ph, p, rx=anim([(0, 9, "settle-soft"), (26, 0)]),
+               ry=anim([(0, -6, "settle-soft"), (30, 0)]), s=(s * 100, s * 100, 100))
+    py = profile_page(pl, fonts)
+    button(pl, fonts, "See packages", 40, py + 616, 920, 96, style="green", size=34)
+    c.cue(34, "whoosh", 0.4)
+    # claim lands after the proof: the page eases back under a light veil
+    t_claim = 104
+    for lyr in c._layers:
+        if lyr["ind"] == pl.ind:
+            lyr["ks"]["p"] = anim([(0, [top_c[0], top_c[1], -260], "settle-soft"), (26, [top_c[0], top_c[1], 0], "hold"),
+                                   (34, [top_c[0], top_c[1], 0], "scroll"), (96, [bot_c[0], bot_c[1], 0], "hold"),
+                                   (t_claim - 4, [bot_c[0], bot_c[1], 0], "settle-soft"),
+                                   (150, [bot_c[0], bot_c[1] - 40, 700])])
+    if LANDSCAPE:
+        statement(c, fonts, ["YOUR PORTFOLIO,", "ORGANISED."], 8, colors=["ink", "gtext"], x=ST_X, j=0,
+                  max_w=ST_W, max_size=170, center_y=H / 2, slots=["profile1", "profile2"])
+    else:
+        c.shape("veil", [group([rect(W, H, W / 2, H / 2), fl("light")])],
+                o=anim([(t_claim - 4, 0, "settle-soft"), (t_claim + 8, 82)]), ip=t_claim - 4)
+        statement(c, fonts, ["YOUR PORTFOLIO,", "ORGANISED."], t_claim, colors=["ink", "gtext"],
+                  center_y=H / 2 - 40, max_w=900, max_size=200, slots=["profile1", "profile2"], exit_at=138)
     return c
 
 
-# =========================================================================== 7 BOOKING: availability + packages (site)
-def scene_booking():
+# =========================================================================== 6 SEARCH: clients find you
+SPORTS = [("BASKETBALL", "v4-sport-basketball.jpg", "basketball"), ("SEPAK TAKRAW", "v4-sport-sepak-takraw.jpg", "takraw"),
+          ("FUTSAL", "v4-sport-point-orange.jpg", "football"), ("FOOTBALL", "v4-sport-tackle-night.jpg", "football")]
+
+
+def sport_icon(plane_like, cx, cy, d, kind):
+    plane_like.circle(cx, cy, d, None, line="white", line_w=4)
+    r = d / 2
+    if kind == "basketball":
+        plane_like.line(cx - r, cy, cx + r, cy, "white", 4)
+        plane_like.line(cx, cy - r, cx, cy + r, "white", 4)
+        plane_like.shape("bb curve", [group([path([[cx - r * 0.62, cy - r * 0.78], [cx - r * 0.25, cy], [cx - r * 0.62, cy + r * 0.78]]),
+                                             st("white", 4)]),
+                                      group([path([[cx + r * 0.62, cy - r * 0.78], [cx + r * 0.25, cy], [cx + r * 0.62, cy + r * 0.78]]),
+                                             st("white", 4)])])
+    elif kind == "takraw":
+        for k in (-0.45, 0, 0.45):
+            plane_like.line(cx - r * 0.86, cy + k * r, cx + r * 0.86, cy + k * r, "white", 3)
+            plane_like.line(cx + k * r, cy - r * 0.86, cx + k * r, cy + r * 0.86, "white", 3)
+    else:
+        pts = [[cx + r * 0.42 * math.cos(-math.pi / 2 + i * 2 * math.pi / 5), cy + r * 0.42 * math.sin(-math.pi / 2 + i * 2 * math.pi / 5)]
+               for i in range(5)]
+        plane_like.shape("pentagon", [group([path(pts, closed=True), st("white", 4)])])
+        for (px, py) in pts:
+            plane_like.line(px, py, cx + (px - cx) * 2.3, cy + (py - cy) * 2.3, "white", 3)
+
+
+def scene_search():
+    c = Comp("06 Now clients find you", W, H, 180)
+    ground(c, "light")
+    soft_vignette(c)
+    c.camera3d(zoom=1400)
+    claim(c, ["NOW CLIENTS", "FIND YOU."], start=4, slots=["search1", "search2"], exit_at=40)
+    CX = W / 2 if LANDSCAPE else UI_X  # the claim clears, so the browse row and results take the centre
+    # Browse by sport: the row whips in and stops on Football (the stop is the choice)
+    cw_, ch_ = 400, 560
+    gap = 26
+    row_w = len(SPORTS) * (cw_ + gap) - gap
+    rw, rh = row_w, ch_ + 110
+    stop_x = (UI_X - (row_w - cw_ / 2 - (cw_ + gap) * 0 - cw_ / 2) * UI_S) if False else None
+    # plane centre so that the Football card (last) is centred on UI_X
+    fb_center_local = row_w - cw_ / 2
+    final_cx = CX - (fb_center_local - rw / 2) * UI_S
+    start_cx = final_cx + 1.6 * W
+    row_in, row_stop, row_out = 40, 72, 100
+    p = anim([(row_in, [start_cx, UI_Y - 40, 0], "scroll"), (row_stop, [final_cx, UI_Y - 40, 0], "hold"),
+              (row_out, [final_cx, UI_Y - 40, 0], "exit-accelerate"), (row_out + 10, [final_cx, UI_Y - 40 - H, 0])])
+    pl = Plane(c, "sports row", rw, rh, p, s=(UI_S * 100, UI_S * 100, 100), ip=row_in, op=row_out + 11)
+    for k, (label, file, kind) in enumerate(SPORTS):
+        x = k * (cw_ + gap)
+        is_fb = label == "FOOTBALL"
+        card = group3d(pl, f"card {label}", Comp.ks3(p=(x + cw_ / 2, 110 + ch_ / 2, 0), a=(x + cw_ / 2, 110 + ch_ / 2, 0),
+                                                       s=anim([(row_stop + 2, [100, 100, 100], "settle-soft"),
+                                                               (row_stop + 10, [106, 106, 100] if is_fb else [94, 94, 100])])))
+        card.image(file, *sz(file), x, 110, cw_, ch_)
+        card.shape("card shade", [group([rect(cw_, ch_ * 0.5, x + cw_ / 2, 110 + ch_ * 0.75),
+                                         gradient([(0, "#000000"), (1, "#000000")], [0, 110 + ch_ * 0.5], [0, 110 + ch_],
+                                                  alpha_stops=[(0, 0), (1, 0.55)])])])
+        sport_icon(card, x + cw_ / 2, 110 + ch_ * 0.36, 128, kind)
+        card.text(label, STATE, 62 if len(label) < 10 else 52, "white", x + 24, 110 + ch_ - 36)
+        if not is_fb:
+            card.box(x, 110, cw_, ch_, "light", o=anim([(row_stop + 2, 0, "settle-soft"), (row_stop + 10, 45)]))
+    c.cue(row_in, "whoosh", 0.7)
+    tl_x = 80 if not LANDSCAPE else UI_X - (rw / 2) * UI_S * 0.55
+    title_y0 = UI_Y - 40 - (rh / 2 - 60) * UI_S
+    n_t = len(c._layers)
+    txt(c, "BROWSE BY SPORT", TITLE, 40 if not LANDSCAPE else 34, "ink", final_cx - (rw / 2 - (row_w - cw_ * 2 - gap)) * UI_S,
+        title_y0, ip=row_stop - 10, op=row_out + 4)
+    members_opacity(since(c, n_t), [(row_stop - 10, 0, "settle-soft"), (row_stop, 100, "hold"), (row_out - 2, 100, "exit-accelerate"),
+                                    (row_out + 4, 0)])
+    fx, fy = flat_pt(final_cx, UI_Y - 40, rw, rh, row_w - cw_ / 2, 110 + ch_ / 2)
+    click_fb = row_stop + 16
+    c.cue(row_stop, "tick", 0.5)
+    # Featured photographers: the site's film strip rises with the result cards
+    sh = 980 if not LANDSCAPE else 720
+    t_strip = row_out + 2
+    band_y = UI_Y + (20 if not LANDSCAPE else 0)
+    film_strip(c, [(t_strip, band_y + H, "settle-soft"), (t_strip + 18, band_y)], sh, ip=t_strip, scroll=(t_strip, 120))
+    c.cue(t_strip, "whoosh", 0.6)
+    # result cards in screen space, scrolling sideways and stopping on yours
+    cards = [("kids-duel", "Farhan Ismail", "From S$120", "Football · Events"),
+             ("celebrate-run", YOUR, f"From {PRICE}", "Football · Events"),
+             ("tackle-night", "Marcus Lim", "From S$150", "Football · Night games"),
+             ("stretch-ball", "Aisyah Rahman", "From S$110", "Football · Youth")]
+    cwr = 720 if not LANDSCAPE else 520
+    chr_ = cwr * 0.66
+    gapr = 40
+    you_idx = 1
+    track_final = CX - (you_idx * (cwr + gapr) + cwr / 2)
+    lift = 0.58 if LANDSCAPE else 0.38
+    track = c.null("result track", p=anim([(t_strip + 4, [track_final + 900, band_y - chr_ * lift, 0], "settle-soft"),
+                                           (t_strip + 30, [track_final, band_y - chr_ * lift, 0])]), ip=t_strip)
+    c.no_camera.add(track)
+    title_y = band_y - sh / 2 + 120
+    fp.fade_line(c, "FEATURED PHOTOGRAPHERS", TITLE, 38 if not LANDSCAPE else 32, "white",
+                 80 if not LANDSCAPE else CX - 640, title_y, start=t_strip + 10)
+    heart_t = t_strip + 40
+    for k, (photo, name, price, sub) in enumerate(cards):
+        x = k * (cwr + gapr)
+        mine = name == YOUR
+        fp.photo(c, f"result {photo}", f"{photo}.jpg", sz(f"{photo}.jpg"), x, 0, cwr, chr_, r=12, parent=track,
+                 ip=t_strip)
+        hx, hy = x + cwr - 46, 46
+        c.shape(f"heart bg {k}", [group([ellipse(64, 64, hx, hy), fl("white", 92)])], parent=track, ip=t_strip)
+        c.image("avatar", "v4-avatar.png", 320, 320, p=(x + 32, chr_ + 62), s=(64 / 320 * 100, 64 / 320 * 100),
+                parent=track, ip=t_strip) if mine else c.shape(
+            f"avatar {k}", [group([ellipse(64, 64, x + 32, chr_ + 62), fl("#5b5f63")])], parent=track, ip=t_strip)
+        txt(c, name, MED, 32, "white", x + 80, chr_ + 58, parent=track, ip=t_strip)
+        txt(c, price, BODY, 28, "white", x + cwr, chr_ + 58, j=1, parent=track, ip=t_strip, o=85)
+        txt(c, sub, BODY, 26, "#a9aeb2", x + 80, chr_ + 96, parent=track, ip=t_strip)
+        if mine:
+            c.shape("your outline", [group([rect(cwr + 14, chr_ + 14, x + cwr / 2, chr_ / 2, 16), st("green", 6)])],
+                    parent=track, ip=t_strip + 32, o=anim([(t_strip + 32, 0, "settle-soft"), (t_strip + 38, 100)]))
+            heart = c.null("your heart", p=(hx, hy), a=(hx, hy), parent=track, ip=t_strip,
+                           s=anim([(heart_t, [100, 100, 100], "expressive-pop"), (heart_t + 6, [130, 130, 100], "settle-soft"),
+                                   (heart_t + 14, [100, 100, 100])]))
+            hk = 30 / 40
+            pts = [[0, 14], [-16, -1], [-16, -10], [-9, -16], [0, -10], [9, -16], [16, -10], [16, -1]]
+            shp = lambda filled: [group([{"ty": "sh", "ks": {"a": 0, "k": {
+                "i": [[0, 0], [0, 0], [0, -5 * hk], [-6 * hk, 0], [0, 0], [-4 * hk, 0], [0, -5 * hk], [0, 0]],
+                "o": [[0, 0], [0, 0], [0, -4 * hk], [4 * hk, 0], [0, 0], [6 * hk, 0], [0, 5 * hk], [0, 0]],
+                "v": [[hx + px * hk, hy + py * hk] for px, py in pts], "c": True}}},
+                fl("green") if filled else st("ink", 3)])]
+            c.shape("heart line", shp(False), parent=heart, ip=t_strip, op=heart_t)
+            c.shape("heart fill", shp(True), parent=heart, ip=heart_t)
+            c.cue(heart_t, "pop", 0.6)
+        else:
+            hk = 30 / 40
+            pts = [[0, 14], [-16, -1], [-16, -10], [-9, -16], [0, -10], [9, -16], [16, -10], [16, -1]]
+            c.shape(f"heart {k}", [group([{"ty": "sh", "ks": {"a": 0, "k": {
+                "i": [[0, 0], [0, 0], [0, -5 * hk], [-6 * hk, 0], [0, 0], [-4 * hk, 0], [0, -5 * hk], [0, 0]],
+                "o": [[0, 0], [0, 0], [0, -4 * hk], [4 * hk, 0], [0, 0], [6 * hk, 0], [0, 5 * hk], [0, 0]],
+                "v": [[hx + px * hk, hy + py * hk] for px, py in pts], "c": True}}}, st("ink", 3)])], parent=track, ip=t_strip)
+    # the client's pointer: picks Football, then hearts your card
+    you_hx = CX + cwr / 2 - 46
+    you_hy = band_y - chr_ * lift + 46
+    cursor(c, [(row_stop + 2, (fx + 220, fy + 380)), (click_fb - 4, (fx, fy)), (row_out - 2, (fx, fy)),
+               (heart_t - 6, (you_hx, you_hy)), (180, (you_hx + 40, you_hy + 120))],
+           presses=[click_fb, heart_t], op=180)
+    return c
+
+
+# =========================================================================== 7 BOOK: at your rate
+def scene_book():
     c = Comp("07 Booked at your rate", W, H, 165)
-    background(c)
-    feature_glow(c)
-    sb = armature_headline(c, fonts, "BOOKED AT", "YOUR RATE.", "Pick a date, pick a package. No lowball DMs.")
-    y0 = sb + 60
-    # the lowball DM gets struck out and thrown away
-    txt = "can do $30?"
-    tw = fonts.width("OT Body", 42, txt)
-    bh = 42 * 1.25 + 52
-    lb = c.null("lowball", p=anim([(8, [0, 40, 0], "entrance-sharp"), (16, [0, 0, 0], "hold"),
-                                   (30, [0, 0, 0], "exit-accelerate"), (40, [-1100, 0, 0])]), ip=8, op=41)
-    s0 = len(c._layers)
-    box(c, "lowball bubble", L, y0, tw + 68, bh, "surface", r=bh / 2, parent=lb, ip=8, op=41)
-    label_text(c, txt, "OT Body", 42, "white", L + 34, y0 + bh / 2 + CAP * 42 / 2, parent=lb, ip=8, op=41)
-    members_opacity(layers_since(c, s0), [(8, 0, "settle-soft"), (14, 100)])
-    c.shape("strike", [group([path([[L + 26, y0 + bh / 2], [L + 42 + tw, y0 + bh / 2]]), stroke(c_("green"), 5),
-                              {**trim(0, 100), "e": anim([(18, 0, "entrance-sharp"), (26, 100)])}])],
-            ip=18, op=41, parent=lb)
-    c.cue(8, "blip_in", 0.8)
-    c.cue(18, "whoosh", 0.35)
-    c.cue(30, "whoosh", 0.6)
-    avail = BOTTOM - 30 - y0
-    ch = avail * 0.53
-    ink = c_("ink")
-    # availability calendar panel
-    cal = c.null("availability", p=anim([(36, [0, 300, 0], "settle-soft"), (52, [0, 0, 0])]), ip=36)
-    box(c, "calendar panel", L, y0, CW, ch, PANEL, r=14, parent=cal, ip=36)
-    label_text(c, "AVAILABILITY", "OT Label", 28, ink, L + 28, y0 + 50, parent=cal, ip=36)
-    label_text(c, "NOVEMBER 2026", "OT Body Medium", 24, ink, R - 28, y0 + 48, j=1, parent=cal, ip=36)
-    gx0, gw = L + 28, CW - 56
-    cw_ = gw / 7
-    hy = y0 + 92
+    ground(c, "light")
+    soft_vignette(c)
+    c.camera3d(zoom=1400)
+    t_in = 32
+    claim(c, ["BOOKED AT", "YOUR RATE."], start=4, slots=["book1", "book2"], exit_at=None if LANDSCAPE else t_in + 4)
+    pw, ph = 960, 1230
+    pl = rise_plane(c, "booking", pw, ph, t_in, op=165)
+    pl.text("BOOK " + YOUR.upper(), TITLE, 50, "ink", 0, 50)
+    # package
+    pl.box(0, 90, pw, 330, "panel", r=18, shadow=SHADOW_SOFT)
+    pl.text("Full match", MED, 46, "ink", 40, 166)
+    pl.text("2 hrs · 60 edited photos ·", BODY, 30, "grey", 40, 214)
+    pl.text("ready in 3 days", BODY, 30, "grey", 40, 252)
+    pl.text(PRICE, MED, 50, "ink", 40, 378)
+    press_book = 120
+    bx, byy, bw_, bh_ = 470, 300, 450, 96
+    book = button(pl, fonts, "Book", bx, byy, bw_, bh_, style="green", size=36, op=press_book + 3, press=press_book)
+    booked = group3d(pl, "booked", Comp.ks3(p=(bx + bw_ / 2, byy + bh_ / 2, 0), a=(bx + bw_ / 2, byy + bh_ / 2, 0),
+                                            s=anim([(press_book + 3, [92, 92, 100], "settle-soft"),
+                                                    (press_book + 12, [100, 100, 100])])), ip=press_book + 3)
+    booked.box(bx, byy, bw_, bh_, "ink", r=bh_ * 0.22)
+    booked.check(bx + 62, byy + bh_ / 2 + 1, 34, "green", draw_at=press_book + 6)
+    booked.text("Booked · Sat 28 Nov", MED, 32, "white", bx + bw_ / 2 + 26, byy + bh_ / 2 + CAP * 32 / 2, j=2)
+    # availability
+    ay = 460
+    pl.box(0, ay, pw, 760, "card", r=18, shadow=SHADOW_SOFT)
+    pl.text("AVAILABILITY", BODY, 28, "ink", 40, ay + 70, tracking=140)
+    pl.text("NOVEMBER 2026", MED, 30, "ink", 40, ay + 124)
+    gx, gw = 40, pw - 80
+    cwd = gw / 7
     for k, d in enumerate("MTWTFSS"):
-        label_text(c, d, "OT Body", 22, INK55, gx0 + cw_ * (k + 0.5), hy, j=2, parent=cal, ip=36)
+        pl.text(d, BODY, 26, "grey", gx + cwd * (k + 0.5), ay + 186, j=2)
     weeks = calendar.monthcalendar(2026, 11)
-    rh = (ch - 120) / len(weeks)
-    available = {21, 22, 28, 29}
-    pick = 21
+    rh = 82
+    avail = {25, 26, 28, 29}
+    pick, pick_t = 28, 88
     pick_xy = None
     for r_, week in enumerate(weeks):
         for k, day in enumerate(week):
             if not day:
                 continue
-            dx, dy = gx0 + cw_ * (k + 0.5), hy + 22 + rh * (r_ + 0.5)
-            at = 44 + r_ * 2
-            if day in available:
-                dot = min(cw_, rh) * 0.86
-                c.shape(f"day {day}", [group([ellipse(dot, dot, dx, dy), fill_("green")])], parent=cal, ip=at)
+            dx, dy = gx + cwd * (k + 0.5), ay + 236 + rh * r_
+            if day in avail:
+                pl.circle(dx, dy, 66, "green")
                 if day == pick:
-                    pick_xy = (dx, dy, dot)
-            label_text(c, str(day), "OT Body Medium" if day in available else "OT Body", 26, ink, dx,
-                       dy + CAP * 26 / 2, j=2, parent=cal, ip=at, o=100 if day in available else 45)
-    # picked date: ring pops on the tap
-    px, py, pd = pick_xy
-    ring = c.null("picked ring", p=(px, py), a=(px, py), parent=cal, ip=97,
-                  s=anim([(97, [60, 60, 100], "expressive-pop"), (104, [112, 112, 100], "settle-soft"),
-                          (110, [100, 100, 100])]))
-    c.shape("picked", [group([ellipse(pd + 12, pd + 12, px, py), stroke(ink, 4)])], parent=ring, ip=97)
-    # packages panel
-    y1 = y0 + ch + 18
-    ph2 = BOTTOM - 30 - y1
-    pk = c.null("packages", p=anim([(46, [0, 300, 0], "settle-soft"), (62, [0, 0, 0])]), ip=46)
-    box(c, "packages panel", L, y1, CW, ph2, PANEL, r=14, parent=pk, ip=46)
-    label_text(c, "PACKAGES", "OT Label", 28, ink, L + 28, y1 + 50, parent=pk, ip=46)
-    label_text(c, "Full match", "OT Body Medium", 34, ink, L + 28, y1 + 104, parent=pk, ip=46)
-    label_text(c, PRICE, "OT Body Medium", 34, ink, R - 28, y1 + 104, j=1, parent=pk, ip=46)
-    label_text(c, "90 mins · 40 edited photos · ready in 3 days", "OT Body", 24, INK55, L + 28, y1 + 140, parent=pk,
-               ip=46)
-    tag(c, fonts, "football", L + 28, y1 + 156, 20, parent=pk, ip=46)
-    bty = y1 + ph2 - 92
-    bcx, bcy = L + CW / 2, bty + 36
-    btn = c.null("book button", p=(bcx, bcy), a=(bcx, bcy), parent=pk, ip=46,
-                 s=anim([(46, [100, 100, 100], "hold"), (126, [96, 96, 100], "hold"), (130, [100, 100, 100])]))
-    box(c, "book", L + 28, bty, CW - 56, 72, "green", r=10, parent=btn, ip=46)
-    s1 = len(c._layers)
-    label_text(c, "Book", "OT Body Medium", 30, "ink", bcx, bcy + CAP * 30 / 2, j=2, parent=btn, ip=46, op=136)
-    from film_parts import arrow_icon
-    arrow_icon(c, R - 28 - 40, bcy, 34, "ink", parent=btn, ip=46, op=136)
-    members_opacity(layers_since(c, s1), [(46, 100, "hold"), (130, 100, "exit-accelerate"), (135, 0)])
-    bw = fonts.width("OT Body Medium", 30, f"Booked · {JOB_DATE}")
-    check_icon(c, bcx - bw / 2 - 26, bcy, 34, "ink", draw_at=134, parent=btn, ip=134)
-    s2 = len(c._layers)
-    label_text(c, f"Booked · {JOB_DATE}", "OT Body Medium", 30, "ink", bcx + 18, bcy + CAP * 30 / 2, j=2, parent=btn,
-               ip=134)
-    members_opacity(layers_since(c, s2), [(134, 0, "settle-soft"), (140, 100)])
-    tap(c, px, py, appear=89, press=97)
-    tap(c, bcx + 80, bcy + 4, appear=118, press=126)
-    c.cue(36, "whoosh", 0.5)
-    c.cue(37, "tick", 0.45)
-    c.cue(134, "chime", 0.9)
-    curtain_open(c)
-    drift(c)
-    curtain_close(c)
+                    pick_xy = (dx, dy)
+            pl.text(str(day), MED if day in avail else BODY, 30, "ink", dx, dy + CAP * 30 / 2, j=2,
+                    o=100 if day in avail else 40)
+    px_, py_ = pick_xy
+    ring = group3d(pl, "pick ring", Comp.ks3(p=(px_, py_, 0), a=(px_, py_, 0),
+                                              s=anim([(pick_t, [60, 60, 100], "expressive-pop"), (pick_t + 7, [112, 112, 100], "settle-soft"),
+                                                      (pick_t + 13, [100, 100, 100])])), ip=pick_t)
+    ring.circle(px_, py_, 84, None, line="ink", line_w=4)
+    pl.circle(gx + 14, ay + 712, 22, "green")
+    pl.text("Available, tap to pick", BODY, 26, "grey", gx + 40, ay + 721)
+    tpx, tpy = flat_pt(UI_X, UI_Y, pw, ph, px_, py_)
+    tbx, tby = flat_pt(UI_X, UI_Y, pw, ph, bx + bw_ * 0.5, byy + bh_ * 0.55)
+    cursor(c, [(66, (tpx + 300, tpy + 380)), (pick_t - 6, (tpx, tpy)), (pick_t + 10, (tpx, tpy)),
+               (press_book - 7, (tbx, tby)), (165, (tbx + 30, tby + 40))], presses=[pick_t, press_book], op=165)
+    c.cue(pick_t, "tick", 0.6)
+    c.cue(press_book + 4, "chime", 0.9)
+    whip_out(pl.ind, c, 152, dx=-1.3)
+    c.cue(152, "whoosh", 0.6)
     return c
 
 
-# =========================================================================== 8 HOW A BOOKING GOES (site 3D carousel)
+# =========================================================================== 8 PAID: even if they cancel
+def scene_paid():
+    c = Comp("08 Paid, even if they cancel", W, H, 165)
+    ground(c, "light")
+    soft_vignette(c)
+    c.camera3d(zoom=1400)
+    t_in = 32
+    claim(c, ["PAID.", "EVEN IF THEY CANCEL."], start=4, slots=["paid1", "paid2"], exit_at=None if LANDSCAPE else t_in + 4)
+    pw, ph = 960, 1110
+    pl = rise_plane(c, "studio money", pw, ph, t_in, op=165)
+    # earnings card
+    pl.box(0, 0, pw, 300, "card", r=24, shadow=SHADOW_SOFT)
+    pl.text("Earnings this month", BODY, 32, "grey", 44, 76)
+    t_deliver, t_count = 74, 80
+    vals = [0, 4, 11, 19, 28, 37, 45, 52, 58, 63, 66, 68, 69, 70]
+    docs = [(0, "S$0.00", MED, 112, "ink", 0)]
+    f = t_count
+    for k, v in enumerate(vals[1:], start=1):
+        f += 1 if k < 7 else 2
+        docs.append((f, f"S${v}.00", MED, 112, "ink", 0))
+    pl.keyed_text(docs, 44, 216)
+    c.cue(f, "chime_soft", 0.7)
+    up = group3d(pl, "plus", Comp.ks3(p=anim([(t_count, [0, 20, 0], "entrance-sharp"), (t_count + 12, [0, 0, 0])]),
+                                       o=anim([(t_count, 0, "settle-soft"), (t_count + 6, 100), (t_count + 40, 100), (t_count + 50, 0)])),
+                 ip=t_count)
+    up.text("+" + PRICE + ".00", MED, 36, "orange", pw - 44, 220, j=1)
+    # bookings
+    by0 = 340
+    pl.box(0, by0, pw, ph - by0, "card", r=24, shadow=SHADOW_SOFT)
+    pl.text("Bookings", MED, 42, "ink", 44, by0 + 84)
+
+    def chip(g, x, y, label, colour, text_col="ink", line=None):
+        w = fonts.width(MED, 28, label) + 44
+        g.box(x, y, w, 52, colour, r=26, line=line)
+        g.text(label, MED, 28, text_col, x + w / 2, y + 36, j=2)
+        return w
+
+    rows = [("Sat 28 Nov · Full match", "Sports club", t_deliver), ("Sun 6 Dec · Full match", "Brand shoot", 112)]
+    for k, (title, client, t_flip) in enumerate(rows):
+        ry = by0 + 130 + k * 330
+        row = group3d(pl, f"booking {k}", Comp.ks3(p=anim([(t_in + 10 + 8 * k, [0, 40, 0], "entrance-sharp"),
+                                                           (t_in + 22 + 8 * k, [0, 0, 0])])))
+        if k == 1:
+            row = group3d(pl, "booking 2", Comp.ks3(p=anim([(98, [0, 60, 0], "entrance-sharp"), (110, [0, 0, 0])]),
+                                                     o=anim([(98, 0, "settle-soft"), (104, 100)])), ip=98)
+        if k == 0:
+            pl.line(44, ry - 20, pw - 44, ry - 20, "#e5e8ea", 2)
+        row.text(title, MED, 38, "ink", 44, ry + 46)
+        row.text(client, BODY, 30, "grey", 44, ry + 92)
+        if k == 0:
+            g1 = group3d(row, "awaiting", op=t_flip)
+            chip(g1, 44, ry + 128, "Awaiting photos", "#e7eaec")
+            g2 = group3d(row, "delivered", Comp.ks3(p=(44, ry + 154, 0), a=(44, ry + 154, 0),
+                                                    s=anim([(t_flip, [80, 80, 100], "expressive-pop"), (t_flip + 8, [100, 100, 100])])),
+                         ip=t_flip)
+            w = chip(g2, 44, ry + 128, "Photos delivered", "green")
+            g2.check(44 + w + 26, ry + 155, 30, "ink", draw_at=t_flip + 2)
+            g3 = group3d(row, "invoice", Comp.ks3(o=anim([(t_flip + 14, 0, "settle-soft"), (t_flip + 20, 100)])), ip=t_flip + 14)
+            chip(g3, 44 + w + 70, ry + 128, "Invoice #OT-0142 sent", "white", line="line")
+            c.cue(t_flip, "pop", 0.6)
+            c.cue(t_flip + 14, "blip_in", 0.5)
+        else:
+            g1 = group3d(row, "cancelled", Comp.ks3(o=anim([(t_flip, 0, "settle-soft"), (t_flip + 6, 100)])), ip=t_flip)
+            chip(g1, 44, ry + 128, "Cancelled by client", "white", text_col="#c2410c", line="#f2b28c")
+            t_fee = t_flip + 16
+            g2 = group3d(row, "fee", Comp.ks3(p=(44, ry + 224, 0), a=(44, ry + 224, 0),
+                                               s=anim([(t_fee, [80, 80, 100], "expressive-pop"), (t_fee + 8, [100, 100, 100])])),
+                         ip=t_fee)
+            w = chip(g2, 44, ry + 198, "Cancellation fee paid to you", "green")
+            g2.check(44 + w + 26, ry + 225, 30, "ink", draw_at=t_fee + 2)
+            c.cue(t_flip, "blip_in", 0.6)
+            c.cue(t_fee, "chime", 0.85)
+    whip_out(pl.ind, c, 154, dy=-1.1)
+    c.cue(154, "whoosh", 0.6)
+    return c
+
+
+# =========================================================================== 9 FEATURED: your shot
+def scene_featured():
+    c = Comp("09 Your shot, featured", W, H, 135)
+    ground(c, "light")
+    soft_vignette(c)
+    c.camera3d(zoom=1400)
+    t_in = 30
+    claim(c, ["YOUR SHOT.", "FEATURED."], start=4, slots=["sotw1", "sotw2"], exit_at=None if LANDSCAPE else t_in + 4)
+    pw, ph = 960, 1240
+    pl = rise_plane(c, "photos of the week", pw, ph, t_in, op=135)
+    pl.text("PHOTOS OF THE WEEK", TITLE, 46, "ink", 0, 52)
+    pl.box(0, 88, pw, 1152, "panel", r=0, shadow=SHADOW)
+    iw, ih = sz("celebrate-run.jpg")
+    ph_h = 640
+    img = pl.image("celebrate-run.jpg", iw, ih, 0, 88, pw, ph_h, p=(pw / 2, 88 + ph_h / 2, 0), a=(iw / 2, ih / 2, 0),
+                   s=anim([(t_in, [pw / iw * 100 * 1.0, ph_h / ih * 100 * 1.0, 100], "linear"),
+                           (135, [pw / iw * 100 * 1.06, ph_h / ih * 100 * 1.06, 100])]))
+    pl.text("FOOTBALL · 21.11.2026", BODY, 24, "white", 30, 88 + ph_h - 30, tracking=80)
+    yy = 88 + ph_h + 40
+    pl.image("v4-avatar.png", 320, 320, 30, yy, 90, 90)
+    pl.text(YOUR.upper(), STATE, 64, "ink", 140, yy + 62)
+    pl.text("Football from the touchline.", BODY, 28, "grey", 140, yy + 100)
+    for k, n in enumerate(["stretch-ball", "tackle-night", "kids-duel", "sepak-takraw"]):
+        pl.image(f"{n}.jpg", *sz(f"{n}.jpg"), 30 + k * 228, yy + 136, 216, 144)
+    tx = 30
+    for t in ("Football", "Events"):
+        tw = fonts.width(BODY, 24, t) + 36
+        pl.box(tx, yy + 302, tw, 42, "pill", r=21)
+        pl.text(t, BODY, 24, "ink", tx + tw / 2, yy + 331, j=2)
+        tx += tw + 10
+    pl.text("From", BODY, 28, "ink", pw - 260, yy + 332)
+    pl.text(PRICE, STATE, 52, "ink", pw - 190, yy + 336)
+    pl.heart(pw - 56, yy + 320, 34, "ink")
+    feat = group3d(pl, "featured chip", Comp.ks3(p=(30 + 110, 120 + 26, 0), a=(30 + 110, 120 + 26, 0),
+                                                  s=anim([(78, [60, 60, 100], "expressive-pop"), (86, [106, 106, 100], "settle-soft"),
+                                                          (92, [100, 100, 100])])), ip=78)
+    feat.box(30, 120, 220, 54, "green", r=8)
+    feat.text("Shot of the Week", MED, 26, "ink", 140, 156, j=2)
+    c.cue(78, "chime", 0.8)
+    whip_out(pl.ind, c, 126, dy=-1.1, dur=9)
+    fp.curtain_close(c)
+    return c
+
+
+# =========================================================================== 10 STEPS: how a booking goes (holographic cards)
 def scene_steps():
-    c = Comp("08 How a booking goes", W, H, 135)
-    background(c)
-    sb = armature_headline(c, fonts, "HOW A BOOKING", "GOES.", "Four steps, all on Outtakes.")
+    c = Comp("10 How a booking goes", W, H, 135)
+    ground(c, "#0f0f11")
+    hs = fonts.fit(TITLE, ["HOW A BOOKING GOES"], 1400 if LANDSCAPE else 940, 120 if LANDSCAPE else 78)
+    fp.rise_line(c, fonts, "HOW A BOOKING GOES", TITLE, hs, "white", W / 2, (170 if LANDSCAPE else 380), j=2,
+                 start=4, slot="stepsTitle", label="Steps title")
     c.camera3d(zoom=1500 if LANDSCAPE else 1400)
-    steps = [("ONE", "1", "Call the photographer\rand agree on the shoot"),
-             ("TWO", "2", "Book their package\rand date on Outtakes"),
-             ("THREE", "3", "Pay once\rthey accept"),
-             ("FOUR", "4", "Get shot, then get\ryour photos")]
+    steps = [("one", "1", "Call the photographer\rand agree on the shoot"),
+             ("two", "2", "Book their package\rand date on Outtakes"),
+             ("three", "3", "Pay once\rthey accept"),
+             ("four", "4", "Get shot, then get\ryour photos")]
     if LANDSCAPE:
-        cw3, chh, ccx, ccy, spacing = 480, 600, (L + R) / 2, H / 2 + 10, 560
+        cw3, chh, ccx, ccy, spacing = 470, 620, W / 2, H / 2 + 70, 560
     else:
-        top = sb + 70
-        cw3, chh, spacing = 600, 700, 660
-        ccx, ccy = W / 2, (top + BOTTOM) / 2 + 10
-    # carousel position k(t): slide in, then advance one card at a time
+        cw3, chh, spacing = 610, 800, 670
+        ccx, ccy = W / 2, 1030
     kk = [(0, -1.3, "travel-balanced"), (14, 0, "linear"), (40, 0.06, "travel-balanced"), (52, 1, "linear"),
           (70, 1.06, "travel-balanced"), (82, 2, "linear"), (100, 2.06, "travel-balanced"), (112, 3, "linear"),
           (135, 3.1, "linear")]
     for f in (0, 40, 70, 100):
         c.cue(f, "whoosh", 0.45)
-    bright, dark = hexc("#74f260"), hexc("#3e9a37")
+    bright, dark = col("green"), col("#2f9a1f")
     for i, (word, num, body) in enumerate(steps):
-        def at_k(k):
-            d = i - k
-            return d
         pk, ryk, colk, ok = [], [], [], []
         for f, k, e in kk:
             d = i - k
@@ -638,197 +868,41 @@ def scene_steps():
             vis = 0 if (LANDSCAPE and d <= -0.8) else (100 if (not LANDSCAPE or d >= -0.2) else 100 * (d + 0.8) / 0.6)
             ok.append((f, [max(0, min(100, vis))], e))
         n = c.null3d(f"card {word}", Comp.ks3(p=anim(pk), ry=anim(ryk)))
-        s0 = len(c._layers)
-        c.shape3d(f"card {word} face", [group([rect(cw3, chh, 0, 0, 14),
-                                                {"ty": "fl", "c": anim(colk), "o": static(100), "r": 1}])],
-                  Comp.ks3(), parent=n)
-        c.text3d(f"card {word} numeral", text_doc(num, STATE, chh * 0.95, hexc("#111113"), justify=2),
-                 Comp.ks3(p=(cw3 * 0.18, chh * 0.42, 0), o=8), parent=n)
-        c.text3d(f"card {word} word", text_doc(word, STATE, cw3 * 0.2, hexc("#111113"), justify=0),
-                 Comp.ks3(p=(-cw3 / 2 + 26, -chh / 2 + cw3 * 0.2 * 0.95, 0)), parent=n)
-        c.text3d(f"card {word} body", text_doc(body, "OT Body", cw3 * 0.058, hexc("#111113"), justify=2,
-                                               lh=cw3 * 0.058 * 1.25), Comp.ks3(p=(0, 0, 0)), parent=n)
-        members = layers_since(c, s0)
-        members_opacity(members, [(f, v[0], e) for f, v, e in ok])
-        members[1]["ks"]["o"] = anim([(f, v[0] * 0.09, e) for f, v, e in ok])
-    curtain_open(c)
-    curtain_close(c)
+        n0 = len(c._layers)
+        c.shape3d(f"card {word} face", [group([rect(cw3, chh, 0, 0, 22),
+                                                {"ty": "fl", "c": anim(colk), "o": static(100), "r": 1}])], Comp.ks3(), parent=n)
+        nf = f"v4-holo-num-{num}.png"
+        nw, nh = sz(nf)
+        ns = chh * 0.86 / nh
+        c.image3d(f"holo {num}", nf, nw, nh, Comp.ks3(p=(cw3 * 0.5 - nw * ns * 0.5 - 18, chh * 0.5 - nh * ns * 0.5 - 14, 0),
+                                                      a=(nw / 2, nh / 2, 0), s=(ns * 100, ns * 100, 100)), parent=n)
+        wf = f"v4-holo-word-{word}.png"
+        ww, wh = sz(wf)
+        wsc = min(cw3 * 0.62 / ww, chh * 0.16 / wh)
+        c.image3d(f"holo {word}", wf, ww, wh, Comp.ks3(p=(-cw3 / 2 + 28, -chh / 2 + 26, 0), a=(0, 0, 0),
+                                                       s=(wsc * 100, wsc * 100, 100)), parent=n)
+        c.text3d(f"card {word} body", text_doc(body, MED, cw3 * 0.062, col("ink"), justify=2,
+                                               lh=cw3 * 0.062 * 1.22), Comp.ks3(p=(0, chh * 0.02, 0)), parent=n)
+        members_opacity(since(c, n0), [(f, v[0], e) for f, v, e in ok])
+    fp.curtain_open(c)
     return c
 
 
-# =========================================================================== 9 INVOICES
-def scene_invoices():
-    c = Comp("09 Invoices, done for you", W, H, 120)
-    background(c)
-    feature_glow(c)
-    sb = armature_headline(c, fonts, "INVOICES,", "DONE FOR YOU.", "Proper invoices for every client, big or small.")
-    y0 = sb + 56
-    ph = min(760, BOTTOM - 20 - y0)
-    pcx, pcy = W / 2 if not LANDSCAPE else (L + R) / 2, y0 + ph / 2
-    paper = c.null("invoice", p=anim([(16, [pcx, pcy + 320, 0], "settle-soft"), (32, [pcx, pcy, 0])]), a=(pcx, pcy),
-                   r=anim([(16, -5, "settle-soft"), (32, 0)]), ip=16)
-    box(c, "paper", L, y0, CW, ph, "cream", r=12, parent=paper, ip=16)
-    ink = c_("ink")
-    rows = [("INVOICE", TITLE, 54, ink, L + 50, 100, 26, 0), ("#OT-0142", "OT Body", 28, INK55, R - 50, 94, 28, 1),
-            ("BILLED TO", "OT Label", 24, INK55, L + 50, 176, 34, 0), ("Sports club", "OT Body Medium", 36, ink, L + 50, 222, 35, 0),
-            ("DATE", "OT Label", 24, INK55, L + 480 if not LANDSCAPE else L + 440, 176, 36, 0),
-            ("21 Nov 2026", "OT Body Medium", 36, ink, L + 480 if not LANDSCAPE else L + 440, 222, 37, 0),
-            ("Full match coverage", "OT Body", 32, ink, L + 50, 334, 44, 0), (PRICE_DEC, "OT Body Medium", 32, ink, R - 50, 334, 45, 1),
-            ("Edited photos (40)", "OT Body", 32, ink, L + 50, 396, 48, 0), ("Included", "OT Body Medium", 32, ink, R - 50, 396, 49, 1),
-            ("Total", "OT Body Medium", 36, ink, L + 50, 524, 56, 0), (PRICE_DEC, TITLE, 50, ink, R - 50, 528, 58, 1),
-            ("PAYMENT", "OT Label", 24, INK55, L + 50, 620, 62, 0), ("Due on booking", "OT Body", 32, ink, L + 50, 664, 64, 0)]
-    for text, font, size, col, x, dy, st, j in rows:
-        fade_line(c, text, font, size, col, x, y0 + dy, j=j, start=st, parent=paper)
-    box(c, "rule 1", L + 50, y0 + 266, CW - 100, 2, hexc("#111113", 0.14), parent=paper, ip=40)
-    box(c, "rule 2", L + 50, y0 + 444, CW - 100, 2, hexc("#111113", 0.14), parent=paper, ip=52)
-    sx, sy = R - 150, y0 + 640
-    stamp = c.null("sent stamp", p=(sx, sy), a=(sx, sy), parent=paper, ip=86,
-                   s=anim([(86, [55, 55, 100], "expressive-pop"), (94, [108, 108, 100], "settle-soft"),
-                           (100, [100, 100, 100])]))
-    box(c, "sent pill", sx - 95, sy - 36, 190, 72, "green", r=36, parent=stamp, ip=86)
-    check_icon(c, sx - 46, sy, 34, "ink", draw_at=89, parent=stamp, ip=86)
-    label_text(c, "Sent", "OT Body Medium", 34, "ink", sx + 20, sy + CAP * 34 / 2, j=2, parent=stamp, ip=86)
-    c.cue(16, "whoosh", 0.5)
-    c.cue(86, "chime", 0.9)
-    curtain_open(c)
-    drift(c)
-    curtain_close(c)
-    return c
-
-
-# =========================================================================== 10 SECURE PAYMENTS
-def scene_payments():
-    c = Comp("10 Paid, even if they cancel", W, H, 135)
-    background(c)
-    feature_glow(c)
-    sb = armature_headline(c, fonts, "PAID. EVEN IF", "THEY CANCEL.", "Secure payments make sure you get paid.")
-    y0 = sb + 56
-    c1 = c.null("payment card", p=anim([(16, [0, 260, 0], "settle-soft"), (30, [0, 0, 0])]), ip=16)
-    box(c, "card 1", L, y0, CW, 350, "surface", r=28, parent=c1, ip=16)
-    c.shape("lock badge", [group([ellipse(96, 96, L + 96, y0 + 84), fill_("green")])], parent=c1, ip=16)
-    lock_icon(c, L + 96, y0 + 86, 44, "ink", parent=c1, ip=16)
-    label_text(c, "Payment secured", "OT Body Medium", 40, "white", L + 170, y0 + 84 + CAP * 40 / 2, parent=c1, ip=16)
-    fade_line(c, PRICE_DEC, TITLE, 84, "white", L + 48, y0 + 250, start=26, parent=c1)
-    fade_line(c, f"{JOB_DATE} · Jalan Besar Stadium", "OT Body", 28, GREY, L + 48, y0 + 306, start=30, parent=c1)
-    c.cue(16, "whoosh", 0.5)
-    c.cue(26, "chime_soft", 0.6)
-    yb = y0 + 380
-    c2 = c.null("cancel card", p=anim([(56, [0, 260, 0], "settle-soft"), (70, [0, 0, 0])]), ip=56)
-    box(c, "card 2", L, yb, CW, 330, "surface", r=28, parent=c2, ip=56)
-    label_text(c, "Client cancelled the booking", "OT Body", 34, "white", L + 48, yb + 76, parent=c2, ip=56, o=75)
-    box(c, "card 2 rule", L + 48, yb + 118, CW - 96, 1.5, c_("white", 0.1), parent=c2, ip=56)
-    c.shape("check badge", [group([ellipse(80, 80, L + 88, yb + 216), fill_("green")])], parent=c2, ip=56)
-    check_icon(c, L + 88, yb + 217, 40, "ink", draw_at=84, parent=c2, ip=84)
-    label_text(c, "Cancellation fee", "OT Body Medium", 40, "white", L + 152, yb + 206, parent=c2, ip=56)
-    fade_line(c, "Paid to you", "OT Body Medium", 34, "green", L + 152, yb + 256, start=86, parent=c2)
-    c.cue(56, "blip_in", 0.7)
-    c.cue(86, "chime", 0.9)
-    curtain_open(c)
-    drift(c)
-    curtain_close(c)
-    return c
-
-
-# =========================================================================== 11 EXPOSURE
-def scene_exposure():
-    c = Comp("11 Free exposure, built in", W, H, 135)
-    background(c)
-    feature_glow(c)
-    sb = armature_headline(c, fonts, "FREE EXPOSURE,", "BUILT IN.", "Shot of the Week puts you in front of clients.")
-    y0 = sb + 56
-    mh = 520
-    pic(c, "portrait-flare", L, y0, CW, mh, r=8, ip=16, focus=(0.5, 0.3),
-        rise=[(16, 90, "entrance-sharp"), (30, 0, "linear")], zoom=[(16, 1.12, "settle-soft"), (135, 1.0)])
-    c.shape("photo shade", [group([rect(CW, 260, L + CW / 2, y0 + mh - 130),
-                                    gradient([(0, "#000000"), (1, "#000000")], [0, y0 + mh - 260], [0, y0 + mh],
-                                             alpha_stops=[(0, 0), (1, 0.65)])])], ip=16)
-    rise_line(c, fonts, "SHOT OF THE WEEK", TITLE, 46, "white", L + 36, y0 + mh - 40, j=0, start=26,
-              slot="sotw", label="Feature title")
-    fx, fy = L + 36, y0 + 34
-    fw = fonts.width("OT Body Medium", 28, "Featured") + 40
-    feat = c.null("featured chip", p=(fx + fw / 2, fy + 24), a=(fx + fw / 2, fy + 24), ip=84,
-                  s=anim([(84, [55, 55, 100], "expressive-pop"), (92, [108, 108, 100], "settle-soft"),
-                          (98, [100, 100, 100])]))
-    box(c, "featured", fx, fy, fw, 48, "green", r=8, parent=feat, ip=84)
-    label_text(c, "Featured", "OT Body Medium", 28, "ink", fx + fw / 2, fy + 24 + CAP * 28 / 2, j=2, parent=feat, ip=84)
-    ys = y0 + mh + 20
-    sh = BOTTOM - 70 - ys
-    strip = c.null("nominees strip", p=anim([(44, [0, 220, 0], "settle-soft"), (58, [0, 0, 0])]), ip=44)
-    box(c, "cream strip", L, ys, CW, sh, "cream", r=8, parent=strip, ip=44)
-    label_text(c, "SHOT OF THE WEEK NOMINEES", "OT Label", 24, "ink", L + 30, ys + 46, parent=strip, ip=44)
-    tw_ = (CW - 60 - 2 * 16) / 3
-    th = sh - 120
-    for i, (name, title) in enumerate([("point-orange", "MATCH POINT"), ("kids-duel", "FINALS"),
-                                       ("stretch-ball", "TOUCH")]):
-        at = 54 + i * 4
-        tx = L + 30 + i * (tw_ + 16)
-        pic(c, name, tx, ys + 66, tw_, th, ip=at, parent=strip, rise=[(at, 60, "entrance-sharp"), (at + 12, 0)])
-        label_text(c, title, TITLE, 20, "ink", tx, ys + 66 + th + 30, parent=strip, ip=at)
-    c.cue(16, "whoosh", 0.5)
-    c.cue(44, "whoosh", 0.35)
-    c.cue(84, "chime", 0.8)
-    curtain_open(c)
-    drift(c)
-    curtain_close(c)
-    return c
-
-
-# =========================================================================== 12 DATES
-def scene_dates():
-    c = Comp("12 Sign up free - 16 Nov - 22.11 5PM", W, H, 165)
-    background(c)
-    glow(c, W / 2, H + 260, 1300 if not LANDSCAPE else 1150, colors=[(0, COL["green"]), (0.5, "#1d4a20"), (1, COL["bg"])],
-         alphas=(0.42, 0.2, 0.0))
-    statement(c, "SIGN UP", "FREE.", 6, slots=("cta1", "cta2"), labels=("Sign-up line 1", "Sign-up line 2"),
-              exit_at=46, port_max=300, land_max=300)
-    if LANDSCAPE:
-        s2 = fonts.fit(STATE, ["SET UP YOUR PROFILE", "FROM 16 NOV."], 1560, 210)
-        b1 = H / 2 - s2 * 0.08
-        rise_line(c, fonts, "SET UP YOUR PROFILE", STATE, s2, "white", W / 2, b1, j=2, start=54, exit_at=100,
-                  slot="setup1", label="Setup line 1")
-        rise_pair(c, fonts, "FROM", "16 NOV.", STATE, s2, W / 2, b1 + s2 * 0.98, start=62, exit_at=102,
-                  slot1="setup2", slot2="profilesOpen", label1="Setup line 2", label2="Profiles-open date")
-    else:
-        lines = ["SET UP YOUR", "PROFILE FROM", "16 NOV."]
-        s2 = fonts.fit(STATE, lines, 860, 220)
-        b0 = H / 2 - s2 * 0.98 + CAP * s2 / 2
-        for i, ln in enumerate(lines):
-            rise_line(c, fonts, ln, STATE, s2, "green" if i == 2 else "white", W / 2, b0 + i * s2 * 0.98, j=2,
-                      start=54 + i * 7, exit_at=100 + i * 2, slot="profilesOpen" if i == 2 else f"setup{i + 1}",
-                      label="Profiles-open date" if i == 2 else f"Setup line {i + 1}")
-    c.cue(54, "tick", 0.6)
-    c.cue(100, "riser:14", 0.7)
-    crash = 114
-    dsize = fonts.fit(STATE, ["22.11"], 900 if LANDSCAPE else 840, 440)
-    dcy = H / 2 - (40 if LANDSCAPE else 80)
-    wordmark_crash(c, "22.11", STATE, dsize, W / 2, dcy, crash, 165, color="green", start_scale=320,
-                   settle_end_scale=95, slot="liveDate", label="Live date")
-    rise_line(c, fonts, "WE GO LIVE · 5PM SGT", "OT Body Medium", 56, "white", W / 2, dcy + CAP * dsize / 2 + 110, j=2,
-              start=124, slot="liveLine", label="Live time line")
-    flash(c, crash, peak=25, dur=3)
-    c.cue(crash, "boom", 1.0)
-    c.cue(crash, "shutter_big", 0.9)
-    curtain_open(c)
-    drift(c)
-    curtain_close(c)
-    return c
-
-
-# =========================================================================== 13 GET IN THE FRAME (site 3D wall) + footer
+# =========================================================================== 11 GET IN THE FRAME (light corridor)
 def scene_frame():
-    c = Comp("13 Get in the frame", W, H, 165)
-    background(c)
+    c = Comp("11 Get in the frame", W, H, 150)
+    ground(c, "light")
     Z = 1500 if LANDSCAPE else 1300
     c.camera3d(zoom=Z)
-    fin = 104   # footer cut
+    fin = 150
     names = ["tackle-night", "basketball", "sepak-takraw", "celebrate-fists", "motion-blur", "team-talk",
              "heart-hands", "number-10", "kids-duel", "point-orange", "smile-orange", "stretch-ball"]
-    D = 1150 if LANDSCAPE else 600      # wall distance from the centre line (world px)
-    PWW, PHW = 700, 875                 # panel size in the world (4:5)
-    YAW = 72                            # 90 = flat along the wall, 0 = facing the camera
+    D = 1150 if LANDSCAPE else 600
+    PWW = 700
+    YAW = 72
     rows = (-940, 0, 940)
     step, slots = 760, 8
-    travel = 1.3 * step                 # how far the walls glide toward the camera before the footer
+    travel = 1.3 * step
     speed = travel / fin
     panels = []
     for side, sgn in (("L", -1), ("R", 1)):
@@ -836,83 +910,116 @@ def scene_frame():
             z0 = -150 + k * step + (0 if side == "L" else step / 2)
             for r_, dy in enumerate(rows):
                 panels.append((z0, side, sgn, dy, k, r_))
-    panels.sort(key=lambda q: -q[0])   # farthest first (Skottie draws 3D layers in layer order)
+    panels.sort(key=lambda q: -q[0])
 
-    def fog(z):  # far panels fade in out of the dark
+    def fog(z):
         return max(0.0, min(100.0, (4900 - z) / 1100 * 100))
 
     for z0, side, sgn, dy, k, r_ in panels:
         name = names[(k * 5 + r_ * 4 + (0 if side == "L" else 6)) % len(names)]
         file = panel_photo(name)
-        # retire a panel once it has slid past the frame edge, well before the camera plane
         f_out = fin if z0 - travel > -650 else int((z0 + 650) / speed) + 1
         if f_out <= 0:
             continue
         fr = sorted(set([0, f_out] + list(range(0, f_out, 8))))
         x = W / 2 + sgn * D
         ks = Comp.ks3(p=anim([(f, [x, H / 2 + dy, z0 - speed * f], "linear") for f in fr]),
-                      a=(PANEL_W / 2, PANEL_H / 2, 0), s=(PWW / PANEL_W * 100,) * 2 + (100,), ry=sgn * YAW,
+                      a=(400, 500, 0), s=(PWW / 800 * 100,) * 2 + (100,), ry=sgn * YAW,
                       o=anim([(f, [fog(z0 - speed * f)], "linear") for f in fr]))
-        c.image3d(f"wall {side}{k} row{r_} {name}", file, PANEL_W, PANEL_H, ks, op=min(f_out, fin))
-    c.shape("wall shade", [group([rect(W, H, W / 2, H / 2),
-                                   gradient([(0, "#111113"), (1, "#111113")], [W / 2, H / 2], [W / 2 + W * 0.62, H / 2],
-                                            kind=2, alpha_stops=[(0, 0.86), (0.5, 0.5), (1, 0)])])], op=fin)
-    c.cue(0, "whoosh", 0.6)
+        c.image3d(f"wall {side}{k} row{r_} {name}", file, 800, 1000, ks, op=min(f_out, fin))
+    c.shape("light veil", [group([rect(W, H, W / 2, H / 2),
+                                   gradient([(0, C_LIGHT), (1, C_LIGHT)], [W / 2, H / 2], [W / 2 + W * 0.62, H / 2],
+                                            kind=2, alpha_stops=[(0, 0.9), (0.5, 0.55), (1, 0)])])])
+    c.cue(0, "whoosh", 0.5)
     if LANDSCAPE:
         hs = fonts.fit(STATE, ["GET IN THE FRAME"], 1200, 220)
-        rise_line(c, fonts, "GET IN THE FRAME", STATE, hs, "white", W / 2, 330, j=2, start=6, op=fin, slot="frame",
-                  label="Get in the frame")
-        sub_y, b1y, b2y, bw = 330 + 76, 640, 735, 470
+        title_y, sub_y, b1y, b2y, bw = 360, 440, 640, 740, 470
+        pill_y = 210
     else:
         hs = fonts.fit(STATE, ["GET IN", "THE FRAME"], 800, 250)
-        rise_line(c, fonts, "GET IN", STATE, hs, "white", W / 2, 640, j=2, start=6, op=fin, slot="frame1",
-                  label="Get in the frame 1")
-        rise_line(c, fonts, "THE FRAME", STATE, hs, "white", W / 2, 640 + hs * 0.98, j=2, start=14, op=fin,
-                  slot="frame2", label="Get in the frame 2")
-        sub_y, b1y, b2y, bw = 640 + hs * 0.98 + 90, 1240, 1350, 600
-    fade_line(c, "Photographers, show your work and take bookings.", "OT Body", 32, "white", W / 2, sub_y, j=2,
-              start=26, op=fin, o=88)
-    fade_line(c, "Clients, find someone for your next match in minutes.", "OT Body", 32, "white", W / 2, sub_y + 42,
-              j=2, start=30, op=fin, o=88)
-    for lab, style, by, at in (("Join as Photographer", "green", b1y, 40), ("Look for Photographer", "white", b2y, 44)):
-        g = c.null(f"{lab} btn", p=(W / 2, by), a=(W / 2, by), ip=at, op=fin,
-                   s=anim([(at, [80, 80, 100], "expressive-pop"), (at + 8, [103, 103, 100], "settle-soft"),
-                           (at + 14, [100, 100, 100], "hold")] +
-                          ([(92, [100, 100, 100], "hold"), (93, [95, 95, 100], "hold"), (97, [100, 100, 100])]
-                           if style == "green" else [(at + 15, [100, 100, 100])])))
-        s0 = len(c._layers)
-        site_button(c, fonts, lab, W / 2, by, width=bw, size=30, style=style, parent=g, ip=at, op=fin)
-        members_opacity(layers_since(c, s0), [(at, 0, "settle-soft"), (at + 6, 100)])
-    c.cue(40, "pop", 0.5)
-    tap(c, W / 2 + bw / 2 - 60, b1y + 4, appear=84, press=93)
-    # footer (site): cream page, giant green OUTTAKES
-    c.shape("footer", [group([rect(W, H, W / 2, H / 2), fill_("cream")])], ip=fin)
-    flash(c, fin, peak=30, dur=3)
-    c.cue(fin, "shutter_big", 0.9)
-    c.cue(fin, "boom_small", 0.5)
-    ink = c_("ink")
+        title_y = 700
+        sub_y, b1y, b2y, bw = 700 + hs * 0.96 + 96, 1250, 1370, 640
+        pill_y = 470
+    pill_w = fonts.width(MED, 28, "Live now · Sign up free") + 90
+    n0 = len(c._layers)
+    fp.box(c, "live pill", W / 2 - pill_w / 2, pill_y - 30, pill_w, 60, "white", r=30)
+    c.shape("live dot", [group([ellipse(18, 18, W / 2 - pill_w / 2 + 34, pill_y), fl("green")])])
+    txt(c, "Live now · Sign up free", MED, 28, "ink", W / 2 + 14, pill_y + CAP * 28 / 2, j=2)
+    members_opacity(since(c, n0), [(4, 0, "settle-soft"), (12, 100)])
     if LANDSCAPE:
-        gs = fonts.fit(STATE, ["OUTTAKES"], W * 1.0, 700)
-        gb = H + gs * 0.05
-        tx, ty, j, us = 120, 200, 0, 84
+        fp.rise_line(c, fonts, "GET IN THE FRAME", STATE, hs, "ink", W / 2, title_y, j=2, start=8, slot="frame",
+                     label="Get in the frame")
     else:
-        gs = fonts.fit(STATE, ["OUTTAKES"], W * 0.96, 520)
-        gb = 1440
-        tx, ty, j, us = W / 2, 800, 2, 84
-    c.text("footer wordmark", text_doc("OUTTAKES", STATE, gs, c_("green"), justify=2), ip=fin,
-           p=anim([(fin, [W / 2, gb + gs * 0.5, 0], "settle-soft"), (fin + 18, [W / 2, gb, 0], "linear"),
-                   (165, [W / 2, gb - 10, 0])]), slot="endBrand", label="Footer wordmark")
-    us = fonts.fit(TITLE, ["outtakes.sg"], 760, us)
-    fade_line(c, "Sign up free at", "OT Body", 44, INK55, tx, ty, j=j, start=fin + 8)
-    fade_line(c, "outtakes.sg", TITLE, us, ink, tx, ty + 30 + us, j=j, start=fin + 10)
-    fade_line(c, "Live 22.11 · 5PM SGT", "OT Body Medium", 44, ink, tx, ty + 100 + us, j=j, start=fin + 14)
-    curtain_open(c)
-    curtain_close(c, dur=6)
+        fp.rise_line(c, fonts, "GET IN", STATE, hs, "ink", W / 2, title_y, j=2, start=8, slot="frame1",
+                     label="Get in the frame 1")
+        fp.rise_line(c, fonts, "THE FRAME", STATE, hs, "ink", W / 2, title_y + hs * 0.96, j=2, start=16,
+                     slot="frame2", label="Get in the frame 2")
+    fp.fade_line(c, "Photographers, show your work and take bookings.", BODY, 32, "ink", W / 2, sub_y, j=2, start=26)
+    fp.fade_line(c, "Clients, find someone for your next match in minutes.", BODY, 32, "ink", W / 2, sub_y + 44, j=2,
+                 start=30)
+    press = 104
+    for lab, style, by, at in (("Join as Photographer", "green", b1y, 40), ("Look for Photographer", "ink", b2y, 44)):
+        g = c.null(f"{lab} btn", p=(W / 2, by), a=(W / 2, by), ip=at,
+                   s=anim([(at, [82, 82, 100], "expressive-pop"), (at + 8, [103, 103, 100], "settle-soft"),
+                           (at + 14, [100, 100, 100], "hold")] +
+                          ([(press, [100, 100, 100], "hold"), (press + 1, [94, 94, 100], "hold"), (press + 6, [100, 100, 100])]
+                           if style == "green" else [(at + 15, [100, 100, 100])])))
+        n1 = len(c._layers)
+        h = 92
+        fp.box(c, f"btn {lab}", W / 2 - bw / 2, by - h / 2, bw, h, col(style), r=h * 0.22, parent=g, ip=at)
+        txt(c, lab, MED, 32, "white" if style == "ink" else "ink", W / 2 - 18, by + CAP * 32 / 2, j=2, parent=g, ip=at)
+        fp.arrow_icon(c, W / 2 + bw / 2 - 52, by, 34, "#ffffff" if style == "ink" else "#121214", parent=g, ip=at)
+        members_opacity(since(c, n1), [(at, 0, "settle-soft"), (at + 6, 100)])
+    c.cue(40, "pop", 0.5)
+    tx, ty = W / 2 + bw * 0.18, b1y + 6
+    cursor(c, [(84, (tx + 260, ty + 360)), (press - 6, (tx, ty)), (150, (tx, ty))], presses=[press])
+    # the site's green glow rises and carries us into the footer
+    gh = H * 1.6
+    c.shape("glow wipe", [group([rect(W * 1.2, gh, W / 2, gh / 2),
+                                 gradient([(0, C_LIGHT), (0.28, "#4bff2c"), (0.5, "#b8ffa8"), (0.72, C_LIGHT), (1, C_LIGHT)],
+                                          [0, 0], [0, gh])])],
+            p=anim([(press + 6, [0, H, 0], "exit-accelerate"), (150, [0, H - gh * 0.98, 0])]), ip=press + 6)
+    c.cue(press + 6, "riser:30", 0.5)
     return c
 
 
-SCENES = [scene_hook, scene_problem, scene_hero, scene_sideline, scene_clients, scene_profile, scene_booking,
-          scene_steps, scene_invoices, scene_payments, scene_exposure, scene_dates, scene_frame]
+C_LIGHT = "#e5e9ec"
+
+
+# =========================================================================== 12 FOOTER
+def scene_footer():
+    c = Comp("12 Footer - outtakes.sg", W, H, 90)
+    ground(c, "light")
+    if LANDSCAPE:
+        gs = fonts.fit(STATE, ["OUTTAKES"], W * 1.0, 700)
+        gb = H + gs * 0.05
+    else:
+        gs = fonts.fit(STATE, ["OUTTAKES"], W * 0.96, 520)
+        gb = 1450
+    c.text("footer wordmark", text_doc("OUTTAKES", STATE, gs, col("green"), justify=2),
+           p=anim([(0, [W / 2, gb + gs * 0.6, 0], "settle-soft"), (20, [W / 2, gb, 0], "linear"), (90, [W / 2, gb - 10, 0])]),
+           slot="endBrand", label="Footer wordmark")
+    c.cue(0, "boom_small", 0.5)
+    links = ["Find a photographer", "Community", "Blog", "About", "Join", "FAQ"]
+    lx, ly = (120, 170) if LANDSCAPE else (80, 330)
+    for k, t in enumerate(links):
+        fp.fade_line(c, t, BODY, 30, "ink", lx, ly + k * 46, start=6 + k)
+    rx = W - (120 if LANDSCAPE else 80)
+    for k, t in enumerate(["2026 Outtakes SG", "Privacy Policy", "Terms", "hello@outtakes.sg"]):
+        fp.fade_line(c, t, BODY, 30, "ink", rx, ly + k * 46, j=1, start=8 + k)
+    if LANDSCAPE:
+        cx, cy = W / 2, 560
+    else:
+        cx, cy = W / 2, 820
+    fp.fade_line(c, "Sign up free at", BODY, 46, "grey", cx, cy, j=2, start=14)
+    us = fonts.fit(TITLE, ["outtakes.sg"], 820, 96)
+    fp.fade_line(c, "outtakes.sg", TITLE, us, "ink", cx, cy + 30 + us, j=2, start=16)
+    fp.curtain_close(c, dur=6)
+    return c
+
+
+SCENES = [scene_hook, scene_problem, scene_hero, scene_studio, scene_profile, scene_search, scene_book, scene_paid,
+          scene_featured, scene_steps, scene_frame, scene_footer]
 
 
 def main():

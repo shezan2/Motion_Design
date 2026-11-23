@@ -6,11 +6,11 @@
     },
     {
       "sid": "problem1",
-      "label": "Line 1"
+      "label": "Statement line 1"
     },
     {
       "sid": "problem2",
-      "label": "Line 2"
+      "label": "Statement line 2"
     }
   ]
 }

@@ -256,9 +256,10 @@ class Comp:
         return aid
 
     def image(self, name, file, w, h, p=(0, 0), s=(100, 100), r=0, o=100, ip=0, op=None,
-              parent=None, matted=False, blend=0):
+              parent=None, matted=False, blend=0, a=None):
         aid = self._asset(file, w, h)
-        layer = self._base(2, name, self.ks(p=p, a=(w / 2, h / 2), s=s, r=r, o=o), ip, op, parent)
+        layer = self._base(2, name, self.ks(p=p, a=a if a is not None else (w / 2, h / 2), s=s, r=r, o=o), ip, op,
+                           parent)
         layer["refId"] = aid
         if matted:
             layer["tt"] = 1

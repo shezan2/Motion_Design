@@ -146,11 +146,23 @@ def whoosh(length=0.45):
     return x * np.sin(np.linspace(0, np.pi, n)) ** 2 * 0.35
 
 
+def af():
+    """Camera autofocus confirmation: two short, bright beeps."""
+    n = int(0.11 * SR)
+    out = np.zeros(n)
+    for d, f0 in ((0.0, 2950), (0.055, 2950)):
+        i = int(d * SR)
+        m = int(0.035 * SR)
+        tm = np.arange(m) / SR
+        out[i:i + m] += np.sin(2 * np.pi * f0 * tm) * np.minimum(1, tm / 0.002) * np.exp(-tm * 40)
+    return out * 0.16
+
+
 VOICES = {
     "shutter": lambda: shutter(1.0), "shutter_big": lambda: shutter(1.3), "boom": lambda: boom(2.2),
     "boom_small": lambda: boom(1.2), "blip_in": lambda: blip(True), "blip_out": lambda: blip(False),
     "tick": tick, "key": key, "tap": tap_snd, "chime": lambda: chime(False), "chime_soft": lambda: chime(True),
-    "pop": pop, "whoosh": lambda: whoosh(0.45),
+    "pop": pop, "whoosh": lambda: whoosh(0.45), "af": af,
 }
 
 for cue in CUES["cues"]:

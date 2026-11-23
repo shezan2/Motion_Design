@@ -5,12 +5,12 @@
       "label": "Background"
     },
     {
-      "sid": "sideline1",
-      "label": "Headline line 1"
+      "sid": "studio1",
+      "label": "Statement line 1"
     },
     {
-      "sid": "sideline2",
-      "label": "Headline line 2"
+      "sid": "studio2",
+      "label": "Statement line 2"
     }
   ]
 }

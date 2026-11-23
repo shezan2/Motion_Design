@@ -1,85 +1,69 @@
 # Outtakes launch film — Lottie edition (text-to-lottie)
 
 The Outtakes launch film, built as **Lottie animations** with
-[diffusionstudio/lottie](https://github.com/diffusionstudio/lottie) (text-to-lottie). The project uses its skill, its Skia
-Skottie player and its authoring rules.
+[diffusionstudio/lottie](https://github.com/diffusionstudio/lottie) (text-to-lottie). It uses that project's skill, its
+Skia Skottie player and its authoring rules.
 
-- **Formats:** two cuts from one timeline, 30 fps, **64 s** each:
+- **Formats:** two cuts from one timeline, 30 fps, **60 s** each:
   - portrait 1080×1920 (`public/projects/outtakes-launch`), the primary cut for Reels, TikTok and Shorts
   - landscape 1920×1080 (`public/projects/outtakes-launch-16x9`) for YouTube, the website and X
-- **Sound:** sound effects only, no voiceover (add your new VO on top).
-- **Interface:** rebuilt to match the **live website** (outtakes.ozendigital.co, November 2026). This covers the hero, the
-  sideline section, the photographer profile page, packages and availability, the four booking steps, "Get in the frame"
-  and the footer. The site's signature animations are ported too (see below).
+- **Sound:** sound effects only, no voiceover.
+- **Interface (v4):** rebuilt for the **redesigned website** (November 2026), as shown in the six screen recordings. The
+  redesign includes:
+  - light editorial pages (cool grey #E5E9EC) with black condensed-italic statements
+  - the neon green #4BFF2C
+  - the film-strip dividers
+  - duotone "Browse by sport" cards
+  - the new photographer profile page
+  - the photographer Studio, with its orange accents
+  - the holographic "How a booking goes" cards
+  - the light "Get in the frame" corridor and the footer
 
-## The film: 13 Lottie scenes
+## How it is directed
+
+v3 was a feature tour: a headline above a card, repeated six times. v4 follows **one case from start to finish**: you get
+the shot, you set up your Studio, a client finds you and books you at your rate, you get paid (even when someone cancels),
+and the shot you took is featured. The craft decisions come from the motionmaxxing references, which distil about 50
+designer-made launch films (`references/ui-demo.md`, `transitions.md` and `judgment.md`). The opening montage borrows the
+graphic match cut from Nike's "You Can't Stop Us" (Wieden+Kennedy):
+
+- **One carried object.** The hook ends on the celebration shot. The same photo is your profile's hero image, your card in
+  the search results, and finally Shot of the Week.
+- **Claim, then proof.** Each feature states its claim big, then a 3D interface surface rises over it with the proof. The
+  profile chapter does it the other way round: proof first, then the claim.
+- **Real UI, magnified.** Every interface is built as 3D planes, using a Lottie camera and 3D layers. They have perspective
+  tilt on entry and soft drop shadows. Copy is sized to read on a phone.
+- **A custom cursor with press physics.** The black arrow with a white edge enters oversized, travels on eased paths and
+  squashes on each press. The button it presses squashes a frame later.
+- **Motivated seams.** Transitions use shutter flashes, the site's own film strip as a wipe, a fly-through into the
+  profile page, whips that cut at peak speed, and the site's green glow into the footer.
+
+## The film: 12 Lottie scenes
 
 | # | Scene | Frames | What it shows |
 |---|---|---|---|
-| 1 | Hook — burst mode | 140 | Ten of the collective's photos fire on shutter clicks, then the shot lands. "YOU GOT / THE SHOT." |
-| 2 | Problem — the DMs | 195 | One DM thread: "how much for saturday's match?" → "$70 for the full game" → "can do $30?" (lowball) → "game cancelled, no need to pay ya" (cancellation) → "just following up on the invoice :)" → Seen. "SOUND / FAMILIAR?" |
-| 3 | **Hero (site)** | 135 | OUTTAKES crashes in over the motion-blurred hero photo. Then "STORIES TOLD THROUGH FRAMES", the Sign In / Menu bar, "Made by photographers, for photographers." and the green "Find a Photographer" button. The page then scrolls into the next section. |
-| 4 | **Every sideline shot starts with a search (site)** | 135 | The cream-to-green glow section. Tilted 3D photo cards fly in and orbit while the headline loads letter by letter. |
-| 5 | **Now clients chase you** | 150 | A client searches "football photographer" and your profile is in the results. Booking requests then stack up: season coverage, a brand shoot, a final. *More clients, bigger clients, one central place where they search.* |
-| 6 | **Your portfolio, organised (site profile page)** | 150 | The photographer page: hero, avatar, YOUR NAME, tagline, Specialises in / Packages from S$70 / Covers, and the Featured grid. *Proper organised portfolio.* |
-| 7 | **Booked at your rate (site packages + availability)** | 165 | The lowball DM is struck out and thrown away. The AVAILABILITY calendar for November 2026 appears; 21 Nov is tapped. Then the PACKAGES panel: Full match, S$70, "Book" is tapped → "Booked · Sat 21 Nov". *Systemised booking, fewer lowball DMs.* |
-| 8 | **How a booking goes (site steps, 3D)** | 135 | The four green step cards in a 3D carousel, using the site's copy: ONE Call the photographer and agree on the shoot, TWO Book their package and date on Outtakes, THREE Pay once they accept, FOUR Get shot, then get your photos. |
-| 9 | **Invoices, done for you** | 120 | A proper invoice builds itself (billed to, items, S$70.00 total), then is stamped Sent. *Invoice generation for big clients.* |
-| 10 | **Paid. Even if they cancel.** | 135 | Payment secured (S$70.00). The client cancels, and the cancellation fee is paid to you. *Secure payments.* |
-| 11 | **Free exposure, built in** | 135 | Shot of the Week feature, the Featured chip and the nominees strip. *Free built-in exposure and marketing.* |
-| 12 | Dates | 165 | "SIGN UP / FREE." → "SET UP YOUR / PROFILE FROM / 16 NOV." → **22.11** crash → "WE GO LIVE · 5PM SGT". |
-| 13 | **Get in the frame (site, 3D) + footer** | 165 | A 3D corridor of photo walls glides past. Over it: "GET IN / THE FRAME", the site's two audience lines and buttons ("Join as Photographer" gets tapped). Then the site footer: cream page, "Sign up free at outtakes.sg · Live 22.11 · 5PM SGT", and the giant green OUTTAKES. |
+| 1 | Hook — the photographer's eye | 150 | A focus point hops subject to subject (ball, ball, ball, … a face), locking green with an autofocus beep before each shutter. The shots speed up and land on the celebration. "YOU GOT / THE SHOT." |
+| 2 | Problem — the DMs | 180 | The DM thread: lowball, cancellation, invoice chasing, Seen. "SOUND / FAMILIAR?" |
+| 3 | Hero (new site) | 150 | OUTTAKES crashes in over the motion-blurred hero. Then "STORIES TOLD THROUGH FRAMES", the Sign In / Menu bar, the Shot of the Week credit, "A platform where photographers and athletes can meet in one searchable place." and "Find a Photographer". The site's film strip, full of the collective's frames, wipes up to the light pages. |
+| 4 | Set up your Studio | 140 | "SET UP ONCE. / GET BOOKED." The Studio's "Set up your profile" card rises. All eight steps tick in turn as the orange progress bar fills. The button becomes "Preview profile"; it is clicked and the camera flies through. *Organised portfolio.* |
+| 5 | Your profile page | 150 | The redesigned profile page: breadcrumbs, avatar, YOUR NAME, the shot, thumbnails, then Reviews, Packages from S$70, Next free date, Covers, Experience, and See packages. Then "YOUR PORTFOLIO, / ORGANISED." |
+| 6 | Now clients find you | 180 | "Browse by sport" duotone cards whip in and stop on Football. A client picks it; the film strip of featured photographers rises; the results scroll and stop on your card, and the client hearts it. *Bigger pool of clients searching one place.* |
+| 7 | Booked at your rate | 165 | "BOOK YOUR NAME". Full match, S$70, and the November availability calendar. The client taps the 28th, then Book. "Booked · Sat 28 Nov". *Systemised booking, no lowball DMs.* |
+| 8 | Paid, even if they cancel | 165 | In the Studio, the photos are delivered and Earnings this month counts S$0.00 → S$70.00. An invoice is sent automatically. A second client cancels, and the cancellation fee is paid to you. *Secure payments, invoices.* |
+| 9 | Your shot, featured | 135 | "PHOTOS OF THE WEEK" with the shot from the hook, your card, and the Shot of the Week chip. *Free built-in exposure.* |
+| 10 | How a booking goes | 135 | The holographic green step cards (foil lettering) in a 3D carousel, using the site's copy. |
+| 11 | Get in the frame | 150 | The light corridor of photo walls, "Live now · Sign up free", "GET IN / THE FRAME", and the two site buttons. "Join as Photographer" is clicked, and the site's green glow rises. |
+| 12 | Footer | 90 | The site footer: links, "Sign up free at outtakes.sg", the giant green OUTTAKES, then the shutter closes. |
 
-### Site animations ported to Lottie
+**Prices:** UI uses the site's format (S$70). The DM keeps "$70 for the full game".
 
-- **Hero wordmark crash:** a giant italic OUTTAKES slams in over the panning, motion-blurred hero plate.
-- **Smooth page scroll as a transition:** the hero scrolls up and the sideline section's glow and headline scroll in with
-  it, as on the site. The carry from chapter 3 into chapter 4 is frame-exact: the last frame of 3 is pixel-identical to the
-  first frame of 4.
-- **Letter-by-letter headline load:** "EVERY SIDELINE SHOT STARTS WITH A SEARCH" arrives as faint ghost letters, then
-  lights up one character at a time. It uses a native Lottie text animator (range selector on opacity).
-- **Floating 3D photo cards:** tilted cards fly in from depth and slowly orbit. This uses a real Lottie 3D camera and 3D
-  image layers.
-- **3D step carousel:** the green ONE–FOUR cards rotate through, the active card bright and the neighbours turned away and
-  darker.
-- **"Get in the frame" photo corridor:** walls of photo panels in 3D perspective, moving toward the viewer.
-- **Site buttons, calendar and packages:** the green and white rounded buttons with arrows, availability dots and package
-  rows, all in the site's colours and type.
-
-**Type:** statements use the site's condensed italic display face (OT Wordmark). Small titles use Archivo Expanded (OT
-Display).
-
-**Seams:** most chapters end with the camera-shutter curtain closing mid-motion, and the next opens with it finishing. That
-is an occlusion wipe from the skill's transition grammar. The exception is hero → sideline, which is a continuous page scroll
-like the site's.
-
-**Feature beats:** all use one repeated layout: the same headline block (white line plus green line), one support line and
-one proof object.
-
-**Prices:** UI elements use the site's currency format: **S$70** and **S$70.00**. The casual DM in chapter 2 stays
-"$70 for the full game".
-
-**What's illustrative:**
-- The DM thread.
-- The sample booking, invoice and payment values (S$70, Jalan Besar Stadium, Sat 21 Nov, Sports club).
-- "YOUR NAME" and its tagline.
-
-No real photographer's name is attached to any photo.
-
-## Landscape layout
-
-The 16:9 cut is laid out for the wide frame; it isn't the portrait one cropped.
-
-- **Hero:** the wordmark sits top-left, the tagline under it, the nav bar top-right, and the positioning line and button
-  bottom-right, as on the desktop site.
-- **Feature beats:** the headline block sits in a left column. The proof (search, profile page, calendar and packages,
-  carousel, invoice, payment cards, Shot of the Week) sits in a right column at x 1000–1800.
-- **Hook, problem and sign-up statements:** set on one line ("YOU GOT **THE SHOT.**", "SOUND **FAMILIAR?**",
-  "SIGN UP **FREE.**").
-- **Footer:** the giant wordmark is cropped by the bottom edge, as on the site.
-- **Timing and sound:** identical in both formats, so they share one sound-effects track.
-
-`OT_FORMAT=landscape` switches `tools/build_film.py` and `tools/film_parts.py` to the 16:9 layout.
+**What's illustrative (not real data):**
+- the DM thread
+- "Your name", its tagline, reviews, stats and next free date
+- the bookings (Sports club, Brand shoot, the dates)
+- the earnings figure
+- the invoice number
+- the other names in the results strip, which are the demo profiles from the site
 
 ## Edit it in the player
 
@@ -88,58 +72,41 @@ npm install
 npm run dev        # http://localhost:3030/outtakes-launch/scene-1  (16:9: /outtakes-launch-16x9/scene-1)
 ```
 
-Every scene exposes **slots** in the player's Properties panel. You can retype these without touching code:
-- each scene's headline lines and background colour
-- `brand` and `tagline` (hero)
-- `sideline1` and `sideline2`
-- `profileName`
-- `sotw`
-- in scene 12: `profilesOpen` (`16 NOV.`), `liveDate` (`22.11`) and `liveLine` (`WE GO LIVE · 5PM SGT`)
-- `endBrand` (footer wordmark)
+Every scene exposes **slots** in the player's Properties panel, so you can retype these without touching code:
+- statements and the background colour
+- the wordmark and tagline
+- the profile name and the step title
+- "Get in the frame"
+- the footer wordmark
 
-`?frame=N` pins a frame.
+`?frame=N` pins a frame. Each `scene-N/lottie.json` is a standard Lottie file.
 
-Each `public/projects/outtakes-launch/scene-N/lottie.json` is a standard Lottie file. It works in lottie-web, iOS, Android
-and Flutter, and can be imported into After Effects.
-
-## Rebuild / export the MP4
+## Rebuild / export
 
 ```bash
 pip install fonttools brotli scipy pillow numpy
 python3 tools/make_fonts.py <archivo woff2 folder> brand/fonts   # one-off: static Archivo cuts for Skottie
-bash tools/export.sh                                             # portrait:  build -> SFX -> render -> out/outtakes-launch-lottie-9x16.mp4
-OT_FORMAT=landscape bash tools/export.sh                         # landscape: -> out/outtakes-launch-lottie-16x9.mp4
+python3 tools/make_assets_v4.py <full-resolution originals>      # one-off: bakes brand/photos/v4-* (committed)
+bash tools/export.sh                                             # portrait  -> out/outtakes-launch-lottie-9x16.mp4
+OT_FORMAT=landscape bash tools/export.sh                         # landscape -> out/outtakes-launch-lottie-16x9.mp4
 ```
 
-- `tools/build_film.py`: authors all scenes (with `tools/film_parts.py` and `tools/lottie_kit.py`). It also bakes the 4:5
-  panel crops for the corridor (`brand/photos/panel-*.jpg`, git-ignored, rebuilt on demand).
-- `tools/sfx.py`: synthesises the sound effects from `cues.json`, which the build writes.
-- `tools/render.mjs`: renders with **canvaskit-wasm "full"**, the same Skia Skottie engine as the player, offline in Node.
-  Scenes render in parallel.
-- `tools/player_shot.mjs`: screenshots pinned frames from the official player, for verification.
+- `tools/build_film.py`: authors the scenes. It uses `tools/parts4.py` (the v4 design system: palette, 3D planes,
+  cursor, film strip, focus brackets), `tools/film_parts.py` and `tools/lottie_kit.py`.
+- `tools/make_assets_v4.py`: bakes the image assets. These are hook crops from the 2560 px originals, with each subject
+  placed for the focus point, plus the blurred hero plate, the duotone sport cards, the foil step lettering and the round
+  avatar.
+- `tools/sfx.py`: synthesises the sound effects (shutters, autofocus beeps, taps, chimes, whooshes) from `cues.json`.
+- `tools/render.mjs`: renders with canvaskit-wasm (Skia Skottie, the player's engine). Film grain is added by ffmpeg.
 
 ### Why some things are done the way they are
 
-- **3D:** scenes 4, 8 and 13 use a Lottie camera layer (`ty: 13`) and 3D layers (`ddd: 1`). Skottie draws 3D layers in
-  layer order, not by depth, so far layers are authored first. Corridor panels are cropped up front because a 3D image
-  layer draws its whole image.
-- **Film grain** is added at encode time with ffmpeg. As a full-frame overlay-blended Lottie layer it cost about 330 ms per
-  frame in Skottie. The skill also lists grain/dither as renderer-risky.
-- **Fonts:** Skottie can't pick axes from a variable font, so `tools/make_fonts.py` cuts static instances: OT Display
-  (Archivo Expanded ExtraBold), OT Wordmark (condensed black italic), OT Body, OT Body Medium and OT Label.
+- **3D interfaces:** each interface is a 3D null with 3D children (shapes, native text, images), viewed by a Lottie
+  camera. Skottie draws 3D layers in layer order, so each plane is authored back to front. Drop shadows and Gaussian blur
+  are native Skottie effects.
+- **Foil lettering and duotones are baked**, because Lottie text can't take a gradient fill and Skottie has no duotone
+  effect.
 
 ## Checks on the export (motionmaxxing `look.py`)
 
-Run on both final exports with `--expect 64.17 --expect-audio`. Both cuts give the same results:
-
-- **G0 render exists:** PASS. 64.17 s, 1925 frames, audio present.
-- **G2 no empty frame:** PASS. No run of more than 3 flat frames.
-- **G3 end card hold:** PASS. The film ends mid-motion as the shutter closes over the footer.
-- **Audio:** −16.3 LUFS, true peak −2.8 dBTP, no flags. 93 % of cuts land within ±80 ms of a sound.
-- **Motion:** mean luma change 3.5, up from 2.4 in v2 but still below the human band of 4.4–9.8. This is a note, not a
-  gate. It reflects the slower pace you asked for and the reading holds left for the voiceover. The step carousel creeps
-  and the hero plate pans, so those holds are not flagged as still.
-
-The official player renders the 3D scenes (4, 8, 13) and the letter-by-letter load the same as the Node export, checked
-on pinned frames. The hero → sideline carry is frame-exact: the last frame of chapter 3 and the first frame of chapter 4
-differ by 0.0 on average.
+Results are recorded here after each final export.

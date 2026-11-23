@@ -5,16 +5,12 @@
       "label": "Background"
     },
     {
-      "sid": "head1",
-      "label": "Headline line 1"
+      "sid": "frame1",
+      "label": "Get in the frame 1"
     },
     {
-      "sid": "head2",
-      "label": "Headline line 2"
-    },
-    {
-      "sid": "sotw",
-      "label": "Feature title"
+      "sid": "frame2",
+      "label": "Get in the frame 2"
     }
   ]
 }

@@ -1,0 +1,264 @@
+{
+ "portrait": [
+  {
+   "name": "tackle-night",
+   "file": "v4-hook-p-tackle-night.jpg",
+   "w": 1188,
+   "h": 2112,
+   "kind": "ball",
+   "subject": [
+    648.0,
+    1526.1
+   ],
+   "subject_size": 302.5
+  },
+  {
+   "name": "kids-duel",
+   "file": "v4-hook-p-kids-duel.jpg",
+   "w": 1188,
+   "h": 2112,
+   "kind": "ball",
+   "subject": [
+    388.8,
+    979.4
+   ],
+   "subject_size": 245.8
+  },
+  {
+   "name": "sepak-takraw",
+   "file": "v4-hook-p-sepak-takraw.jpg",
+   "w": 1188,
+   "h": 2112,
+   "kind": "ball",
+   "subject": [
+    626.4,
+    691.2
+   ],
+   "subject_size": 126.6
+  },
+  {
+   "name": "stretch-ball",
+   "file": "v4-hook-p-stretch-ball.jpg",
+   "w": 1188,
+   "h": 2112,
+   "kind": "ball",
+   "subject": [
+    432.0,
+    1340.4
+   ],
+   "subject_size": 288.4
+  },
+  {
+   "name": "basketball",
+   "file": "v4-hook-p-basketball.jpg",
+   "w": 1188,
+   "h": 2112,
+   "kind": "ball",
+   "subject": [
+    561.6,
+    637.5
+   ],
+   "subject_size": 180.0
+  },
+  {
+   "name": "motion-blur",
+   "file": "v4-hook-p-motion-blur.jpg",
+   "w": 1188,
+   "h": 2112,
+   "kind": "ball",
+   "subject": [
+    367.2,
+    1584.1
+   ],
+   "subject_size": 405.2
+  },
+  {
+   "name": "point-orange",
+   "file": "v4-hook-p-point-orange.jpg",
+   "w": 1188,
+   "h": 2112,
+   "kind": "face",
+   "subject": [
+    626.4,
+    508.8
+   ],
+   "subject_size": 241.4
+  },
+  {
+   "name": "portrait-flare",
+   "file": "v4-hook-p-portrait-flare.jpg",
+   "w": 1188,
+   "h": 2112,
+   "kind": "face",
+   "subject": [
+    540.0,
+    750.0
+   ],
+   "subject_size": 390.0
+  },
+  {
+   "name": "celebrate-run",
+   "file": "v4-hook-p-celebrate-run.jpg",
+   "w": 1188,
+   "h": 2112,
+   "kind": "face",
+   "subject": [
+    540.0,
+    468.2
+   ],
+   "subject_size": 151.9
+  }
+ ],
+ "landscape": [
+  {
+   "name": "tackle-night",
+   "file": "v4-hook-l-tackle-night.jpg",
+   "w": 2112,
+   "h": 1188,
+   "kind": "ball",
+   "subject": [
+    1202.2,
+    873.7
+   ],
+   "subject_size": 158.4
+  },
+  {
+   "name": "kids-duel",
+   "file": "v4-hook-l-kids-duel.jpg",
+   "w": 2112,
+   "h": 1188,
+   "kind": "ball",
+   "subject": [
+    691.2,
+    561.6
+   ],
+   "subject_size": 202.8
+  },
+  {
+   "name": "sepak-takraw",
+   "file": "v4-hook-l-sepak-takraw.jpg",
+   "w": 2112,
+   "h": 1188,
+   "kind": "ball",
+   "subject": [
+    1075.2,
+    388.8
+   ],
+   "subject_size": 94.5
+  },
+  {
+   "name": "stretch-ball",
+   "file": "v4-hook-l-stretch-ball.jpg",
+   "w": 2112,
+   "h": 1188,
+   "kind": "ball",
+   "subject": [
+    1324.2,
+    709.2
+   ],
+   "subject_size": 184.5
+  },
+  {
+   "name": "basketball",
+   "file": "v4-hook-l-basketball.jpg",
+   "w": 2112,
+   "h": 1188,
+   "kind": "ball",
+   "subject": [
+    1055.7,
+    388.8
+   ],
+   "subject_size": 270.1
+  },
+  {
+   "name": "motion-blur",
+   "file": "v4-hook-l-motion-blur.jpg",
+   "w": 2112,
+   "h": 1188,
+   "kind": "ball",
+   "subject": [
+    238.9,
+    908.4
+   ],
+   "subject_size": 207.0
+  },
+  {
+   "name": "point-orange",
+   "file": "v4-hook-l-point-orange.jpg",
+   "w": 2112,
+   "h": 1188,
+   "kind": "face",
+   "subject": [
+    1113.6,
+    385.3
+   ],
+   "subject_size": 182.8
+  },
+  {
+   "name": "portrait-flare",
+   "file": "v4-hook-l-portrait-flare.jpg",
+   "w": 2112,
+   "h": 1188,
+   "kind": "face",
+   "subject": [
+    1068.8,
+    453.6
+   ],
+   "subject_size": 487.5
+  },
+  {
+   "name": "celebrate-run",
+   "file": "v4-hook-l-celebrate-run.jpg",
+   "w": 2112,
+   "h": 1188,
+   "kind": "face",
+   "subject": [
+    897.0,
+    327.6
+   ],
+   "subject_size": 106.3
+  }
+ ],
+ "glyphs": {
+  "v4-holo-word-one.png": {
+   "w": 442,
+   "h": 216,
+   "baseline_from_top": -31
+  },
+  "v4-holo-word-two.png": {
+   "w": 486,
+   "h": 216,
+   "baseline_from_top": -31
+  },
+  "v4-holo-word-three.png": {
+   "w": 672,
+   "h": 211,
+   "baseline_from_top": -34
+  },
+  "v4-holo-word-four.png": {
+   "w": 550,
+   "h": 216,
+   "baseline_from_top": -31
+  },
+  "v4-holo-num-1.png": {
+   "w": 471,
+   "h": 728,
+   "baseline_from_top": -117
+  },
+  "v4-holo-num-2.png": {
+   "w": 530,
+   "h": 738,
+   "baseline_from_top": -107
+  },
+  "v4-holo-num-3.png": {
+   "w": 517,
+   "h": 749,
+   "baseline_from_top": -107
+  },
+  "v4-holo-num-4.png": {
+   "w": 513,
+   "h": 739,
+   "baseline_from_top": -107
+  }
+ }
+}

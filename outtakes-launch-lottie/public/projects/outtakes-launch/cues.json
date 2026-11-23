@@ -1,629 +1,503 @@
 {
  "fps": 30,
- "total": 1925,
+ "total": 1790,
  "scenes": [
   {
    "scene": 1,
-   "name": "01 Hook - burst mode",
-   "frames": 140,
+   "name": "01 Hook - the photographer's eye",
+   "frames": 150,
    "start": 0
   },
   {
    "scene": 2,
    "name": "02 Problem - the DMs",
-   "frames": 195,
-   "start": 140
+   "frames": 180,
+   "start": 150
   },
   {
    "scene": 3,
    "name": "03 Hero - OUTTAKES",
-   "frames": 135,
-   "start": 335
+   "frames": 150,
+   "start": 330
   },
   {
    "scene": 4,
-   "name": "04 Every sideline shot starts with a search",
-   "frames": 135,
-   "start": 470
+   "name": "04 Set up your Studio",
+   "frames": 140,
+   "start": 480
   },
   {
    "scene": 5,
-   "name": "05 Now clients chase you",
+   "name": "05 Your portfolio, organised",
    "frames": 150,
-   "start": 605
+   "start": 620
   },
   {
    "scene": 6,
-   "name": "06 Your portfolio, organised",
-   "frames": 150,
-   "start": 755
+   "name": "06 Now clients find you",
+   "frames": 180,
+   "start": 770
   },
   {
    "scene": 7,
    "name": "07 Booked at your rate",
    "frames": 165,
-   "start": 905
+   "start": 950
   },
   {
    "scene": 8,
-   "name": "08 How a booking goes",
-   "frames": 135,
-   "start": 1070
+   "name": "08 Paid, even if they cancel",
+   "frames": 165,
+   "start": 1115
   },
   {
    "scene": 9,
-   "name": "09 Invoices, done for you",
-   "frames": 120,
-   "start": 1205
+   "name": "09 Your shot, featured",
+   "frames": 135,
+   "start": 1280
   },
   {
    "scene": 10,
-   "name": "10 Paid, even if they cancel",
+   "name": "10 How a booking goes",
    "frames": 135,
-   "start": 1325
+   "start": 1415
   },
   {
    "scene": 11,
-   "name": "11 Free exposure, built in",
-   "frames": 135,
-   "start": 1460
+   "name": "11 Get in the frame",
+   "frames": 150,
+   "start": 1550
   },
   {
    "scene": 12,
-   "name": "12 Sign up free - 16 Nov - 22.11 5PM",
-   "frames": 165,
-   "start": 1595
-  },
-  {
-   "scene": 13,
-   "name": "13 Get in the frame",
-   "frames": 165,
-   "start": 1760
+   "name": "12 Footer - outtakes.sg",
+   "frames": 90,
+   "start": 1700
   }
  ],
  "cues": [
   {
    "frame": 3,
    "kind": "shutter",
-   "gain": 0.55
+   "gain": 0.42
   },
   {
-   "frame": 14,
-   "kind": "shutter",
-   "gain": 0.5900000000000001
+   "frame": 8,
+   "kind": "af",
+   "gain": 0.5
   },
   {
-   "frame": 24,
+   "frame": 17,
    "kind": "shutter",
-   "gain": 0.63
+   "gain": 0.46444444444444444
   },
   {
-   "frame": 33,
-   "kind": "shutter",
-   "gain": 0.67
+   "frame": 22,
+   "kind": "af",
+   "gain": 0.5
   },
   {
-   "frame": 42,
+   "frame": 29,
    "kind": "shutter",
-   "gain": 0.7100000000000001
+   "gain": 0.5088888888888888
+  },
+  {
+   "frame": 34,
+   "kind": "af",
+   "gain": 0.5
+  },
+  {
+   "frame": 40,
+   "kind": "shutter",
+   "gain": 0.5533333333333333
+  },
+  {
+   "frame": 45,
+   "kind": "af",
+   "gain": 0.5
   },
   {
    "frame": 50,
    "kind": "shutter",
-   "gain": 0.75
+   "gain": 0.5977777777777777
   },
   {
-   "frame": 57,
-   "kind": "shutter",
-   "gain": 0.79
+   "frame": 55,
+   "kind": "af",
+   "gain": 0.5
   },
   {
-   "frame": 63,
+   "frame": 59,
    "kind": "shutter",
-   "gain": 0.8300000000000001
+   "gain": 0.6422222222222222
+  },
+  {
+   "frame": 61,
+   "kind": "af",
+   "gain": 0.5
+  },
+  {
+   "frame": 67,
+   "kind": "shutter",
+   "gain": 0.6866666666666668
   },
   {
    "frame": 69,
-   "kind": "shutter",
-   "gain": 0.8700000000000001
+   "kind": "af",
+   "gain": 0.5
   },
   {
    "frame": 74,
    "kind": "shutter",
-   "gain": 0.91
+   "gain": 0.731111111111111
+  },
+  {
+   "frame": 76,
+   "kind": "af",
+   "gain": 0.5
   },
   {
    "frame": 80,
+   "kind": "shutter",
+   "gain": 0.7755555555555556
+  },
+  {
+   "frame": 89,
+   "kind": "af",
+   "gain": 0.5
+  },
+  {
+   "frame": 93,
    "kind": "shutter_big",
    "gain": 1.0
   },
   {
-   "frame": 80,
+   "frame": 93,
    "kind": "boom_small",
-   "gain": 0.45
+   "gain": 0.4
   },
   {
-   "frame": 92,
+   "frame": 102,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 101,
+   "frame": 111,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 139,
+   "frame": 149,
    "kind": "shutter",
    "gain": 0.9
   },
   {
-   "frame": 152,
+   "frame": 164,
    "kind": "blip_in",
    "gain": 0.9
   },
   {
-   "frame": 176,
+   "frame": 190,
    "kind": "blip_out",
    "gain": 0.9
   },
   {
-   "frame": 202,
+   "frame": 216,
    "kind": "blip_in",
    "gain": 0.9
   },
   {
-   "frame": 232,
+   "frame": 244,
    "kind": "blip_in",
    "gain": 0.9
   },
   {
-   "frame": 264,
+   "frame": 274,
    "kind": "blip_out",
    "gain": 0.9
   },
   {
-   "frame": 290,
+   "frame": 300,
    "kind": "tick",
    "gain": 0.4
   },
   {
-   "frame": 304,
+   "frame": 310,
    "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 314,
+   "kind": "riser:20",
    "gain": 0.55
   },
   {
-   "frame": 308,
-   "kind": "riser:25",
-   "gain": 0.6
-  },
-  {
-   "frame": 334,
+   "frame": 329,
    "kind": "shutter",
    "gain": 0.9
   },
   {
-   "frame": 337,
+   "frame": 332,
    "kind": "boom",
    "gain": 1.0
   },
   {
-   "frame": 337,
+   "frame": 332,
    "kind": "shutter_big",
-   "gain": 1.0
+   "gain": 0.9
   },
   {
-   "frame": 357,
+   "frame": 350,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 381,
+   "frame": 376,
    "kind": "pop",
+   "gain": 0.45
+  },
+  {
+   "frame": 442,
+   "kind": "whoosh",
+   "gain": 0.7
+  },
+  {
+   "frame": 456,
+   "kind": "shutter",
    "gain": 0.5
   },
   {
-   "frame": 435,
-   "kind": "whoosh",
-   "gain": 0.6
-  },
-  {
-   "frame": 472,
-   "kind": "whoosh",
-   "gain": 0.6
-  },
-  {
-   "frame": 482,
+   "frame": 484,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 500,
+   "frame": 532,
    "kind": "tick",
-   "gain": 0.5
+   "gain": 0.55
+  },
+  {
+   "frame": 538,
+   "kind": "tick",
+   "gain": 0.55
+  },
+  {
+   "frame": 544,
+   "kind": "tick",
+   "gain": 0.55
+  },
+  {
+   "frame": 550,
+   "kind": "tick",
+   "gain": 0.55
+  },
+  {
+   "frame": 556,
+   "kind": "tick",
+   "gain": 0.55
+  },
+  {
+   "frame": 562,
+   "kind": "tick",
+   "gain": 0.55
+  },
+  {
+   "frame": 568,
+   "kind": "tick",
+   "gain": 0.55
   },
   {
    "frame": 574,
-   "kind": "whoosh",
-   "gain": 0.5
-  },
-  {
-   "frame": 604,
-   "kind": "shutter",
-   "gain": 0.9
-  },
-  {
-   "frame": 611,
-   "kind": "tick",
-   "gain": 0.5
-  },
-  {
-   "frame": 627,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 629,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 630,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 631,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 632,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 634,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 636,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 637,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 638,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 639,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 641,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 642,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 643,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 644,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 646,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 647,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 648,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 649,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 650,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 651,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 652,
-   "kind": "key",
-   "gain": 0.35
-  },
-  {
-   "frame": 655,
-   "kind": "blip_in",
-   "gain": 0.6
-  },
-  {
-   "frame": 679,
-   "kind": "whoosh",
-   "gain": 0.4
-  },
-  {
-   "frame": 693,
-   "kind": "blip_in",
-   "gain": 0.9
-  },
-  {
-   "frame": 707,
-   "kind": "blip_in",
-   "gain": 0.9
-  },
-  {
-   "frame": 721,
-   "kind": "blip_in",
-   "gain": 0.9
-  },
-  {
-   "frame": 754,
-   "kind": "shutter",
-   "gain": 0.9
-  },
-  {
-   "frame": 761,
-   "kind": "tick",
-   "gain": 0.5
-  },
-  {
-   "frame": 771,
-   "kind": "whoosh",
-   "gain": 0.5
-  },
-  {
-   "frame": 803,
-   "kind": "whoosh",
-   "gain": 0.3
-  },
-  {
-   "frame": 904,
-   "kind": "shutter",
-   "gain": 0.9
-  },
-  {
-   "frame": 911,
-   "kind": "tick",
-   "gain": 0.5
-  },
-  {
-   "frame": 913,
-   "kind": "blip_in",
-   "gain": 0.8
-  },
-  {
-   "frame": 923,
-   "kind": "whoosh",
-   "gain": 0.35
-  },
-  {
-   "frame": 935,
-   "kind": "whoosh",
-   "gain": 0.6
-  },
-  {
-   "frame": 941,
-   "kind": "whoosh",
-   "gain": 0.5
-  },
-  {
-   "frame": 942,
-   "kind": "tick",
-   "gain": 0.45
-  },
-  {
-   "frame": 1002,
-   "kind": "tap",
-   "gain": 0.8
-  },
-  {
-   "frame": 1031,
-   "kind": "tap",
-   "gain": 0.8
-  },
-  {
-   "frame": 1039,
-   "kind": "chime",
-   "gain": 0.9
-  },
-  {
-   "frame": 1069,
-   "kind": "shutter",
-   "gain": 0.9
-  },
-  {
-   "frame": 1070,
-   "kind": "whoosh",
-   "gain": 0.45
-  },
-  {
-   "frame": 1076,
-   "kind": "tick",
-   "gain": 0.5
-  },
-  {
-   "frame": 1110,
-   "kind": "whoosh",
-   "gain": 0.45
-  },
-  {
-   "frame": 1140,
-   "kind": "whoosh",
-   "gain": 0.45
-  },
-  {
-   "frame": 1170,
-   "kind": "whoosh",
-   "gain": 0.45
-  },
-  {
-   "frame": 1204,
-   "kind": "shutter",
-   "gain": 0.9
-  },
-  {
-   "frame": 1211,
-   "kind": "tick",
-   "gain": 0.5
-  },
-  {
-   "frame": 1221,
-   "kind": "whoosh",
-   "gain": 0.5
-  },
-  {
-   "frame": 1291,
-   "kind": "chime",
-   "gain": 0.9
-  },
-  {
-   "frame": 1324,
-   "kind": "shutter",
-   "gain": 0.9
-  },
-  {
-   "frame": 1331,
-   "kind": "tick",
-   "gain": 0.5
-  },
-  {
-   "frame": 1341,
-   "kind": "whoosh",
-   "gain": 0.5
-  },
-  {
-   "frame": 1351,
-   "kind": "chime_soft",
-   "gain": 0.6
-  },
-  {
-   "frame": 1381,
-   "kind": "blip_in",
-   "gain": 0.7
-  },
-  {
-   "frame": 1411,
-   "kind": "chime",
-   "gain": 0.9
-  },
-  {
-   "frame": 1459,
-   "kind": "shutter",
-   "gain": 0.9
-  },
-  {
-   "frame": 1466,
-   "kind": "tick",
-   "gain": 0.5
-  },
-  {
-   "frame": 1476,
-   "kind": "whoosh",
-   "gain": 0.5
-  },
-  {
-   "frame": 1504,
-   "kind": "whoosh",
-   "gain": 0.35
-  },
-  {
-   "frame": 1544,
-   "kind": "chime",
-   "gain": 0.8
-  },
-  {
-   "frame": 1594,
-   "kind": "shutter",
-   "gain": 0.9
-  },
-  {
-   "frame": 1601,
    "kind": "tick",
    "gain": 0.55
   },
   {
-   "frame": 1649,
-   "kind": "tick",
-   "gain": 0.6
-  },
-  {
-   "frame": 1695,
-   "kind": "riser:14",
-   "gain": 0.7
-  },
-  {
-   "frame": 1709,
-   "kind": "boom",
-   "gain": 1.0
-  },
-  {
-   "frame": 1709,
-   "kind": "shutter_big",
-   "gain": 0.9
-  },
-  {
-   "frame": 1759,
-   "kind": "shutter",
-   "gain": 0.9
-  },
-  {
-   "frame": 1760,
-   "kind": "whoosh",
-   "gain": 0.6
-  },
-  {
-   "frame": 1800,
+   "frame": 580,
    "kind": "pop",
    "gain": 0.5
   },
   {
-   "frame": 1853,
+   "frame": 596,
    "kind": "tap",
-   "gain": 0.8
-  },
-  {
-   "frame": 1864,
-   "kind": "shutter_big",
    "gain": 0.9
   },
   {
-   "frame": 1864,
+   "frame": 604,
+   "kind": "whoosh",
+   "gain": 0.7
+  },
+  {
+   "frame": 654,
+   "kind": "whoosh",
+   "gain": 0.4
+  },
+  {
+   "frame": 724,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 774,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 810,
+   "kind": "whoosh",
+   "gain": 0.7
+  },
+  {
+   "frame": 842,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 858,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 872,
+   "kind": "whoosh",
+   "gain": 0.6
+  },
+  {
+   "frame": 912,
+   "kind": "pop",
+   "gain": 0.6
+  },
+  {
+   "frame": 912,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 954,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 1038,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 1038,
+   "kind": "tick",
+   "gain": 0.6
+  },
+  {
+   "frame": 1070,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 1074,
+   "kind": "chime",
+   "gain": 0.9
+  },
+  {
+   "frame": 1102,
+   "kind": "whoosh",
+   "gain": 0.6
+  },
+  {
+   "frame": 1119,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 1189,
+   "kind": "pop",
+   "gain": 0.6
+  },
+  {
+   "frame": 1203,
+   "kind": "blip_in",
+   "gain": 0.5
+  },
+  {
+   "frame": 1215,
+   "kind": "chime_soft",
+   "gain": 0.7
+  },
+  {
+   "frame": 1227,
+   "kind": "blip_in",
+   "gain": 0.6
+  },
+  {
+   "frame": 1243,
+   "kind": "chime",
+   "gain": 0.85
+  },
+  {
+   "frame": 1269,
+   "kind": "whoosh",
+   "gain": 0.6
+  },
+  {
+   "frame": 1284,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 1358,
+   "kind": "chime",
+   "gain": 0.8
+  },
+  {
+   "frame": 1414,
+   "kind": "shutter",
+   "gain": 0.9
+  },
+  {
+   "frame": 1415,
+   "kind": "whoosh",
+   "gain": 0.45
+  },
+  {
+   "frame": 1455,
+   "kind": "whoosh",
+   "gain": 0.45
+  },
+  {
+   "frame": 1485,
+   "kind": "whoosh",
+   "gain": 0.45
+  },
+  {
+   "frame": 1515,
+   "kind": "whoosh",
+   "gain": 0.45
+  },
+  {
+   "frame": 1550,
+   "kind": "whoosh",
+   "gain": 0.5
+  },
+  {
+   "frame": 1590,
+   "kind": "pop",
+   "gain": 0.5
+  },
+  {
+   "frame": 1654,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 1660,
+   "kind": "riser:30",
+   "gain": 0.5
+  },
+  {
+   "frame": 1700,
    "kind": "boom_small",
    "gain": 0.5
   },
   {
-   "frame": 1924,
+   "frame": 1789,
    "kind": "shutter",
    "gain": 0.9
   }
