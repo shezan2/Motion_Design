@@ -52,8 +52,10 @@ graphic match cut from Nike's "You Can't Stop Us" (Wieden+Kennedy):
 | 8 | Paid, even if they cancel | 165 | In the Studio, the photos are delivered and Earnings this month counts S$0.00 → S$70.00. An invoice is sent automatically. A second client cancels, and the cancellation fee is paid to you. *Secure payments, invoices.* |
 | 9 | Your shot, featured | 135 | "PHOTOS OF THE WEEK" with the shot from the hook, your card, and the Shot of the Week chip. *Free built-in exposure.* |
 | 10 | How a booking goes | 135 | The holographic green step cards (foil lettering) in a 3D carousel, using the site's copy. |
-| 11 | Get in the frame | 150 | The light corridor of photo walls, "Live now · Sign up free", "GET IN / THE FRAME", and the two site buttons. "Join as Photographer" is clicked; the site's glow sweeps light, then green, then dark. |
-| 12 | End card | 96 | The OUTTAKES wordmark starts out of focus. The hook's focus brackets lock onto it in green (beep), it snaps sharp, and the shutter fires. Then "STORIES TOLD THROUGH FRAMES" and "Sign up free at outtakes.sg", and the shutter closes. The film opens on black, lives in the light pages, and closes on black. |
+| 11 | Get in the frame | 150 | The light corridor of photo walls, "Opens 24 Nov · Photographers only", "GET IN / THE FRAME", "Set up your profile free from 24 November.", and one call to action, "Join as Photographer". It is clicked; the site's glow sweeps light, then green, then dark. |
+| 12 | End card | 96 | The OUTTAKES wordmark starts out of focus. The hook's focus brackets lock onto it in green (beep), it snaps sharp, and the shutter fires. Then "STORIES TOLD THROUGH FRAMES" and "Photographer sign-ups open 24 November · outtakes.sg", and the shutter closes. The film opens on black, lives in the light pages, and closes on black. |
+
+**Launch copy:** onboarding opens to photographers only on 24 November 2026, so the call to action is "Join as Photographer" alone and the end card says "Photographer sign-ups open 24 November".
 
 **Prices:** UI uses the site's format (S$70). The DM keeps "$70 for the full game".
 

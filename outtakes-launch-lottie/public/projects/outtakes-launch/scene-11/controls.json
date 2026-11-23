@@ -5,6 +5,10 @@
       "label": "Background"
     },
     {
+      "sid": "openPill",
+      "label": "Opening date pill"
+    },
+    {
       "sid": "frame1",
       "label": "Get in the frame 1"
     },

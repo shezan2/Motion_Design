@@ -953,11 +953,11 @@ def scene_frame():
         title_y = 700
         sub_y, b1y, b2y, bw = 700 + hs * 0.96 + 96, 1250, 1370, 640
         pill_y = 470
-    pill_w = fonts.width(MED, 28, "Live now · Sign up free") + 90
+    PILL = "Opens 24 Nov · Photographers only"
+    pill_w = fonts.width(MED, 28, PILL) + 64
     n0 = len(c._layers)
-    fp.box(c, "live pill", W / 2 - pill_w / 2, pill_y - 30, pill_w, 60, "white", r=30)
-    c.shape("live dot", [group([ellipse(18, 18, W / 2 - pill_w / 2 + 34, pill_y), fl("green")])])
-    txt(c, "Live now · Sign up free", MED, 28, "ink", W / 2 + 14, pill_y + CAP * 28 / 2, j=2)
+    fp.box(c, "date pill", W / 2 - pill_w / 2, pill_y - 30, pill_w, 60, "white", r=30)
+    txt(c, PILL, MED, 28, "ink", W / 2, pill_y + CAP * 28 / 2, j=2, slot="openPill", label="Opening date pill")
     members_opacity(since(c, n0), [(4, 0, "settle-soft"), (12, 100)])
     if LANDSCAPE:
         fp.rise_line(c, fonts, "GET IN THE FRAME", STATE, hs, "ink", W / 2, title_y, j=2, start=8, slot="frame",
@@ -968,10 +968,11 @@ def scene_frame():
         fp.rise_line(c, fonts, "THE FRAME", STATE, hs, "ink", W / 2, title_y + hs * 0.96, j=2, start=16,
                      slot="frame2", label="Get in the frame 2")
     fp.fade_line(c, "Photographers, show your work and take bookings.", BODY, 32, "ink", W / 2, sub_y, j=2, start=26)
-    fp.fade_line(c, "Clients, find someone for your next match in minutes.", BODY, 32, "ink", W / 2, sub_y + 44, j=2,
+    fp.fade_line(c, "Set up your profile free from 24 November.", BODY, 32, "ink", W / 2, sub_y + 44, j=2,
                  start=30)
     press = 104
-    for lab, style, by, at in (("Join as Photographer", "green", b1y, 40), ("Look for Photographer", "ink", b2y, 44)):
+    b1y = (b1y + b2y) / 2
+    for lab, style, by, at in (("Join as Photographer", "green", b1y, 40),):
         g = c.null(f"{lab} btn", p=(W / 2, by), a=(W / 2, by), ip=at,
                    s=anim([(at, [82, 82, 100], "expressive-pop"), (at + 8, [103, 103, 100], "settle-soft"),
                            (at + 14, [100, 100, 100], "hold")] +
@@ -1059,7 +1060,8 @@ def scene_end():
     fp.rise_line(c, fonts, "STORIES TOLD THROUGH FRAMES", TITLE, ts, "#c9ced2", W / 2 + tw / 2 - 6,
                  cy + cap / 2 + ts * 1.5, j=1, start=shot + 4, slot="endTagline", label="End tagline")
     uy = cy + cap / 2 + (330 if not LANDSCAPE else 250)
-    fp.fade_line(c, "Sign up free at", BODY, 40 if not LANDSCAPE else 34, "#9aa0a6", W / 2, uy, j=2, start=shot + 10)
+    fp.fade_line(c, "Photographer sign-ups open 24 November", BODY, 40 if not LANDSCAPE else 34, "#9aa0a6", W / 2, uy, j=2,
+                 start=shot + 10)
     us = fonts.fit(TITLE, ["outtakes.sg"], 760, 84 if not LANDSCAPE else 70)
     fp.fade_line(c, "outtakes.sg", TITLE, us, "white", W / 2, uy + 26 + us, j=2, start=shot + 12)
     c.cue(shot + 12, "tick", 0.5)
