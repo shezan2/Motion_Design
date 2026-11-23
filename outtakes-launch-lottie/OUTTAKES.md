@@ -109,4 +109,19 @@ OT_FORMAT=landscape bash tools/export.sh                         # landscape -> 
 
 ## Checks on the export (motionmaxxing `look.py`)
 
-Results are recorded here after each final export.
+Run on both final exports with `--expect 59.37 --expect-audio`:
+
+| Gate | Portrait 9:16 | Landscape 16:9 |
+|---|---|---|
+| G0 render exists | PASS (59.37 s, audio present) | PASS |
+| G2 no empty frame | PASS | PASS |
+| G3 end card hold | PASS (ends mid-motion as the shutter closes) | PASS |
+| Loudness | −15.6 LUFS, true peak −2.7 dBTP, no flags | −15.7 LUFS, true peak −3.2 dBTP, no flags |
+| Cut sync | 75 % of cuts within ±80 ms of a sound | 65 % |
+| Motion (a note, not a gate) | mean luma change 3.7 | 3.3 |
+
+Motion sits below the human band of 4.4–9.8. That reflects the light pages and the slower pace you asked for; the holds
+drift so nothing sits frozen.
+
+The official player renders the hook's focus point, the 3D Studio card with its shadow and the foil step cards the same
+as the Node export, checked on pinned frames.

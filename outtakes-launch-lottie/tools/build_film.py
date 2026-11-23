@@ -581,8 +581,9 @@ def scene_search():
     tl_x = 80 if not LANDSCAPE else UI_X - (rw / 2) * UI_S * 0.55
     title_y0 = UI_Y - 40 - (rh / 2 - 60) * UI_S
     n_t = len(c._layers)
-    txt(c, "BROWSE BY SPORT", TITLE, 40 if not LANDSCAPE else 34, "ink", final_cx - (rw / 2 - (row_w - cw_ * 2 - gap)) * UI_S,
-        title_y0, ip=row_stop - 10, op=row_out + 4)
+    futsal_left = final_cx + ((cw_ + gap) * 2 - rw / 2) * UI_S
+    txt(c, "BROWSE BY SPORT", TITLE, 40 if not LANDSCAPE else 34, "ink", max(80, futsal_left), title_y0,
+        ip=row_stop - 10, op=row_out + 4)
     members_opacity(since(c, n_t), [(row_stop - 10, 0, "settle-soft"), (row_stop, 100, "hold"), (row_out - 2, 100, "exit-accelerate"),
                                     (row_out + 4, 0)])
     fx, fy = flat_pt(final_cx, UI_Y - 40, rw, rh, row_w - cw_ / 2, 110 + ch_ / 2)
