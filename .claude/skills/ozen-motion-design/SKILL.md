@@ -1,6 +1,6 @@
 ---
 name: ozen-motion-design
-description: "Make Ozen Digital's motion design videos for clients from a short brief: brand ads, SaaS and app explainers, product launch films, kinetic-type reels, logo stings and promo videos in 9:16, 1:1, 4:5 and 16:9. Holds Ozen's plans and limits, Shezan's taste, a library of reference reels and named moves, timing and easing numbers, transition rules, music, SFX and voiceover rules, the production pipeline and quality gates, so nothing has to be re-explained per client. Use it whenever Shezan asks to plan, script, storyboard, animate, render, review or revise any motion design or animated video, breaks down reference videos, writes a voiceover script or ElevenLabs prompt for a video, or prepares a video brief, even if Ozen is not named. Not for static posts, ad copy variations (ozen-offers-and-ads) or website builds."
+description: "Make Ozen Flow videos, Ozen Digital's motion design service, for clients from a short brief: brand ads, SaaS and app explainers, product launch films, kinetic-type reels, logo stings and promo videos in 9:16, 1:1, 4:5 and 16:9. Holds Ozen's plans and limits, Shezan's taste, a library of reference reels and named moves, timing and easing numbers, transition rules, music, SFX and voiceover rules, the production pipeline and quality gates, so nothing has to be re-explained per client. Use it whenever Shezan asks to plan, script, storyboard, animate, render, review or revise any motion design or animated video, breaks down reference videos, writes a voiceover script or ElevenLabs prompt for a video, or prepares a video brief, even if Ozen is not named. Not for static posts, ad copy variations (ozen-offers-and-ads) or website builds."
 ---
 
 # Ozen motion design
@@ -11,7 +11,7 @@ Built from the 11 reference reels Shezan picked (24 Nov 2026), what the Outtakes
 
 ## Context
 - Ozen Digital (ozendigital.co), a Singapore studio. Shezan runs motion design; Ammar leads website builds.
-- The product, from the rate card (all prices SGD): "Motion design videos: custom branded videos with animation, music and optional voiceover."
+- The product is **Ozen Flow**, Ozen's motion design service. From the rate card (all prices SGD): "Motion design videos: custom branded videos with animation, music and optional voiceover."
 
 | Plan | Price | Videos | Revisions | Notes |
 |---|---|---|---|---|

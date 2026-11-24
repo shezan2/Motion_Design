@@ -95,7 +95,10 @@ if (mode === "still") {
   const surface = ck.MakeSurface(w, h);
   const info = { width: w, height: h, colorType: ck.ColorType.RGBA_8888, alphaType: ck.AlphaType.Unpremul, colorSpace: ck.ColorSpace.SRGB };
   const t0 = Date.now();
-  for (let f = 0; f < scene.frames; f++) {
+  // optional frame range [from, to): long scenes are rendered as parallel chunks and concatenated
+  const from = c !== undefined ? Number(c) : 0;
+  const to = process.argv[6] !== undefined ? Math.min(Number(process.argv[6]), scene.frames) : scene.frames;
+  for (let f = from; f < to; f++) {
     renderFrame(scene, surface, f);
     const px = surface.makeImageSnapshot().readPixels(0, 0, info);
     if (!ff.stdin.write(Buffer.from(px.buffer, px.byteOffset, px.byteLength))) {
@@ -104,7 +107,7 @@ if (mode === "still") {
   }
   ff.stdin.end();
   await new Promise((r) => ff.on("close", r));
-  console.log(`${path.basename(a)} -> ${b}: ${scene.frames} frames in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+  console.log(`${path.basename(a)} -> ${b}: frames ${from}-${to} in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
 } else {
   console.error("usage: render.mjs still <sceneDir> <frames> <outPrefix> | video <projectDir> <out.mp4> [audio]");
   process.exit(1);

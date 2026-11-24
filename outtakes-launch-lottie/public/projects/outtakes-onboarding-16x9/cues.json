@@ -1,0 +1,511 @@
+{
+ "fps": 30,
+ "total": 1274,
+ "scenes": [
+  {
+   "scene": 1,
+   "name": "A Hook - too many shots, too many DMs",
+   "frames": 186,
+   "start": 0
+  },
+  {
+   "scene": 2,
+   "name": "B Studio - the tour",
+   "frames": 836,
+   "start": 186
+  },
+  {
+   "scene": 3,
+   "name": "C Booked - get in the frame",
+   "frames": 252,
+   "start": 1022
+  }
+ ],
+ "cues": [
+  {
+   "frame": 3,
+   "kind": "shutter",
+   "gain": 0.22
+  },
+  {
+   "frame": 5,
+   "kind": "shutter",
+   "gain": 0.25
+  },
+  {
+   "frame": 6,
+   "kind": "shutter",
+   "gain": 0.28
+  },
+  {
+   "frame": 6,
+   "kind": "tick",
+   "gain": 0.45
+  },
+  {
+   "frame": 8,
+   "kind": "shutter",
+   "gain": 0.31
+  },
+  {
+   "frame": 9,
+   "kind": "shutter",
+   "gain": 0.22
+  },
+  {
+   "frame": 11,
+   "kind": "shutter",
+   "gain": 0.25
+  },
+  {
+   "frame": 13,
+   "kind": "shutter",
+   "gain": 0.28
+  },
+  {
+   "frame": 14,
+   "kind": "shutter",
+   "gain": 0.31
+  },
+  {
+   "frame": 16,
+   "kind": "shutter",
+   "gain": 0.22
+  },
+  {
+   "frame": 18,
+   "kind": "shutter",
+   "gain": 0.25
+  },
+  {
+   "frame": 20,
+   "kind": "shutter",
+   "gain": 0.28
+  },
+  {
+   "frame": 22,
+   "kind": "shutter",
+   "gain": 0.31
+  },
+  {
+   "frame": 24,
+   "kind": "shutter",
+   "gain": 0.22
+  },
+  {
+   "frame": 26,
+   "kind": "shutter",
+   "gain": 0.25
+  },
+  {
+   "frame": 60,
+   "kind": "riser:66",
+   "gain": 0.5
+  },
+  {
+   "frame": 66,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 70,
+   "kind": "blip_in",
+   "gain": 0.8
+  },
+  {
+   "frame": 80,
+   "kind": "blip_out",
+   "gain": 0.8
+  },
+  {
+   "frame": 92,
+   "kind": "blip_in",
+   "gain": 0.8
+  },
+  {
+   "frame": 104,
+   "kind": "blip_in",
+   "gain": 0.8
+  },
+  {
+   "frame": 126,
+   "kind": "whoosh",
+   "gain": 0.75
+  },
+  {
+   "frame": 142,
+   "kind": "pop",
+   "gain": 0.7
+  },
+  {
+   "frame": 168,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 171,
+   "kind": "whoosh",
+   "gain": 0.8
+  },
+  {
+   "frame": 175,
+   "kind": "boom_small",
+   "gain": 0.45
+  },
+  {
+   "frame": 192,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 242,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 282,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 292,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 316,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 326,
+   "kind": "pop",
+   "gain": 0.35
+  },
+  {
+   "frame": 332,
+   "kind": "pop",
+   "gain": 0.35
+  },
+  {
+   "frame": 338,
+   "kind": "pop",
+   "gain": 0.35
+  },
+  {
+   "frame": 343,
+   "kind": "pop",
+   "gain": 0.35
+  },
+  {
+   "frame": 348,
+   "kind": "pop",
+   "gain": 0.35
+  },
+  {
+   "frame": 399,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 423,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 445,
+   "kind": "tick",
+   "gain": 0.35
+  },
+  {
+   "frame": 449,
+   "kind": "tick",
+   "gain": 0.35
+  },
+  {
+   "frame": 453,
+   "kind": "tick",
+   "gain": 0.35
+  },
+  {
+   "frame": 457,
+   "kind": "tick",
+   "gain": 0.35
+  },
+  {
+   "frame": 461,
+   "kind": "tick",
+   "gain": 0.35
+  },
+  {
+   "frame": 465,
+   "kind": "tick",
+   "gain": 0.35
+  },
+  {
+   "frame": 495,
+   "kind": "pop",
+   "gain": 0.4
+  },
+  {
+   "frame": 501,
+   "kind": "pop",
+   "gain": 0.4
+  },
+  {
+   "frame": 504,
+   "kind": "pop",
+   "gain": 0.4
+  },
+  {
+   "frame": 539,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 563,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 589,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 596,
+   "kind": "key",
+   "gain": 0.5
+  },
+  {
+   "frame": 600,
+   "kind": "key",
+   "gain": 0.5
+  },
+  {
+   "frame": 611,
+   "kind": "tap",
+   "gain": 0.5
+  },
+  {
+   "frame": 611,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 656,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 680,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 712,
+   "kind": "tick",
+   "gain": 0.55
+  },
+  {
+   "frame": 712,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 723,
+   "kind": "tick",
+   "gain": 0.55
+  },
+  {
+   "frame": 723,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 734,
+   "kind": "tick",
+   "gain": 0.55
+  },
+  {
+   "frame": 734,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 779,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 803,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 841,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 845,
+   "kind": "chime",
+   "gain": 0.8
+  },
+  {
+   "frame": 886,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 904,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 906,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 922,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 924,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 942,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 952,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 956,
+   "kind": "tick",
+   "gain": 0.4
+  },
+  {
+   "frame": 959,
+   "kind": "tick",
+   "gain": 0.4
+  },
+  {
+   "frame": 962,
+   "kind": "tick",
+   "gain": 0.4
+  },
+  {
+   "frame": 965,
+   "kind": "tick",
+   "gain": 0.4
+  },
+  {
+   "frame": 968,
+   "kind": "tick",
+   "gain": 0.4
+  },
+  {
+   "frame": 971,
+   "kind": "tick",
+   "gain": 0.4
+  },
+  {
+   "frame": 974,
+   "kind": "tick",
+   "gain": 0.4
+  },
+  {
+   "frame": 977,
+   "kind": "tick",
+   "gain": 0.4
+  },
+  {
+   "frame": 979,
+   "kind": "chime_soft",
+   "gain": 0.8
+  },
+  {
+   "frame": 1016,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 1019,
+   "kind": "whoosh",
+   "gain": 0.6
+  },
+  {
+   "frame": 1022,
+   "kind": "whoosh",
+   "gain": 0.55
+  },
+  {
+   "frame": 1078,
+   "kind": "blip_in",
+   "gain": 1.0
+  },
+  {
+   "frame": 1080,
+   "kind": "pop",
+   "gain": 0.5
+  },
+  {
+   "frame": 1114,
+   "kind": "tap",
+   "gain": 0.9
+  },
+  {
+   "frame": 1116,
+   "kind": "boom",
+   "gain": 0.75
+  },
+  {
+   "frame": 1118,
+   "kind": "chime",
+   "gain": 1.0
+  },
+  {
+   "frame": 1126,
+   "kind": "boom_small",
+   "gain": 0.6
+  },
+  {
+   "frame": 1160,
+   "kind": "whoosh",
+   "gain": 0.5
+  },
+  {
+   "frame": 1163,
+   "kind": "tick",
+   "gain": 0.5
+  },
+  {
+   "frame": 1222,
+   "kind": "af",
+   "gain": 0.6
+  },
+  {
+   "frame": 1227,
+   "kind": "shutter_big",
+   "gain": 0.9
+  },
+  {
+   "frame": 1227,
+   "kind": "boom_small",
+   "gain": 0.35
+  },
+  {
+   "frame": 1233,
+   "kind": "tick",
+   "gain": 0.5
+  }
+ ]
+}

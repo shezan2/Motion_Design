@@ -19,7 +19,7 @@ from scipy.signal import butter, resample_poly, sosfilt
 
 ROOT = Path(__file__).resolve().parent.parent
 # Both formats share one timeline; read the cues of whichever format was built last.
-_PROJECT = "outtakes-launch-16x9" if os.environ.get("OT_FORMAT") == "landscape" else "outtakes-launch"
+_PROJECT = os.environ.get("OT_PROJECT") or ("outtakes-launch-16x9" if os.environ.get("OT_FORMAT") == "landscape" else "outtakes-launch")
 CUES = json.loads((ROOT / "public/projects" / _PROJECT / "cues.json").read_text())
 SR = 48000
 FPS = CUES["fps"]
@@ -191,9 +191,52 @@ for cue in CUES["cues"]:
         n = min(int(1.2 * SR), N - i)
         duck[i:i + n] = np.minimum(duck[i:i + n], 1 - 0.7 * np.exp(-np.arange(n) / SR * 3))
 NO_BED = os.environ.get("OT_NO_BED") == "1"   # the voiceover mix runs without the crowd bed
-if not NO_BED:
+BED = os.environ.get("OT_BED") or ("room" if NO_BED else "crowd")
+if BED == "crowd":
     L += bed[:, 0] * duck
     R += bed[:, 1] * duck
+elif BED == "studio":
+    # the onboarding film: crowd only under the first act (the shots), then a soft sustained pad under the
+    # Studio and the payoff (no rhythm, no melody: two slow chords, then a brighter one from the third act)
+    acts = [sc["start"] / FPS for sc in CUES["scenes"]] + [DUR]
+    a1 = acts[1]
+    cenv = np.clip((a1 + 0.2 - tt) / 0.45, 0, 1)
+    L += bed[:, 0] * duck * cenv
+    R += bed[:, 1] * duck * cenv
+    chords = {"am9": [110.0, 164.81, 246.94, 261.63, 329.63], "fmaj7": [87.31, 130.81, 220.0, 261.63, 329.63],
+              "cadd9": [130.81, 196.0, 293.66, 329.63, 392.0]}
+    plan = []
+    t = a1
+    k = 0
+    while t < acts[2]:
+        plan.append((t, min(t + 4.0, acts[2] + 0.6), "am9" if k % 2 == 0 else "fmaj7"))
+        t += 4.0
+        k += 1
+    booked = acts[2] + float(os.environ.get("OT_BOOKED_AT", "3.4"))
+    plan.append((booked - 0.3, DUR + 1, "cadd9"))
+    pad = np.zeros((N, 2))
+    for t0, t1, name in plan:
+        i0, i1 = int(max(0, t0 - 0.2) * SR), min(N, int((t1 + 1.6) * SR))
+        n = i1 - i0
+        if n <= 0:
+            continue
+        tl = np.arange(n) / SR
+        e = np.clip(tl / 1.2, 0, 1) * np.clip((t1 + 1.6 - (t0 - 0.2) - tl) / 1.6, 0, 1)
+        e = e * e * (3 - 2 * e)
+        for j, f0 in enumerate(chords[name]):
+            for side, det in ((0, -0.6), (1, 0.6)):
+                ph = rng.uniform(0, 2 * np.pi)
+                w = np.sin(2 * np.pi * (f0 + det) * tl + ph) + 0.18 * np.sin(2 * np.pi * 2 * (f0 + det) * tl + ph)
+                pad[i0:i1, side] += w * e * (0.55 if j == 0 else 0.32)
+    pad = np.stack([lp(pad[:, 0], 1400), lp(pad[:, 1], 1400)], axis=1)
+    pad *= 0.010 / (np.sqrt(np.mean(pad[int(a1 * SR):] ** 2)) + 1e-12)
+    L += pad[:, 0] * (0.55 + 0.45 * duck)
+    R += pad[:, 1] * (0.55 + 0.45 * duck)
+    tone = np.cumsum(rng.standard_normal((N, 2)), axis=0)
+    tone = lp(hp(tone, 30), 380)
+    tone /= np.sqrt(np.mean(tone ** 2)) + 1e-12
+    L += tone[:, 0] * 0.0018
+    R += tone[:, 1] * 0.0018
 else:
     # an inaudible room-tone floor (about -58 dBFS after mastering, low frequencies only): no audible noise, but the
     # track never drops to digital zero between sounds, which plays as a dropout
@@ -216,7 +259,7 @@ mix *= np.minimum(uniform_filter1d(g, size=int(0.003 * SR)), g)[:, None]
 fade = int(0.2 * SR)
 mix[-fade:] *= np.linspace(1, 0, fade)[:, None]
 
-out = ROOT / "audio" / ("sfx_nobed.wav" if NO_BED else "sfx.wav")
+out = ROOT / "audio" / (os.environ.get("OT_SFX_OUT") or ("sfx_nobed.wav" if NO_BED else "sfx.wav"))
 out.parent.mkdir(exist_ok=True)
 with wave.open(str(out), "wb") as w:
     w.setnchannels(2)
