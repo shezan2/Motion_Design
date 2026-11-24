@@ -588,9 +588,16 @@ def feat_packages(card, t):
     kn.circle(tgx + tgh / 2, tgy + tgh / 2, tgh - 12, "white")
     card.c.cue(ta, "tap", 0.5)
     # the tooltip's second line, kept as the beat's proof line
-    ln = pop_group(card, g, "line", t + 36, 0, 0)
+    ln = pop_group(card, g, "line", t + 50, 0, 0)
     ln.text("Clients book a package and pay on the site.", BODY, 32, "grey", 48, 560)
-    pop_close(card, ln, t + 36)
+    pop_close(card, ln, t + 50)
+    sw0 = t + 60
+    sweep = group3d(g, "sweep", Comp.ks3(p=anim([(sw0, [0, 0, 0], "travel-balanced"), (sw0 + 18, [w - 56 - 170, 0, 0])])),
+                    ip=sw0, op=sw0 + 19)
+    sweep.shape("sweep band", [group([rect(170, 352, 28 + 85, 132 + 176),
+                                      gradient([(0, "#ffffff"), (1, "#ffffff")], [28, 0], [28 + 170, 0],
+                                               alpha_stops=[(0, 0), (0.5, 0.5), (1, 0)])])])
+    card.c.cue(sw0 + 4, "whoosh", 0.18)
     card.close(g)
     return ty, ta
 
@@ -760,7 +767,7 @@ def act_b():
     t9, t10, fin = 720, 738, 756
     card = Card(c, "card 8-10", e8, None, morph=[(fin + 2, fin + 16, CHECK)], op=B_FR)
     for step, a, b_ in ((8, e8, t9), (9, t9, t10), (10, t10, fin + 2)):
-        g = card.content(f"tour {step}", CW, CH, a, b_ + 1)
+        g = card.content(f"tour {step}", CW, CH, a, b_)      # op is exclusive: no frame shows two steps
         tour_content(g, step, press=(b_ - 2) if step < 10 else fin)
         if step > 8:
             c.cue(a, "tick", 0.5)
@@ -953,23 +960,24 @@ def act_c():
                          start=t_g + i * 6, exit_at=out_g + i * 2)
     c.cue(t_g, "tick", 0.5)
     # OUTTAKES in focus, then the address
-    lock, shot = out_g + 14, out_g + 19
+    lock, shot = out_g + 16, out_g + 21
     wsize = fonts.fit(STATE, ["OUTTAKES"], 860 if not LANDSCAPE else 1240, 300)
     wcy = H / 2 - (90 if not LANDSCAPE else 70)
     tw = fonts.width(STATE, wsize, "OUTTAKES")
     cap = CAP * wsize
+    w0 = out_g + 9           # the wordmark arrives once the headline has cleared
     wm = c.text("end wordmark", text_doc("OUTTAKES", STATE, wsize, col("white"), justify=2), p=(W / 2, wcy),
-                a=(0, -cap / 2), ip=out_g + 2,
-                s=anim([(out_g + 2, [112, 112, 100], "settle-soft"), (lock + 3, [100, 100, 100], "linear"),
+                a=(0, -cap / 2), ip=w0,
+                s=anim([(w0, [112, 112, 100], "settle-soft"), (lock + 3, [100, 100, 100], "linear"),
                         (C_FR, [97, 97, 100])]))
-    with_fx(c, wm, gblur(anim([(out_g + 2, [50], "settle-soft"), (lock + 1, [0])])))
-    c._layers[-1]["ks"]["o"] = anim([(out_g + 2, 0, "settle-soft"), (out_g + 6, 100)])
+    with_fx(c, wm, gblur(anim([(w0, [50], "settle-soft"), (lock + 1, [0])])))
+    c._layers[-1]["ks"]["o"] = anim([(w0, 0, "settle-soft"), (w0 + 4, 100)])
     fw, fh = tw + 140, cap + 160
     bf.corner_frame(c, W / 2, wcy, fw, fh, arm=min(84, fh * 0.32), width=7,
-                    scale_keys=[(out_g + 2, [150, 150, 100], "crash"), (lock - 1, [104, 104, 100], "crash"),
+                    scale_keys=[(w0, [150, 150, 100], "crash"), (lock - 1, [104, 104, 100], "crash"),
                                 (lock + 2, [99, 99, 100], "hold"), (C_FR, [99, 99, 100])],
-                    colour_keys=[(out_g + 2, "white", "hold"), (lock, "green", "hold")], ip=out_g + 2, op=C_FR,
-                    o=anim([(out_g + 2, 0, "settle-soft"), (out_g + 6, 100)]))
+                    colour_keys=[(w0, "white", "hold"), (lock, "green", "hold")], ip=w0, op=C_FR,
+                    o=anim([(w0, 0, "settle-soft"), (w0 + 4, 100)]))
     c.cue(lock, "af", 0.6)
     fp.flash(c, shot, peak=24, dur=3)
     c.cue(shot, "shutter_big", 0.9)
