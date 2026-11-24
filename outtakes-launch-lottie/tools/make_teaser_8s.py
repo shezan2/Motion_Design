@@ -30,6 +30,11 @@ GREEN, CREAM = (116, 242, 96), (240, 235, 228)
 rng = np.random.default_rng(3011)
 font = lambda f, s: ImageFont.truetype(str(ROOT / "brand/fonts" / f), s)
 META = json.loads((ROOT / "brand/photos/v4-meta.json").read_text())["portrait"]
+# more match shots Shezan sent (25 Nov): file, subject point (the ball or a face), subject size, in source pixels
+EXTRA = [(1, (1894, 1293), 218), (2, (443, 800), 70), (3, (1690, 1453), 192), (4, (902, 858), 256),
+         (5, (804, 2150), 243), (6, (1011, 666), 282), (7, (922, 1638), 256)]
+for i_, sub_, size_ in EXTRA:
+    META.append({"file": f"teaser-extra-{i_}.jpg", "subject": list(sub_), "subject_size": size_})
 
 
 # ------------------------------------------------------------------ the treatment
@@ -58,7 +63,7 @@ for k, sh in enumerate(META):
     sx, sy = sh["subject"]
     pad = 1.18
     if SQUARE:
-        side = int(iw / pad * 0.98)
+        side = int(min(iw, ih) / pad * 0.98)
         x0 = int(np.clip(sx - side / 2, 0, iw - side))
         y0 = int(np.clip(sy - side / 2, 0, ih - side))
         im = im.crop((x0, y0, x0 + side, y0 + side))
