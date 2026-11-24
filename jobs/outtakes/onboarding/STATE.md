@@ -30,7 +30,7 @@ Pick: 2 as the hook into 1, ending on a booking (the tour's own "Bookings: reque
 Carriers: the green pill (chaos converges into it, its press floods into the Studio), the tour card (morphs into every feature), the cursor, the Accept button (its green bloom flips the film back to dark).
 Current: content leaves left, the next card arrives from the right.
 
-## Beat sheet (30 fps, 1170 frames = 39.0 s)
+## Beat sheet (planned at 30 fps, 1170 frames; delivered at 1274 frames = 42.47 s)
 | # | Global frames | Beat | Statement | Picture | Seam out |
 |---|---|---|---|---|---|
 | 1 | 0-180 | hook | TOO MANY SHOTS. -> DMS. (slot swap) | sports photos land scattered in the dark, DM bubbles pop; everything converges into a green dot that becomes "Join as Photographer"; press | the button floods the frame and turns light grey |
@@ -47,4 +47,7 @@ Current: content leaves left, the next card arrives from the right.
 Importance 3: beats 1 and 9 (2 of 10). CTA beat 4 s (10%).
 
 ## Versions
-- v1: in progress.
+- v1 (24 Nov): first full render, 1274 frames = 42.47 s (the Studio act was given more reading time than planned).
+- v2: camera push toward each feature's detail, a soft light drifting over the Studio ground, end lines re-timed.
+- v3: no frame shows two tour steps, OUTTAKES waits for GET IN THE FRAME. to clear, a light sweep on the package hold. Delivered: out/outtakes-onboarding-9x16-v3.mp4 (+ cover), out/outtakes-onboarding-16x9-v3.mp4.
+- Revision rounds used: 0.

@@ -293,6 +293,11 @@
    "gain": 0.9
   },
   {
+   "frame": 629,
+   "kind": "whoosh",
+   "gain": 0.18
+  },
+  {
    "frame": 656,
    "kind": "tick",
    "gain": 0.5
@@ -483,27 +488,27 @@
    "gain": 0.5
   },
   {
-   "frame": 1163,
+   "frame": 1167,
    "kind": "tick",
    "gain": 0.5
   },
   {
-   "frame": 1222,
+   "frame": 1224,
    "kind": "af",
    "gain": 0.6
   },
   {
-   "frame": 1227,
+   "frame": 1229,
    "kind": "shutter_big",
    "gain": 0.9
   },
   {
-   "frame": 1227,
+   "frame": 1229,
    "kind": "boom_small",
    "gain": 0.35
   },
   {
-   "frame": 1233,
+   "frame": 1235,
    "kind": "tick",
    "gain": 0.5
   }

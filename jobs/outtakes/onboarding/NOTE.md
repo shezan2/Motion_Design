@@ -1,4 +1,4 @@
-# Outtakes / photographer onboarding / v1
+# Outtakes / photographer onboarding / v3
 
 An Ozen Flow production, made with the ozen-motion-design skill.
 
@@ -23,6 +23,9 @@ An Ozen Flow production, made with the ozen-motion-design skill.
 
 **Sound:** synthesised: shutters, pops, ticks, taps, whooshes, chimes, an autofocus beep, impacts; the crowd under the hook, a soft two-chord pad under the Studio and a brighter chord from BOOKED. No licensed music and no voiceover in this cut.
 
-**look.py:** (filled in after the render)
+**look.py (9:16, v3):** length 42.47 s (expected 42.47); G0 pass; G2 pass (no run of more than 3 flat frames); G3 pass (end hold 1.10 s, final shot 1.50 s = 4 %); -14.5 LUFS, true peak -1.5 dBTP, no dropouts, no silent tail; 3 of 8 detected cuts on a sound onset (38 %). Mean motion 2.2/255, below the human band (4.4-9.8): a light, UI-led film with reading holds; every hold over a second has a living element (the drifting ground light, a camera push, a sweep, the cursor).
+**look.py (16:9, v3):** see below.
 
-**Still to improve:** (filled in after review)
+**Frames (2 fps review):** shots tumble into a dark pile under TOO MANY SHOTS., DM bubbles pop, the keyword swaps to DMS.; everything converges into a green dot that becomes Join as Photographer; the press floods into the light Studio; SET IT UP ONCE. over the Welcome card, then Bookings; each later step arrives from the right and grows into its feature (profile header, a 3x2 portfolio with sport tags and stars, the package with S$70 typed and Active on, the November calendar with 26, 28 and 29 tapped, Payouts connected), the camera pushing toward the detail; ALMOST THERE. over steps 8 to 10; ALL SET. as the checklist ticks to 8 of 8; Preview profile cuts to the page; a booking request drops in; Accept blooms green into the dark; BOOKED.; GET IN THE FRAME.; OUTTAKES locks into focus with outtakes.sg.
+
+**Still to improve:** a licensed music track would lift it (the sound is synthesised); the Studio act repeats one rhythm five times, so a 30 s cut could drop Bookings and merge Stories/Help into one flick; the 16:9 version re-uses the portrait UI scale and could crop tighter on features.
