@@ -227,8 +227,8 @@ for fr in range(N):
     ff.stdin.write(pil.tobytes())
 ff.stdin.close()
 ff.wait()
-cues += [(STUTTER1, "cut_silence", 1), (FLASH_WM - 6, "suck", 0.7), (FLASH_WM, "impact", 1.0), (DATE0, "whoosh", 0.4),
-         (LOCK, "af", 0.6), (SHOT, "shutter_big", 1.0), (SHOT, "impact_soft", 0.6)]
+# the date scene: no shutter, no beeps, no tone; one beat drop on the flash, then silence (Shezan, 25 Nov)
+cues += [(STUTTER1, "cut_silence", 1), (FLASH_WM - 6, "suck", 0.7), (FLASH_WM, "impact_short", 1.0), (SHOT, "drop", 1.3)]
 
 # ------------------------------------------------------------------ sound
 SR = 48000
@@ -298,10 +298,23 @@ def impact(m_s=1.6, f0=40):
     tt = np.arange(m) / SR
     body = np.sin(2 * np.pi * (f0 + 90 * np.exp(-tt * 18)) * tt) * env(m, 2.6)
     crack = noise(m) * env(m, 30) * 0.5
-    return body + crack
+    return (body + crack) * np.clip((m_s - tt) / 0.08, 0, 1)
 
 
-SPEC = {"shutter": lambda: shutter(), "shutter_big": lambda: shutter(1.6), "thump": lambda: thump(),
+def drop():
+    """808-style beat drop: a hard kick into a sub that glides down, gone in about a second."""
+    m = int(1.1 * SR)
+    tt = np.arange(m) / SR
+    f = 38 + 22 * np.exp(-tt * 3) + 120 * np.exp(-tt * 45)
+    sub = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-tt * 2.2)
+    sub = np.tanh(sub * 1.8) / np.tanh(1.8)
+    kick = lowpass(noise(m), 3000) * env(m, 60) * 0.6
+    out = sub + kick
+    out *= np.clip((1.1 - tt) / 0.25, 0, 1)        # hard tail: silence after the drop
+    return out
+
+
+SPEC = {"drop": lambda: drop(), "impact_short": lambda: impact(0.3), "shutter": lambda: shutter(), "shutter_big": lambda: shutter(1.6), "thump": lambda: thump(),
         "af": lambda: af(), "af_soft": lambda: af(True), "impact": lambda: impact(), "impact_soft": lambda: impact(1.2, 55) * 0.6}
 for fr, kind, g in cues:
     if kind in SPEC:
@@ -314,9 +327,8 @@ bed = (drone + rise) * (t_all < cut)
 # a reversed swell into the subliminal wordmark
 sw0, sw1 = (FLASH_WM - 18) / FPS, FLASH_WM / FPS
 swell = lowpass(noise(n), 1800) * np.clip((t_all - sw0) / (sw1 - sw0), 0, 1) ** 3 * ((t_all >= sw0) & (t_all < sw1)) * 0.8
-tail = (np.sin(2 * np.pi * 41 * t_all) * 0.18) * np.clip((t_all - DATE0 / FPS) / 0.6, 0, 1) * np.clip((T - t_all) / 0.6, 0, 1)
-L += bed + swell + tail
-R += bed + swell + tail
+L += bed + swell
+R += bed + swell
 mix = np.stack([L, R], axis=1)
 mix /= np.max(np.abs(mix)) / 0.9
 wav = ROOT / "audio/_teaser.wav"
