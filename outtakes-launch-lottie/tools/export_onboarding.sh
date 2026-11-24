@@ -2,7 +2,7 @@
 # Outtakes onboarding film (Ozen Flow): build -> sound -> render the three acts in parallel chunks -> concat + audio.
 #   bash tools/export_onboarding.sh                       portrait  -> out/outtakes-onboarding-9x16-$VER.mp4
 #   OT_FORMAT=landscape bash tools/export_onboarding.sh   landscape -> out/outtakes-onboarding-16x9-$VER.mp4
-#   ONLY=2 bash tools/export_onboarding.sh                re-render only act 2's chunks, then re-join
+#   ONLY="2 3" bash tools/export_onboarding.sh          re-render only acts 2 and 3, then re-join
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export OT_FORMAT=${OT_FORMAT:-portrait}
@@ -30,7 +30,7 @@ for d in $(ls -d $P/scene-* | sort -V); do
     e=$(( s + CHUNK < n ? s + CHUNK : n ))
     name=$sn-$(printf %04d $s)
     echo "file '$name.mp4'" >> $SEG/list.txt
-    if [ -z "${ONLY:-}" ] || [ "$sn" = "scene-${ONLY}" ]; then echo "$d $SEG/$name.mp4 $s $e" >> $JOBF; fi
+    if [ -z "${ONLY:-}" ] || [[ " ${ONLY} " == *" ${sn#scene-} "* ]]; then echo "$d $SEG/$name.mp4 $s $e" >> $JOBF; fi
   done
 done
 xargs -P "$JOBS" -L 1 sh -c 'node tools/render.mjs scene "$0" "$1" "$2" "$3" 2>&1 | grep -v "as a font" || true' < $JOBF

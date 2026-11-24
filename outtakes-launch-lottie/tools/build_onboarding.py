@@ -199,10 +199,12 @@ class Card:
     """A 3D card centred at its plane's origin. The box can grow into a feature view (container morph) and the
     whole card can whip in from the right or out to the left (the film's current)."""
 
-    def __init__(self, c, name, enter, leave=None, rise=False, op=None, morph=None, x=None, y=None):
+    def __init__(self, c, name, enter, leave=None, rise=False, op=None, morph=None, x=None, y=None, push=None):
+        """push = (t0, t1, k, (lx, ly), (w, h), ease): the camera pushes k times closer toward a detail of the
+        w x h feature, keeping that detail where it is on screen (the move that keeps a hold alive)."""
         self.c, self.n0, self.rise = c, len(c._layers), rise
         cx, cy = (UI_X if x is None else x), (UI_Y if y is None else y)
-        self.cx, self.cy = cx, cy
+        self.cx, self.cy, self.push = cx, cy, push
         if rise:
             keys = [(enter, [cx, cy + (H * 0.42), 240], "settle-soft"), (enter + 22, [cx, cy, 0], "linear")]
             rx = anim([(enter, 16, "settle-soft"), (enter + 22, 0)])
@@ -212,13 +214,22 @@ class Card:
             rx = 0
             ry = anim([(enter, -14, "settle-soft"), (enter + 16, 0)])
         end = leave if leave is not None else (op if op is not None else c.frames)
-        keys.append((end, [cx, cy - 18, 0]))
+        S0 = UI_S * 100
+        sk = [(enter, [S0, S0, 100], "hold")]
+        dx = dy = 0.0
+        if push:
+            t0, t1, k, (lx, ly), (fw, fh), ease = push
+            dx, dy = -(lx - fw / 2) * UI_S * (k - 1), -(ly - fh / 2) * UI_S * (k - 1)
+            keys.append((t0, [cx, cy - 6, 0], ease))
+            keys.append((t1, [cx + dx, cy - 8 + dy, 0], "linear"))
+            sk += [(t0, [S0, S0, 100], ease), (t1, [S0 * k, S0 * k, 100], "linear"), (end, [S0 * k * 1.012, S0 * k * 1.012, 100])]
+        keys.append((end, [cx + dx, cy - 18 + dy, 0]))
         if leave is not None:
-            keys[-1] = (leave, [cx, cy - 18, 0], "exit-accelerate")
-            keys.append((leave + 10, [cx - W * 0.98, cy - 18, 0]))
+            keys[-1] = (leave, [cx + dx, cy - 18 + dy, 0], "exit-accelerate")
+            keys.append((leave + 10, [cx + dx - W * 0.98, cy - 18 + dy, 0]))
         self.enter, self.leave = enter, leave
-        self.pl = Plane(c, name, 0, 0, anim(keys), rx=rx, ry=ry, s=(UI_S * 100, UI_S * 100, 100), ip=enter,
-                        op=(leave + 11) if leave is not None else op)
+        self.pl = Plane(c, name, 0, 0, anim(keys), rx=rx, ry=ry, s=anim(sk) if len(sk) > 1 else (S0, S0, 100),
+                        ip=enter, op=(leave + 11) if leave is not None else op)
         size_keys = [(enter, (CW, CH), "hold")]
         prev = (CW, CH)
         for a_, b_, size in (morph or []):      # grow from frame a_ to b_ into `size`
@@ -227,6 +238,14 @@ class Card:
             prev = size
         ind = self.pl.shape(f"{name} box", [group([rect_anim(size_keys, r=30), fl("card")])])
         with_fx(c, ind, drop_shadow(**SHADOW))
+
+    def at(self, lx, ly, w, h):
+        """Screen position of a feature point once the push has settled (or at rest when there is no push)."""
+        if not self.push:
+            return screen(lx, ly, w, h, self.cx, self.cy)
+        t0, t1, k, (fx, fy), (fw, fh), ease = self.push
+        dx, dy = -(fx - fw / 2) * UI_S * (k - 1), -(fy - fh / 2) * UI_S * (k - 1)
+        return (self.cx + dx + (lx - w / 2) * UI_S * k, self.cy - 8 + dy + (ly - h / 2) * UI_S * k)
 
     def content(self, name, w, h, ip, op, fade_in=None, fade_out=None):
         """A content group laid out on a w x h card (origin = its top-left). Fades are 4-frame helpers."""
@@ -251,9 +270,9 @@ class Card:
         add_fx(layers_since(self.c, self.n0), gblur_dir(anim(keys), 2))
 
 
-def tour_card(c, step, enter, leave, press, rise=False, morph=None, until=None):
+def tour_card(c, step, enter, leave, press, rise=False, morph=None, until=None, push=None):
     """A whole tour step card. `until` ends the tour content (when the card grows into a feature)."""
-    card = Card(c, f"card {step}", enter, leave, rise=rise, morph=morph)
+    card = Card(c, f"card {step}", enter, leave, rise=rise, morph=morph, push=push)
     g = card.content(f"tour {step}", CW, CH, enter, (until + 5) if until else None,
                      fade_out=until if until else None)
     tour_content(g, step, press=press)
@@ -456,9 +475,9 @@ def pop_close(card, sub, t):
 def feat_profile(card, t):
     w, h = FEAT[3]
     g = feature_group(card, 3, w, h, t)
-    b = pop_group(card, g, "banner", t + 8, 0, 0, dy=0)
+    b = pop_group(card, g, "banner", t + 5, 0, 0, dy=0)
     b.image(photo("celebrate-run", 880, 300), 880, 300, 0, 0, w, 300)
-    pop_close(card, b, t + 8)
+    pop_close(card, b, t + 5)
     a = pop_group(card, g, "avatar", t + 14, 118, 300, dy=0, scale=55)
     a.circle(118, 300, 176, "card")
     a.image("v4-avatar.png", 320, 320, 118 - 80, 300 - 80, 160, 160)
@@ -658,6 +677,12 @@ def act_b():
     global CUR
     c = Comp("B Studio - the tour", W, H, B_FR)
     ground(c, "light")
+    # one soft light drifting across the ground for the whole act: holds stay alive without wobble
+    lr = max(W, H) * 0.62
+    c.no_camera.add(c.shape("ground light", [group([ellipse(lr * 2, lr * 2, 0, 0),
+                                                    gradient([(0, "#ffffff"), (1, "#ffffff")], [0, 0], [lr, 0], kind=2,
+                                                             alpha_stops=[(0, 0.55), (0.55, 0.18), (1, 0)])])],
+                            p=anim([(0, [W * 0.1, H * 0.28, 0], "linear"), (B_FR, [W * 0.95, H * 0.62, 0])])))
     soft_vignette(c)
     c.camera3d(zoom=1400)
     nx, ny = next_xy()
@@ -677,7 +702,8 @@ def act_b():
     # 3: your profile
     e3, p3, m3, l3 = T[3]
     say(c, ["THE PAGE", "CLIENTS SEE."], e3 + 4, exit_at=l3 - 6)
-    c3 = tour_card(c, 3, e3, l3, press=p3, morph=[(m3, m3 + 14, FEAT[3])], until=m3)
+    c3 = tour_card(c, 3, e3, l3, press=p3, morph=[(m3, m3 + 14, FEAT[3])], until=m3,
+                   push=(m3 + 34, l3, 1.07, (300, 470), FEAT[3], "settle-soft"))
     feat_profile(c3, m3)
     c3.finish()
     cur += [(p3 - 10, (nx, ny)), (p3 + 10, (nx + 90, ny + 220), "settle-soft"), (l3 - 2, (nx + 40, ny + 120))]
@@ -685,7 +711,8 @@ def act_b():
     # 4: portfolio
     e4, p4, m4, l4 = T[4]
     say(c, ["SIX SHOTS.", "TAGGED BY SPORT."], e4 + 4, exit_at=l4 - 6)
-    c4 = tour_card(c, 4, e4, l4, press=p4, morph=[(m4, m4 + 14, FEAT[4])], until=m4)
+    c4 = tour_card(c, 4, e4, l4, press=p4, morph=[(m4, m4 + 14, FEAT[4])], until=m4,
+                   push=(m4 + 46, l4, 1.09, (440, 480), FEAT[4], "settle-soft"))
     feat_portfolio(c4, m4)
     c4.finish()
     cur += [(p4 - 10, (nx, ny)), (p4 + 12, (nx + 110, ny + 300), "settle-soft"), (l4 - 2, (nx + 60, ny + 160))]
@@ -693,35 +720,38 @@ def act_b():
     # 5: packages
     e5, p5, m5, l5 = T[5]
     say(c, ["SET", "YOUR PRICE."], e5 + 4, exit_at=l5 - 6)
-    c5 = tour_card(c, 5, e5, l5, press=p5, morph=[(m5, m5 + 14, FEAT[5])], until=m5)
+    c5 = tour_card(c, 5, e5, l5, press=p5, morph=[(m5, m5 + 14, FEAT[5])], until=m5,
+                   push=(m5 + 12, m5 + 26, 1.14, (300, 406), FEAT[5], "entrance-sharp"))
     ty, ta = feat_packages(c5, m5)
     c5.finish()
-    fx_, fy_ = screen(200, 406, *FEAT[5])
-    tx_, ty_ = screen(670, 412, *FEAT[5])
+    fx_, fy_ = c5.at(200, 406, *FEAT[5])
+    tx_, ty_ = c5.at(670, 412, *FEAT[5])
     cur += [(p5 - 10, (nx, ny)), (ty - 6, (fx_, fy_)), (ta - 6, (tx_, ty_)), (ta + 12, (tx_ + 30, ty_ + 50), "settle-soft"),
             (l5 - 2, (nx, ny + 40))]
     presses += [p5, ty - 2, ta]
     # 6: availability
     e6, p6, m6, l6 = T[6]
     say(c, ["MARK YOUR", "FREE DAYS."], e6 + 4, exit_at=l6 - 6)
-    c6 = tour_card(c, 6, e6, l6, press=p6, morph=[(m6, m6 + 14, FEAT[6])], until=m6)
+    c6 = tour_card(c, 6, e6, l6, press=p6, morph=[(m6, m6 + 14, FEAT[6])], until=m6,
+                   push=(m6 + 14, m6 + 28, 1.12, (600, 600), FEAT[6], "entrance-sharp"))
     taps = feat_availability(c6, m6)
     c6.finish()
     cur += [(p6 - 10, (nx, ny))]
     presses.append(p6)
     for d in TAPS:
         (dx, dy), tt = taps[d]
-        sx_, sy_ = screen(dx, dy, *FEAT[6])
+        sx_, sy_ = c6.at(dx, dy, *FEAT[6])
         cur += [(tt - 6, (sx_ + 6, sy_ + 8)), (tt + 3, (sx_ + 6, sy_ + 8), "settle-soft")]
         presses.append(tt)
     cur += [(l6 - 2, (nx, ny + 60))]
     # 7: payouts
     e7, p7, m7, l7 = T[7]
     say(c, ["PAID WHEN", "PHOTOS ARRIVE."], e7 + 4, exit_at=l7 - 6)
-    c7 = tour_card(c, 7, e7, l7, press=p7, morph=[(m7, m7 + 14, FEAT[7])], until=m7)
+    c7 = tour_card(c, 7, e7, l7, press=p7, morph=[(m7, m7 + 14, FEAT[7])], until=m7,
+                   push=(m7 + 18, m7 + 32, 1.12, (268, 318), FEAT[7], "entrance-sharp"))
     pp, (bxl, byl) = feat_payouts(c7, m7)
     c7.finish()
-    bsx, bsy = screen(bxl, byl, *FEAT[7])
+    bsx, bsy = c7.at(bxl, byl, *FEAT[7])
     cur += [(p7 - 10, (nx, ny)), (pp - 8, (bsx, bsy)), (pp + 10, (bsx + 20, bsy + 40), "settle-soft"),
             (l7 - 2, (nx - 40, ny + 80))]
     presses += [p7, pp]
@@ -902,7 +932,7 @@ def act_c():
     c.cue(t_bk, "boom_small", 0.6)
     c.cue(out_bk, "whoosh", 0.5)
     # GET IN THE FRAME.
-    t_g = out_bk + 3
+    t_g = out_bk + 7
     out_g = 186
     if LANDSCAPE:
         runs = ["GET IN THE ", "FRAME."]
