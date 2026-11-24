@@ -30,9 +30,12 @@ GREEN, CREAM = (116, 242, 96), (240, 235, 228)
 rng = np.random.default_rng(3011)
 font = lambda f, s: ImageFont.truetype(str(ROOT / "brand/fonts" / f), s)
 META = json.loads((ROOT / "brand/photos/v4-meta.json").read_text())["portrait"]
+for _m in META:   # v4-meta stores subjects in 1080x1920 frame space; the hook files are cropped at 1.1x that size
+    _m["subject"] = [v * 1.1 for v in _m["subject"]]
+    _m["subject_size"] *= 1.1
 # more match shots Shezan sent (25 Nov): file, subject point (the ball or a face), subject size, in source pixels
-EXTRA = [(1, (1894, 1293), 218), (2, (443, 800), 70), (3, (1690, 1453), 192), (4, (902, 858), 256),
-         (5, (804, 2150), 243), (6, (1011, 666), 282), (7, (922, 1638), 256)]
+EXTRA = [(1, (1897, 1296), 205), (2, (443, 822), 60), (3, (1690, 1453), 193), (4, (885, 660), 230),
+         (5, (804, 2150), 236), (6, (994, 645), 260), (7, (922, 1642), 245)]
 for i_, sub_, size_ in EXTRA:
     META.append({"file": f"teaser-extra-{i_}.jpg", "subject": list(sub_), "subject_size": size_})
 
