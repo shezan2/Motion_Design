@@ -185,9 +185,10 @@ for fr in range(N):
             img[:] = np.array(GREEN) / 255 * 0.55
     elif fr < 12 or (STUTTER1 <= fr < FLASH_WM):
         if fr >= STUTTER1:   # the breath: a faint ghost of the last shot drifting, never a dead frame
-            ghost, _ = frame_photo(IDX[plan[-1][2]], (fr - STUTTER1) / (FLASH_WM - STUTTER1))
+            ghost, gsub = frame_photo(IDX[plan[-1][2]], (fr - STUTTER1) / (FLASH_WM - STUTTER1))
             img = img + ghost * 0.16
-        marks.append((W / 2, H / 2, 70, CREAM if (fr // 8) % 2 == 0 else (110, 108, 104)))
+        fx, fy = gsub if fr >= STUTTER1 else (W / 2, H / 2)   # in the breath the focus point stays on the ghost's ball
+        marks.append((fx, fy, 70, CREAM if (fr // 8) % 2 == 0 else (110, 108, 104)))
         if fr in (STUTTER1 + 6, STUTTER1 + 14):
             cues.append((fr, "af_soft", 0.3))
     pil = Image.fromarray((np.clip(img + rng.normal(0, 0.03, img.shape[:2])[..., None], 0, 1) * 255).astype(np.uint8))
