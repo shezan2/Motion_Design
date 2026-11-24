@@ -1,16 +1,16 @@
-"""8-second mysterious launch teaser (Ozen Flow for Outtakes): a photographer's viewfinder hunting in the dark.
+"""10-second mysterious launch teaser (Ozen Flow for Outtakes): a photographer's viewfinder hunting in the dark.
 
-    python3 tools/make_teaser_8s.py            -> out/outtakes-teaser-8s-9x16.mp4
-    python3 tools/make_teaser_8s.py square     -> out/outtakes-teaser-8s-1x1.mp4
+    python3 tools/make_teaser_10s.py            -> out/outtakes-teaser-10s-9x16.mp4
+    python3 tools/make_teaser_10s.py square     -> out/outtakes-teaser-10s-1x1.mp4
 
-Picture (30 fps, 240 frames), one treatment over everything (dark, desaturated, green-tinted shadows, grain):
+Picture (30 fps, 300 frames), one treatment over everything (dark, desaturated, green-tinted shadows, grain):
   0-12    black; a lone focus point blinks
-  12-134  glimpses of match shots, cuts accelerating 14 f -> 2 f, each one smeared, pushing in, the focus
+  12-193  28 glimpses across rugby, basketball, padel, sepak takraw, silat, F1, cycling and football, cuts accelerating 13 f -> 2 f, each one smeared, pushing in, the focus
           brackets snapping onto the subject; a tiny caption stays put underneath ("persistent caption")
-  134-156 stutter: 1-frame photo / black / green
-  156-176 silence and black (the breath before the payoff)
-  176-178 OUTTAKES, two frames, subliminal
-  186-240 30.11 pulls into focus, the brackets lock green, a shutter fires; 5PM SGT; held 1.2 s
+  193-215 stutter: 1-frame photo / black / green
+  215-236 silence and black (the breath before the payoff)
+  236-238 OUTTAKES, two frames, subliminal
+  239-300 30.11 pulls into focus, the brackets lock green, a shutter fires; 5PM SGT; held 1.2 s
 Sound is synthesised here (shutters, sub pulses, riser, autofocus beeps, impacts) and cut to the same frames.
 """
 import json
@@ -25,7 +25,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 ROOT = Path(__file__).resolve().parent.parent
 SQUARE = len(sys.argv) > 1 and sys.argv[1] == "square"
 W, H = (1080, 1080) if SQUARE else (1080, 1920)
-FPS, N = 30, 240
+FPS, N = 30, 300
 GREEN, CREAM = (116, 242, 96), (240, 235, 228)
 rng = np.random.default_rng(3011)
 font = lambda f, s: ImageFont.truetype(str(ROOT / "brand/fonts" / f), s)
@@ -38,6 +38,19 @@ EXTRA = [(1, (1897, 1296), 205), (2, (443, 822), 60), (3, (1690, 1453), 193), (4
          (5, (804, 2150), 236), (6, (994, 645), 260), (7, (922, 1642), 245)]
 for i_, sub_, size_ in EXTRA:
     META.append({"file": f"teaser-extra-{i_}.jpg", "subject": list(sub_), "subject_size": size_})
+# the multi-sport set Shezan sent (25 Nov), measured on labelled crops: subject point (ball, helmet or face) and size
+MORE = [(1, (1024, 698), 260), (2, (560, 290), 170), (3, (781, 512), 250), (4, (1677, 1344), 300), (5, (636, 300), 120),
+        (6, (555, 680), 90), (7, (1635, 998), 240), (8, (1024, 1152), 380), (9, (896, 1280), 380), (10, (512, 365), 90),
+        (11, (465, 310), 140), (12, (473, 607), 140), (13, (445, 600), 100), (14, (809, 1231), 110), (15, (558, 371), 110)]
+for i_, sub_, size_ in MORE:
+    META.append({"file": f"teaser-more-{i_}.jpg", "subject": list(sub_), "subject_size": size_})
+# glimpse order: the sports alternate, the clearest frames get the longest (earliest) glimpses
+ORDER = ["teaser-more-1", "teaser-more-7", "teaser-extra-1", "teaser-more-14", "teaser-more-2", "teaser-more-13",
+         "v4-hook-p-sepak-takraw", "teaser-more-5", "teaser-more-6", "teaser-extra-3", "teaser-more-11", "teaser-more-15",
+         "teaser-more-10", "teaser-more-3", "v4-hook-p-basketball", "teaser-extra-5", "teaser-more-4", "teaser-more-12",
+         "v4-hook-p-tackle-night", "teaser-more-9", "teaser-extra-6", "teaser-more-8", "v4-hook-p-point-orange",
+         "teaser-extra-2", "v4-hook-p-kids-duel", "teaser-extra-4", "v4-hook-p-celebrate-run", "v4-hook-p-stretch-ball"]
+IDX = [[m["file"].split(".")[0] for m in META].index(o) for o in ORDER]
 
 
 # ------------------------------------------------------------------ the treatment
@@ -112,14 +125,14 @@ def brackets(d, cx, cy, size, colour, w=4):
 
 
 # ------------------------------------------------------------------ the schedule
-durs = [14, 12, 11, 10, 9, 8, 7, 6, 5, 5, 4, 4, 3, 3, 2, 2, 2, 2]
-gaps = [3, 2, 2, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+durs = [13, 12, 11, 10, 9, 9, 8, 8, 7, 7, 6, 6, 5, 5, 5, 4, 4, 4, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2]
+gaps = [3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
 plan, f = [], 12
 for k, (d_, g) in enumerate(zip(durs, gaps)):
     plan.append((f, f + d_, k))
     f += d_ + g
-STUTTER0, STUTTER1, FLASH_WM, DATE0 = f, f + 22, 176, 179
-LOCK, SHOT, SUB = 192, 194, 198
+STUTTER0, STUTTER1, FLASH_WM, DATE0 = f, f + 22, f + 43, f + 46
+LOCK, SHOT, SUB = DATE0 + 13, DATE0 + 15, DATE0 + 19
 cues = []  # (frame, kind, gain)
 
 cap_font = font("ot-label.ttf", 24)
@@ -150,8 +163,8 @@ for fr in range(N):
     cur = next((p for p in plan if p[0] <= fr < p[1]), None)
     if cur:
         s0, s1, k = cur
-        img, sub = frame_photo(k * 5 % len(shots), (fr - s0) / (s1 - s0))
-        size = max(140, min(320, shots[k * 5 % len(shots)][2] * 1.2))
+        img, sub = frame_photo(IDX[k], (fr - s0) / (s1 - s0))
+        size = max(140, min(320, shots[IDX[k]][2] * 1.2))
         snap = fr - s0
         marks.append((sub[0], sub[1], size * (1.6 if snap == 0 else 1.15 if snap == 1 else 1.0),
                       GREEN if snap >= 3 and (s1 - s0) > 5 else CREAM))
@@ -172,7 +185,7 @@ for fr in range(N):
             img[:] = np.array(GREEN) / 255 * 0.55
     elif fr < 12 or (STUTTER1 <= fr < FLASH_WM):
         if fr >= STUTTER1:   # the breath: a faint ghost of the last shot drifting, never a dead frame
-            ghost, _ = frame_photo(plan[-1][2] * 5 % len(shots), (fr - STUTTER1) / (FLASH_WM - STUTTER1))
+            ghost, _ = frame_photo(IDX[plan[-1][2]], (fr - STUTTER1) / (FLASH_WM - STUTTER1))
             img = img + ghost * 0.16
         marks.append((W / 2, H / 2, 70, CREAM if (fr // 8) % 2 == 0 else (110, 108, 104)))
         if fr in (STUTTER1 + 6, STUTTER1 + 14):
@@ -311,7 +324,7 @@ with wave.open(str(wav), "wb") as w:
     w.setnchannels(2), w.setsampwidth(2), w.setframerate(SR)
     w.writeframes((np.clip(mix, -1, 1) * 32767).astype(np.int16).tobytes())
 
-out = ROOT / f"out/outtakes-teaser-8s-{'1x1' if SQUARE else '9x16'}.mp4"
+out = ROOT / f"out/outtakes-teaser-10s-{'1x1' if SQUARE else '9x16'}.mp4"
 COMP = "acompressor=threshold=-22dB:ratio=4:attack=4:release=140:makeup=2,"
 m = subprocess.run(["ffmpeg", "-hide_banner", "-i", str(wav), "-af", COMP + "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json",
                     "-f", "null", "-"], capture_output=True, text=True).stderr
