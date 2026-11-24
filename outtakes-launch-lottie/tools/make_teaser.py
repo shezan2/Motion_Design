@@ -53,7 +53,7 @@ d.text((S - m - 24, m + 22), "1/2000  f2.8", font=font("ot-body.ttf", 26), fill=
 
 # the only real information: the date
 big = font("ot-wordmark.ttf", 230)
-d.text((m + 20, S - m - 120), "22.11", font=big, fill=GREEN, anchor="ls")
+d.text((m + 20, S - m - 120), "30.11", font=big, fill=GREEN, anchor="ls")
 d.text((m + 26, S - m - 62), "5PM SGT  ·  SOMETHING'S ABOUT TO STEP INTO FRAME", font=font("ot-label.ttf", 28), fill=CREAM, anchor="ls")
 
 out = ROOT / "out/teaser-1x1.png"
