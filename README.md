@@ -20,13 +20,13 @@ A photographer gets the shot, then spends days chasing payment over DMs. Outtake
 
 ## OmniGro AI promo (Nov 2026)
 
-A 20-second landscape (16:9) motion piece for **[OmniGro AI](https://www.omnigroai.com)**, a GEO agency that gets brands recommended by ChatGPT, Gemini, Claude and Perplexity. A customer asks AI what to buy, the answer names competitors, and OmniGro's coral triangle lifts "Your Brand" to #1, followed by the real pilot results and the logo forming out of the motion. Built as HTML with a deterministic timeline, rendered frame by frame in headless Chromium with shutter motion blur, plus an original synthesized music bed and SFX.
+A 20-second landscape (16:9) motion piece for **[OmniGro AI](https://www.omnigroai.com)**, a GEO agency that gets brands recommended by ChatGPT, Gemini, Claude and Perplexity. A customer asks AI what to buy, the answer names competitors, and OmniGro's coral triangle lifts "Your Brand" to #1, followed by the real pilot results and the logo forming out of the motion. Built as HTML with a deterministic timeline, rendered frame by frame in headless Chromium with shutter motion blur, with a sound-effects-only soundtrack.
 
 | Folder | Built with | Length | Cuts | Status |
 | --- | --- | --- | --- | --- |
-| [`jobs/omnigro-ai/promo-20s`](jobs/omnigro-ai/promo-20s/) | HTML + JS timeline, Playwright, ffmpeg, numpy audio | 20 s, 30 fps | 16:9 | v1 delivered |
+| [`jobs/omnigro-ai/promo-20s`](jobs/omnigro-ai/promo-20s/) | HTML + JS timeline, Playwright, ffmpeg; SFX from Mixkit + CC0 libraries | 20 s, 30 fps | 16:9 | v2 delivered (SFX only) |
 
-Start with [`STATE.md`](jobs/omnigro-ai/promo-20s/STATE.md) (brand sheet, idea, beat sheet, rebuild commands) and [`NOTE.md`](jobs/omnigro-ai/promo-20s/NOTE.md) (what is real, QA numbers, client message). The video is [`out/omnigro-promo-16x9-v1.mp4`](jobs/omnigro-ai/promo-20s/out/omnigro-promo-16x9-v1.mp4).
+Start with [`STATE.md`](jobs/omnigro-ai/promo-20s/STATE.md) (brand sheet, idea, beat sheet, rebuild commands) and [`NOTE.md`](jobs/omnigro-ai/promo-20s/NOTE.md) (what is real, QA numbers, client message). The current video is [`out/omnigro-promo-16x9-v2.mp4`](jobs/omnigro-ai/promo-20s/out/omnigro-promo-16x9-v2.mp4): sound effects only, built with the [real-sfx](https://github.com/Clipwing/skills) and [sfx-library](https://github.com/GFXER/sfx-library) skills' methods from Mixkit and CC0 sounds. v1 (with a synthesized music bed) is kept next to it.
 
 ## Other branches
 

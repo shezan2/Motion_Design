@@ -1,1 +1,3 @@
 audio/*.wav
+build/sfx_lib/
+build/__pycache__/

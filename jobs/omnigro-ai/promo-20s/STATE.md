@@ -5,10 +5,10 @@
 | Client | OmniGro AI (omnigroai.com), Singapore. GEO / AEO / AI SEO agency |
 | Video | 20 s brand promo, 16:9 1920x1080, 30 fps (600 frames) |
 | Plan | spec / onboarding piece (bill as one-off up to 30 s if needed) |
-| Version | **v1 delivered 27 Nov 2026** (first draft): `out/omnigro-promo-16x9-v1.mp4` |
+| Version | **v2 delivered 27 Nov 2026** (SFX only): `out/omnigro-promo-16x9-v2.mp4`; v1 (music) kept |
 | Revision rounds used | 0 |
 | Engine | HTML + deterministic JS timeline, rendered frame by frame in headless Chromium (Playwright), 4-subframe shutter blur, ffmpeg encode. Chosen over Lottie for the site's real CSS look: variable Bricolage Grotesque, glass, glows, conic borders |
-| Sound | original synthesized music bed (120 BPM) + 5 kinds of SFX, no voiceover |
+| Sound | v2: sound effects only (real recorded Mixkit + CC0 library sounds, no music), built with the Clipwing real-sfx and GFXER sfx-library methods; v1 had a synthesized music bed |
 
 ## Brand sheet (from the live site, 27 Nov 2026)
 - **Ground:** navy `#08104d` with their hero art (`hero-bg.webp`: a blue constellation with faint triangle marks) under a navy gradient. Light sections `#ecf2fe` with white cards (border `#e8edf8`, radius 20, soft navy shadows).
@@ -104,3 +104,10 @@ ffmpeg -framerate 30 -i /tmp/frames/f%04d.png -i audio/mix.wav -map 0:v -map 1:a
 python3 <skill>/scripts/look.py out/omnigro-promo-16x9-v2.mp4 --out look --expect 20 --expect-audio
 ```
 Copy and numbers live in `build/film.html` (`QUERY`, the headline spans) so a change is one edit plus a partial re-render. Never overwrite v1: the next delivery is v2.
+
+## v2 (27 Nov): SFX only
+- Shezan: "no music just sound effects and for sound effects use the best github skills out there". Not a client revision round (internal, before sending).
+- Taste lesson (for the skill's `references/taste.md`): 2026-11-27, OmniGro promo: asked for no music and SFX built with the best GitHub SFX skills. Lesson: offer an SFX-only cut by default for SaaS promos, built from real library sounds, not synthesis.
+- Researched and read: Clipwing real-sfx, GFXER sfx-library, soundcn (Kenney CC0), ElevenLabs sound-effects, Remotion add-sfx, vibe-motion/sound, procedural-sfx, owoevan sfx-skill. Used: real-sfx (method, levels, anchoring, bed, checks), GFXER (pick table, lead frames, layering, pocket, licence-safe Mixkit/CC0 sounds), soundcn (Kenney CC0 UI sounds). Their scripts were not run (the session's safety check blocks running fetched third-party code); their rules live in `build/sfx_v2.py`.
+- Rounds of the mix: (1) loudness fell to -16.6 because peaks set the level; (2) the send click hit the leveller trap and the payoff out-shouted the logo: fixed with a bus compressor, gains, -14.3 LUFS; (3) long tails merged everything: added a 5-frame silence pocket before the landing, shorter question swell and logo tail; (4) two holes at bed level: hover tick on the cursor park and a tick on the trend line completing (real picture moves); five same-source bloops alternated; masked push ticks removed.
+- Rebuild: `python3 build/sfx_fetch.py` then `python3 build/sfx_v2.py`, then `ffmpeg -i out/omnigro-promo-16x9-v1.mp4 -i audio/sfx_v2_mix.wav -map 0:v -map 1:a -c:v copy -c:a aac -b:a 320k -ar 48000 -movflags +faststart -shortest out/omnigro-promo-16x9-v2.mp4`.
