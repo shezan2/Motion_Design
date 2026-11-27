@@ -81,6 +81,50 @@ Mixkit Sound Effects Free License: free for commercial and client projects; the 
 >
 > The sound is effects only, no music, so a voiceover or your own track can go on top later. Send any changes in one message, with the time in the video for each.
 
+## Voiceover for v2 (ElevenLabs, ready to paste)
+
+42 words (~2.7 a second), one line per beat, each heard just after its words appear, and silent through the two big hits (the landing at 0:05.9, the logo at 0:16.6). House voices: neutral accent, no whispering, no announcer hype. Put ONE "Voice:" paragraph into Voice Design (or use it to pick a library voice), and only the script lines into the text box. Test line 3 first, then three full takes.
+
+Option A, deep male:
+```
+Voice: male, 30s, deep, rich bass voice with a slight gravel, like a big campaign trailer for a tech brand. Calm, confident and controlled, never shouting. Deliberate pacing with weight on each line: dry and knowing on "Where's your brand?", quiet certainty on "OmniGro puts it on top.", real warmth on "Get your brand recommended by AI." Neutral international English accent. Clean studio sound, close to the mic, no reverb, no whispering, no announcer hype. Say "OmniGro" as "OM-nee-groh". Leave a clear pause at each line break.
+```
+
+Option B, warm female:
+```
+Voice: female, late 20s, soft, warm and feminine, smooth and velvety with a slight breathy warmth. Elegant and confident, like a premium brand campaign but friendly, not cold. Medium-low pitch, unhurried, a gentle smile in the voice. Quietly knowing on "Where's your brand?", a touch brighter on "OmniGro puts it on top." and "Get your brand recommended by AI." Neutral international English accent. Clean studio sound, close to the mic, no reverb, no whispering, no announcer hype. Say "OmniGro" as "OM-nee-groh". Leave a clear pause at each line break.
+```
+
+Script (text box):
+```
+Your customers ask AI.
+
+It names your competitors.
+
+Where's your brand?
+
+OmniGro puts it on top.
+
+Our latest pilot: number one on every major AI platform.
+
+Get your brand recommended by AI.
+
+Your free AI visibility report: omni-gro A I dot com.
+```
+
+| Line | Starts | Sits on |
+|---|---|---|
+| Your customers ask AI. | 0:00.4 | the question typing |
+| It names your competitors. | 0:02.4 | the competitor rows landing |
+| Where's your brand? | 0:04.0 | the same words on screen; ends by 0:05.6 so the silence pocket stays clear |
+| OmniGro puts it on top. | 0:06.2 | right after the #1 badge |
+| Our latest pilot: number one on every major AI platform. | 0:08.2 | the "Ranked #1" headline; ends as +451% lands at 0:12.0 |
+| Get your brand recommended by AI. | 0:14.2 | the H1 building; ends before the logo hit at 0:16.6 |
+| Your free AI visibility report: omni-gro A I dot com. | 0:17.0 | the end card; ends by 0:19.8 |
+
+The voice rests 0:12-0:14 so the count-up and its ticks carry +451%. To say the number too, add "And four hundred and fifty-one percent more organic clicks." after line 5 (fits only with a brisk read).
+Mixing it in (v3): place each line by its first syllable on the times above; SFX dipped about 9 dB under speech (real-sfx voice-safe) and no big hit under a word (GFXER); the voice at least 8 dB above the SFX while it speaks; master -14 LUFS, -1 dBTP; deliver `omnigro-promo-16x9-v3-vo.mp4` plus an .srt.
+
 ---
 
 # OmniGro AI / promo-20s / v1 (music + synthesized SFX, superseded by v2)
@@ -136,7 +180,7 @@ Mixkit Sound Effects Free License: free for commercial and client projects; the 
 >
 > Have a look and send any changes in one message, with the time in the video for each. Once you're happy we can also cut a vertical version for Reels and Shorts.
 
-## Optional voiceover (for a later voiced version)
+## Optional voiceover (v1 draft, superseded by the v2 voiceover above)
 
 About 2.3 words a second, one line per beat. Paste the "Voice:" paragraph into ElevenLabs Voice Design (or use it to pick a library voice), and only the lines into the text box.
 
