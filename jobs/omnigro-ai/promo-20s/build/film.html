@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>OmniGro AI promo film</title>
+<style>
+@font-face{font-family:'Bricolage';src:url('../brand/fonts/BricolageGrotesque-VF-latin.woff2') format('woff2');font-weight:200 800;font-display:block}
+@font-face{font-family:'Inter';src:url('../brand/fonts/Inter-VF-latin.woff2') format('woff2');font-weight:100 900;font-display:block}
+:root{--navy:#08104d;--blue:#3241e4;--blue2:#2535c8;--coral:#ef5d50;--coralbg:#fde5e3;--light:#ecf2fe;--line:#e8edf8;--lav:#e6e9fd}
+*{box-sizing:border-box}
+html,body{margin:0;background:#000}
+body.play{display:grid;place-items:center;min-height:100vh}
+#stage{position:relative;width:1920px;height:1080px;overflow:hidden;background:var(--navy);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased}
+.abs{position:absolute;left:0;top:0}
+.c{transform-origin:50% 50%}
+.layer{position:absolute;left:0;top:0;width:1920px;height:1080px}
+svg{display:block;overflow:visible}
+
+/* ---------- grounds */
+#navyA,#navyC{background:var(--navy);overflow:hidden}
+.bgimg{position:absolute;left:0;top:0;width:2200px;height:1228px;opacity:.62;transform-origin:50% 50%}
+.navyfx{position:absolute;inset:0;background:
+  radial-gradient(120% 90% at 50% 45%, rgba(8,16,77,0) 0%, rgba(8,16,77,.35) 60%, rgba(5,9,48,.85) 100%),
+  linear-gradient(180deg, rgba(8,16,77,.30) 0%, rgba(8,16,77,.50) 60%, rgba(8,16,77,.78) 100%)}
+#lightB{width:1920px;height:3600px;background:linear-gradient(180deg,#eef3ff 0%,#ecf2fe 40%,#e8eefd 100%)}
+#navyC{width:1920px;height:1500px}
+.glow{position:absolute;border-radius:50%;pointer-events:none;transform-origin:50% 50%}
+
+/* ---------- S1 prompt pill */
+#pill{left:960px;top:500px;width:1240px;height:136px}
+#pill .shell{width:100%;height:100%;border-radius:999px;padding:3px;
+  box-shadow:0 34px 90px -28px rgba(50,65,228,.75),0 14px 44px -18px rgba(239,93,80,.45)}
+#pill .inner{width:100%;height:100%;border-radius:999px;background:rgba(255,255,255,.965);display:flex;align-items:center;padding:0 23px;gap:28px}
+.spark{flex:none;width:86px;height:86px;border-radius:50%;background:linear-gradient(140deg,#4a58f2 0%,#3241e4 55%,#2535c8 100%);display:grid;place-items:center;box-shadow:0 8px 20px -8px rgba(50,65,228,.8)}
+.spark svg{width:42px;height:42px}
+.field{flex:1;position:relative;height:60px;font:600 46px/60px 'Inter';color:var(--navy);white-space:nowrap;letter-spacing:-.01em}
+#ph{position:absolute;left:0;top:0;color:#8e94b8;font-weight:400}
+#caret{display:inline-block;width:3px;height:54px;background:var(--blue);vertical-align:-11px;margin-left:3px;border-radius:2px}
+#send{flex:none;width:86px;height:86px;border-radius:50%;background:var(--blue);display:grid;place-items:center;transform-origin:50% 50%}
+#send svg{width:40px;height:40px}
+#chips{left:960px;top:632px;display:flex;gap:18px;white-space:nowrap}
+.chip{padding:12px 28px;border-radius:999px;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.18);color:rgba(255,255,255,.86);font:500 36px/44px 'Inter'}
+#cursor{width:40px;height:56px;transform-origin:0 0;filter:drop-shadow(0 8px 14px rgba(0,0,0,.45))}
+
+/* ---------- S2/S3 answer card */
+#card{left:410px;top:300px;width:1100px;height:470px;border-radius:32px;background:#fff;
+  box-shadow:0 50px 120px -36px rgba(2,4,30,.85),0 0 0 1px rgba(232,237,248,1)}
+.cardhead{position:absolute;left:40px;top:44px;display:flex;align-items:center;gap:20px;font:500 38px/46px 'Inter';color:#4c5384}
+.cardhead .spark{width:56px;height:56px;box-shadow:none}
+.cardhead .spark svg{width:28px;height:28px}
+.row{position:absolute;left:40px;width:1020px;height:92px;border-radius:22px;background:#f6f8ff;border:1.5px solid var(--line);display:flex;align-items:center;padding:0 28px;gap:24px}
+.rank{flex:none;width:58px;height:58px;border-radius:50%;background:var(--lav);color:var(--blue);display:grid;place-items:center;font:700 31px/1 'Bricolage'}
+.nm{font:600 48px/1 'Bricolage';color:var(--navy);letter-spacing:-.01em}
+#rowY{left:450px;top:470px;width:1020px;height:92px;margin-top:-46px;background:#fff;border:2.5px solid var(--coral);
+  box-shadow:0 22px 54px -18px rgba(239,93,80,.65);transform-origin:50% 50%}
+#rowY .rank{background:var(--coralbg)}
+#rowY .nm{font-weight:700}
+.badge{margin-left:auto;display:flex;align-items:center;gap:16px}
+.b1{padding:9px 20px;border-radius:999px;background:var(--coralbg);color:var(--coral);font:700 34px/1 'Bricolage';transform-origin:50% 50%}
+#line2{left:960px;top:540px;white-space:nowrap;font:700 124px/1 'Bricolage';letter-spacing:-.025em;color:#fff}
+.w{display:inline-block;transform-origin:50% 60%;white-space:pre}
+.co{color:var(--coral)}
+
+/* ---------- S4 ranked #1 */
+#h4{left:960px;top:368px;white-space:nowrap;font:700 82px/1 'Bricolage';letter-spacing:-.022em;color:var(--navy)}
+#pills{left:960px;top:552px;display:flex;flex-wrap:nowrap;gap:22px}
+.pl{display:flex;align-items:center;gap:18px;padding:18px 20px 18px 30px;border-radius:26px;background:#fff;border:1.5px solid var(--line);
+  box-shadow:0 16px 36px -16px rgba(8,16,77,.25);font:600 42px/1 'Bricolage';color:var(--navy);white-space:nowrap;transform-origin:50% 50%}
+.pl .b1{font-size:31px;padding:8px 16px}
+#cap{left:960px;top:706px;white-space:nowrap;font:400 40px/1 'Inter';color:#4f5686;letter-spacing:-.005em}
+
+/* ---------- S5 stat */
+#num{left:1000px;top:430px;white-space:nowrap;font:800 300px/1 'Bricolage';letter-spacing:-.035em;color:var(--coral);display:flex;align-items:baseline}
+#num .d{display:inline-block;text-align:center}
+#lab{left:960px;top:620px;white-space:nowrap;font:500 58px/1 'Inter';color:var(--navy);letter-spacing:-.01em}
+#chart{left:0;top:0;width:1920px;height:1080px}
+
+/* ---------- S6 payoff */
+#h6a,#h6b{left:960px;white-space:nowrap;font:800 152px/1 'Bricolage';letter-spacing:-.025em}
+#h6a{top:455px;color:#fff}
+#h6b{top:615px;color:var(--coral)}
+.ch{display:inline-block;white-space:pre;transform-origin:50% 50%}
+
+/* ---------- S7 logo */
+.tri{position:absolute;left:0;top:0;transform-origin:50% 50%}
+#wm{left:0;top:450px;white-space:nowrap;font:800 104px/1 'Bricolage';letter-spacing:-.012em;color:#fff}
+#cta1{left:960px;top:668px;white-space:nowrap;font:500 46px/1 'Inter';color:rgba(255,255,255,.82);letter-spacing:-.005em}
+#cta2{left:960px;top:752px;white-space:nowrap;font:700 64px/1 'Bricolage';color:var(--coral);letter-spacing:-.015em}
+</style>
+</head>
+<body>
+<div id="stage">
+  <!-- ===== navy section A (S1-S3) -->
+  <div id="navyA" class="layer">
+    <img id="bgA" class="bgimg" src="../brand/site/hero-bg.webp" alt="">
+    <div class="navyfx"></div>
+  </div>
+  <div id="contentA" class="layer">
+    <div id="glowA" class="glow" style="left:260px;top:-180px;width:1400px;height:1400px;background:radial-gradient(closest-side,rgba(50,65,228,.42),rgba(50,65,228,.14) 55%,rgba(50,65,228,0) 100%)"></div>
+    <div id="glowY" class="glow" style="left:460px;top:120px;width:1000px;height:700px;background:radial-gradient(closest-side,rgba(239,93,80,.34),rgba(239,93,80,.10) 55%,rgba(239,93,80,0) 100%);opacity:0"></div>
+    <div id="camA" class="layer" style="transform-origin:960px 540px">
+      <div id="card" class="abs">
+        <div class="cardhead"><div class="spark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-spark"/></svg></div><span>Top picks for sensitive skin</span></div>
+        <div id="rowA" class="row"><div class="rank">1</div><span class="nm">Competitor A</span></div>
+        <div id="rowB" class="row"><div class="rank">2</div><span class="nm">Competitor B</span></div>
+        <div id="rowC" class="row"><div class="rank">3</div><span class="nm">Competitor C</span></div>
+      </div>
+      <div id="rowY" class="row abs">
+        <div class="rank"><svg width="30" height="27" viewBox="0 0 1649 1513"><polygon points="824.5,0 1649,1513 0,1513" fill="#ef5d50"/></svg></div>
+        <span class="nm">Your Brand</span>
+        <div class="badge"><span id="b1Y" class="b1">#1</span>
+          <svg id="chkY" width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#ef5d50" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" pathLength="1" stroke-dasharray="1" id="chkC"/><path d="m8.5 12.4 2.4 2.4 4.8-5.2" pathLength="1" stroke-dasharray="1" id="chkP"/></svg></div>
+      </div>
+      <div id="line2" class="abs c"><span class="w">Where's </span><span class="w co">your </span><span class="w co">brand?</span></div>
+      <div id="pill" class="abs c">
+        <div class="shell" id="shell"><div class="inner">
+          <div class="spark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-spark"/></svg></div>
+          <div class="field"><span id="ph">Ask anything</span><span id="typed"></span><span id="caret"></span></div>
+          <div id="send"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg></div>
+        </div></div>
+      </div>
+      <div id="chips" class="abs c"><span class="chip">ChatGPT</span><span class="chip">Claude</span><span class="chip">Perplexity</span><span class="chip">Gemini</span></div>
+      <svg id="cursor" class="abs" viewBox="0 0 40 56"><path d="M3 2 L3 44 L13.5 34.5 L21 51 L28.5 47.8 L21 31.5 L35 31.5 Z" fill="#fff" stroke="#08104d" stroke-width="2.6" stroke-linejoin="round"/></svg>
+    </div>
+  </div>
+
+  <!-- ===== light section B (S4-S5) -->
+  <div id="lightB" class="abs"></div>
+  <div id="contentB" class="layer">
+    <div id="glowB1" class="glow" style="left:160px;top:-60px;width:1600px;height:1000px;background:radial-gradient(closest-side,rgba(255,255,255,.95),rgba(255,255,255,.4) 55%,rgba(255,255,255,0) 100%)"></div>
+    <div id="glowB2" class="glow" style="left:560px;top:1180px;width:1500px;height:1100px;background:radial-gradient(closest-side,rgba(50,65,228,.13),rgba(50,65,228,0) 100%)"></div>
+    <div id="h4" class="abs c"><span class="w">Ranked </span><span class="w co">#1 </span><span class="w">across </span><span class="w">every </span><span class="w">major </span><span class="w">AI </span><span class="w">platform</span></div>
+    <div id="pills" class="abs c">
+      <div class="pl">ChatGPT<span class="b1">#1</span></div>
+      <div class="pl">Gemini<span class="b1">#1</span></div>
+      <div class="pl">Claude<span class="b1">#1</span></div>
+      <div class="pl">Google AI Mode<span class="b1">#1</span></div>
+      <div class="pl">Perplexity<span class="b1">#1</span></div>
+    </div>
+    <svg id="chart" class="abs" viewBox="0 0 1920 1080">
+      <defs>
+        <linearGradient id="gArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3241e4" stop-opacity=".20"/><stop offset="1" stop-color="#3241e4" stop-opacity="0"/></linearGradient>
+        <clipPath id="clipArea"><rect id="areaRect" x="-50" y="0" width="0" height="1200"/></clipPath>
+      </defs>
+      <g stroke="rgba(8,16,77,.07)" stroke-width="2"><line x1="0" y1="320" x2="1920" y2="320"/><line x1="0" y1="500" x2="1920" y2="500"/><line x1="0" y1="680" x2="1920" y2="680"/><line x1="0" y1="860" x2="1920" y2="860"/></g>
+      <path id="area" clip-path="url(#clipArea)" fill="url(#gArea)" d=""/>
+      <path id="trend" fill="none" stroke="#3241e4" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d=""/>
+      <g id="head"><circle r="15" fill="#fff" stroke="#3241e4" stroke-width="6"/></g>
+    </svg>
+    <div id="num" class="abs c"><span>+</span><span class="d" id="d0">4</span><span class="d" id="d1">5</span><span class="d" id="d2">1</span><span>%</span></div>
+    <div id="lab" class="abs c">organic clicks</div>
+  </div>
+  <div id="cap" class="abs c">From our latest pilot, June 2026</div>
+
+  <!-- ===== navy section C (S6-S7) -->
+  <div id="navyC" class="abs">
+    <img id="bgC" class="bgimg" src="../brand/site/hero-bg.webp" alt="">
+    <div class="navyfx"></div>
+  </div>
+  <div id="contentC" class="layer">
+    <div id="glowC" class="glow" style="left:210px;top:-160px;width:1500px;height:1400px;background:radial-gradient(closest-side,rgba(50,65,228,.40),rgba(50,65,228,.12) 55%,rgba(50,65,228,0) 100%)"></div>
+    <div id="glowK" class="glow" style="left:560px;top:150px;width:800px;height:640px;background:radial-gradient(closest-side,rgba(239,93,80,.5),rgba(239,93,80,.12) 55%,rgba(239,93,80,0) 100%);opacity:0"></div>
+    <div id="h6a" class="abs c"><span class="w">Get </span><span class="w">your </span><span class="w">brand</span></div>
+    <div id="h6b" class="abs c"></div>
+    <div id="lock" class="layer" style="transform-origin:960px 470px">
+      <svg id="triC" class="tri" width="161" height="148" viewBox="0 0 1649 1513"><polygon points="824.5,0 1649,1513 0,1513" fill="#ef5d50"/></svg>
+      <svg id="triB" class="tri" width="161" height="148" viewBox="0 0 1649 1513"><polygon points="824.5,0 1649,1513 0,1513" fill="#3241e4"/></svg>
+      <div id="wm" class="abs">OmniGro <span class="co">AI</span></div>
+    </div>
+    <div id="cta1" class="abs c">Get your free AI visibility report</div>
+    <div id="cta2" class="abs c">omnigroai.com</div>
+  </div>
+</div>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- Lucide "Sparkles" (ISC licence), the icon omnigroai.com uses -->
+    <g id="i-spark"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></g>
+  </defs>
+</svg>
+
+<script>
+'use strict';
+// =====================================================================
+// Easing: cubic-beziers from the Ozen craft table
+// =====================================================================
+function bez(p1x, p1y, p2x, p2y) {
+  const cx = 3 * p1x, bx = 3 * (p2x - p1x) - cx, ax = 1 - cx - bx;
+  const cy = 3 * p1y, by = 3 * (p2y - p1y) - cy, ay = 1 - cy - by;
+  const sx = t => ((ax * t + bx) * t + cx) * t, sy = t => ((ay * t + by) * t + cy) * t;
+  const dsx = t => (3 * ax * t + 2 * bx) * t + cx;
+  function solve(x) {
+    let t = x;
+    for (let i = 0; i < 8; i++) { const e = sx(t) - x; if (Math.abs(e) < 1e-7) return t; const d = dsx(t); if (Math.abs(d) < 1e-7) break; t -= e / d; }
+    let lo = 0, hi = 1; t = x;
+    for (let i = 0; i < 50; i++) { const v = sx(t); if (Math.abs(v - x) < 1e-7) break; if (x > v) lo = t; else hi = t; t = (lo + hi) / 2; }
+    return t;
+  }
+  return x => x <= 0 ? 0 : x >= 1 ? 1 : sy(solve(x));
+}
+const E = {
+  lin: t => t,
+  glide: bez(.40, .67, .76, 1), softInOut: bez(.35, .06, .65, .94), softLand: bez(.28, 1, .72, .93),
+  snap: bez(.14, 1, .24, .95), whip: bez(.28, .67, .50, 1), gentleIn: bez(.58, 0, .96, .95),
+  accelExit: bez(.40, 0, .67, .16), crash: bez(.56, 0, .71, 0), pop: bez(.29, .12, .29, 1.41),
+  scroll: bez(.55, 0, .15, 1),
+};
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, u) => a + (b - a) * u;
+const U = (t, t0, t1) => clamp((t - t0) / (t1 - t0));
+const tw = (t, t0, t1, a, b, e = E.lin) => lerp(a, b, e(U(t, t0, t1)));
+// damped spring 0 -> 1 (the film's one visible spring)
+function spring(u, zeta = .42, w = 15) { if (u <= 0) return 0; const wd = w * Math.sqrt(1 - zeta * zeta); return 1 - Math.exp(-zeta * w * u) * (Math.cos(wd * u) + zeta * w / wd * Math.sin(wd * u)); }
+
+const $ = id => document.getElementById(id);
+function put(el, o) {
+  // centred element: base left/top is its centre
+  const x = o.x || 0, y = o.y || 0, s = o.s == null ? 1 : o.s, r = o.r || 0;
+  el.style.transform = `translate(${x.toFixed(2)}px,${y.toFixed(2)}px) translate(-50%,-50%) scale(${s.toFixed(4)})` + (r ? ` rotate(${r}deg)` : '');
+  el.style.opacity = o.o == null ? 1 : clamp(o.o).toFixed(4);
+  const b = o.b || 0; el.style.filter = b > .05 ? `blur(${b.toFixed(2)}px)` + (o.f || '') : (o.f || 'none');
+}
+function putTL(el, o) {
+  // top-left anchored element (transform-origin from CSS)
+  const x = o.x || 0, y = o.y || 0, s = o.s == null ? 1 : o.s;
+  el.style.transform = `translate(${x.toFixed(2)}px,${y.toFixed(2)}px) scale(${s.toFixed(4)})`;
+  el.style.opacity = o.o == null ? 1 : clamp(o.o).toFixed(4);
+  const b = o.b || 0; el.style.filter = b > .05 ? `blur(${b.toFixed(2)}px)` + (o.f || '') : (o.f || 'none');
+}
+// word build: blur-in + rise (Ozen move 1)
+function wordIn(el, t, t0, rise = 34, blur = 12, dur = 13) {
+  const u = U(t, t0, t0 + dur);
+  const y = (1 - E.softLand(u)) * rise;
+  const b = (1 - E.glide(U(t, t0, t0 + 8))) * blur;
+  const o = E.glide(U(t, t0, t0 + 6));
+  return { y, b, o };
+}
+
+// =====================================================================
+// Timeline (frames at 30 fps). Bars of 120 BPM fall every 60 frames.
+// =====================================================================
+const QUERY = 'Best skincare brand for sensitive skin?';
+const T = {
+  type0: 6, cur0: 32, cur1: 48, press: 58,
+  pill0: 60, pill1: 77, card0: 62, card1: 82, head0: 70, rows: [83, 90, 97],
+  dim0: 115, dim1: 129, line0: 118,
+  out0: 154, rise0: 160, rise1: 181, badge: 183, chk0: 187, chk1: 198,
+  sc1a: 228, sc1b: 254, h4: 240, pills: 254, pillGap: 6, cap: 270,
+  sc2a: 322, sc2b: 346, trend0: 332, trend1: 376, cnt0: 337, cnt1: 360, lab: 352,
+  sc3a: 406, sc3b: 432, h6: 419,
+  out6: 482, conv0: 481, conv1: 495, triC0: 494, triC1: 509, triB0: 497, triB1: 512,
+  lock0: 511, lock1: 530, cta1: 540, cta2: 548, end: 600,
+};
+const D1 = 1240, D2 = 1000, D3 = 1240;
+const P = t => D1 * E.scroll(U(t, T.sc1a, T.sc1b)) + D2 * E.scroll(U(t, T.sc2a, T.sc2b)) + D3 * E.scroll(U(t, T.sc3a, T.sc3b));
+
+// typing bursts: [frame offset, chars] built word by word, deterministic
+const TYPE = (() => {
+  const words = QUERY.match(/\S+\s?/g); const out = []; let f = 0, n = 0, seed = 7;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (const w of words) {
+    let left = w.length;
+    while (left > 0) { const k = Math.min(left, 2 + (rnd() < .45 ? 1 : 0)); n += k; left -= k; out.push([f, n]); f += 1; }
+    f += rnd() < .5 ? 1 : 2;
+  }
+  return out;
+})();
+const typedAt = fr => { let n = 0; for (const [f, k] of TYPE) if (fr >= T.type0 + f) n = k; return n; };
+const TYPE_END = T.type0 + TYPE[TYPE.length - 1][0];
+
+// rows inside the card (card-local centres)
+const SLOT = [170, 272, 374, 476];
+const CARD_TOP = 300;
+// rising row path (camA space, pre-camera): its centre y
+const RISE_FROM = 1270, RISE_TO = CARD_TOP + SLOT[0];
+const riseY = t => lerp(RISE_FROM, RISE_TO, E.whip(U(t, T.rise0, T.rise1)));
+let CROSS = [];   // frame where the rising row pushes each slot (computed in init)
+
+// trend line points (S5 local space)
+const TREND = [[-60, 1000], [240, 985], [520, 960], [780, 930], [1000, 880], [1180, 815], [1340, 735], [1480, 640], [1600, 545], [1720, 445], [1860, 330], [2000, 215]];
+let trendLen = 0, trendPts = [];
+
+const FILM = { T, cues: [], ready: false };
+window.FILM = FILM;
+
+function catmull(pts, seg = 14) {
+  const out = [];
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
+    for (let k = 0; k < seg; k++) {
+      const u = k / seg, u2 = u * u, u3 = u2 * u;
+      out.push([0.5 * ((2 * p1[0]) + (-p0[0] + p2[0]) * u + (2 * p0[0] - 5 * p1[0] + 4 * p2[0] - p3[0]) * u2 + (-p0[0] + 3 * p1[0] - 3 * p2[0] + p3[0]) * u3),
+                0.5 * ((2 * p1[1]) + (-p0[1] + p2[1]) * u + (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * u2 + (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * u3)]);
+    }
+  }
+  out.push(pts[pts.length - 1]);
+  return out;
+}
+
+// wave edge: the S-curve divider under omnigroai.com's hero
+function waveY(x) { const k = x / 1920; return 30 * Math.sin(2 * Math.PI * (k * 0.95) + 0.5) + 14 * Math.sin(2 * Math.PI * (k * 2.1) + 1.9); }
+function wavePath(h) {
+  let d = `M -20 ${(60 + waveY(-20)).toFixed(1)}`;
+  for (let x = 0; x <= 1940; x += 20) d += ` L ${x} ${(60 + waveY(x)).toFixed(1)}`;
+  return d + ` L 1940 ${h} L -20 ${h} Z`;
+}
+
+let LAYOUT = {};
+FILM.init = function () {
+  // wave clip on the two incoming sections
+  $('lightB').style.clipPath = `path('${wavePath(3600)}')`;
+  $('navyC').style.clipPath = `path('${wavePath(1500)}')`;
+
+  // rows: base positions
+  for (const [id, k] of [['rowA', 0], ['rowB', 1], ['rowC', 2]]) $(id).style.top = (SLOT[k] - 46) + 'px';
+
+  // crossing frames for the rising row (it pushes a slot when its centre is 58 px below the slot centre)
+  CROSS = [2, 1, 0].map(k => { for (let f = T.rise0; f <= T.rise1; f += .25) if (riseY(f) <= CARD_TOP + SLOT[k] + 58) return f; return T.rise1; });
+
+  // pills: one row if it fits inside title-safe, else 3 + 2
+  const pills = $('pills'); const w = pills.getBoundingClientRect().width;
+  LAYOUT.pillsW = w;
+  if (w > 1728) { pills.style.flexWrap = 'wrap'; pills.style.justifyContent = 'center'; pills.style.width = '1300px'; pills.style.rowGap = '22px'; }
+
+  // counter digit slots: fixed width so the number never jitters
+  const probe = document.createElement('span'); probe.style.cssText = "position:absolute;visibility:hidden;font:800 300px 'Bricolage';letter-spacing:-.035em"; document.body.appendChild(probe);
+  let wmax = 0; for (let d = 0; d <= 9; d++) { probe.textContent = String(d); wmax = Math.max(wmax, probe.getBoundingClientRect().width); }
+  probe.remove(); for (const id of ['d0', 'd1', 'd2']) $(id).style.width = wmax.toFixed(1) + 'px';
+
+  // trend path
+  trendPts = catmull(TREND);
+  let d = '', L = [0];
+  trendPts.forEach((p, i) => { d += (i ? ' L ' : 'M ') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); if (i) L.push(L[i - 1] + Math.hypot(p[0] - trendPts[i - 1][0], p[1] - trendPts[i - 1][1])); });
+  trendLen = L[L.length - 1]; LAYOUT.trendL = L;
+  $('trend').setAttribute('d', d); $('trend').style.strokeDasharray = trendLen.toFixed(1);
+  $('area').setAttribute('d', d + ` L 2000 1200 L -60 1200 Z`);
+
+  // payoff line 2: letters as spans (they converge into the coral triangle)
+  const h6b = $('h6b'); const txt = 'recommended by AI';
+  h6b.innerHTML = txt.split(' ').map(wd => `<span class="w">${[...wd].map(c => `<span class="ch">${c}</span>`).join('')}</span>`).join('<span class="w"> </span>');
+
+  // lockup geometry: mark (161 x 200) + gap 60 + wordmark, centred on x = 960
+  const wm = $('wm'); const wmW = wm.getBoundingClientRect().width;
+  const markW = 161, gap = 60, total = markW + gap + wmW;
+  LAYOUT.markX = 960 - total / 2 + markW / 2;   // final centre x of the mark
+  LAYOUT.wmLeft = 960 - total / 2 + markW + gap;
+  LAYOUT.wmW = wmW;
+  wm.style.left = LAYOUT.wmLeft + 'px'; wm.style.marginTop = '-52px';
+
+  // letter centres for the convergence (measured at rest)
+  put(h6b, { x: 0, y: 0 });
+  LAYOUT.letters = [...h6b.querySelectorAll('.ch')].map(el => { const r = el.getBoundingClientRect(); return { el, cx: r.left + r.width / 2, cy: r.top + r.height / 2 }; });
+
+  FILM.cues = buildCues();
+  FILM.ready = true;
+};
+
+// =====================================================================
+// Sound cues (frame, kind, gain): read by sound.py
+// =====================================================================
+function buildCues() {
+  const c = [];
+  let prev = 0; for (const [f, n] of TYPE) { if (n !== prev) c.push([T.type0 + f, 'key', .55 + .1 * ((n * 7) % 3)]); prev = n; }
+  c.push([T.press, 'click', 1]);
+  c.push([T.pill0 + 1, 'whoosh', .45]);
+  T.rows.forEach((f, i) => c.push([f, 'tick', .7 - i * .08]));
+  c.push([T.line0, 'thud', .6]);
+  c.push([T.out0, 'whoosh', .35]);
+  c.push([Math.round(T.rise1 - 3), 'hit', 1]);
+  c.push([T.badge, 'pop', .9]);
+  c.push([T.sc1a + 6, 'whoosh', .8]);
+  for (let i = 0; i < 5; i++) if (i !== 1 && i !== 3) c.push([T.pills + i * T.pillGap, 'tick', .55]);
+  c.push([T.sc2a + 5, 'whoosh', .55]);
+  for (let f = T.cnt0; f < T.cnt1; f += 3) c.push([f, 'count', .35 + .4 * U(f, T.cnt0, T.cnt1)]);
+  c.push([T.cnt1, 'tick', .9]);
+  c.push([T.sc3a + 6, 'whoosh', .8]);
+  c.push([T.conv0, 'suck', .8]);
+  c.push([T.triC0, 'logo', 1]);
+  c.push([T.cta2, 'tick', .4]);
+  return c;
+}
+
+// =====================================================================
+// Render one (possibly fractional) frame
+// =====================================================================
+FILM.render = function (t) {
+  const fr = Math.round(t);              // discrete events (typing, counters) never ghost between sub-frames
+  const p = P(t);
+
+  // ---------------- grounds
+  // navy A: hero art drifts slowly; parallax 0.6 on the scroll
+  const driftA = tw(t, 0, 240, 0, 1);
+  putTL($('bgA'), { x: -150 - 60 * driftA, y: -74 - .6 * Math.min(p, D1), s: 1 + .05 * driftA });
+  $('navyA').style.visibility = p > D1 + 5 ? 'hidden' : 'visible';
+  // light B rises on the wave
+  putTL($('lightB'), { x: 0, y: (1160 - 60) - p });
+  $('lightB').style.visibility = (p < 1 || p > D1 + D2 + D3 + 5) ? 'hidden' : 'visible';
+  // navy C rises on the wave (with parallax inside)
+  const yC = (D1 + D2 + 1160 - 60) - p;
+  putTL($('navyC'), { x: 0, y: yC });
+  const driftC = tw(t, 400, 600, 0, 1);
+  putTL($('bgC'), { x: -120 + 70 * driftC, y: -90 + .4 * Math.max(0, (D1 + D2 + D3) - p) - 0 + 140, s: 1.04 + .05 * driftC });
+  $('bgC').style.transform += ' scaleX(-1)';
+  $('navyC').style.visibility = p < D1 + D2 + 1 ? 'hidden' : 'visible';
+
+  // ---------------- section A content (S1-S3)
+  const cA = $('contentA');
+  cA.style.transform = `translate(0px,${(-p).toFixed(2)}px)`;
+  cA.style.visibility = p > D1 + 5 ? 'hidden' : 'visible';
+  // camera: one slow push across the whole section, plus a tiny bump on the landing
+  const land = T.rise1 - 3;
+  const bump = t > land ? .006 * Math.exp(-(t - land) / 4) * Math.sin(Math.min(Math.PI, (t - land) / 3 * Math.PI)) : 0;
+  const cam = 1 + .03 * E.softInOut(U(t, 0, 110)) + .085 * E.softInOut(U(t, 100, 236)) + bump;
+  $('camA').style.transform = `scale(${cam.toFixed(4)})`;
+  // the one light: blue, warming with coral when the brand lands
+  put($('glowA'), { x: 0, y: 0, s: 1 + .04 * Math.sin(t / 40), o: 1 });
+  $('glowA').style.transform = `translate(0px,${(tw(t, 60, 82, 0, 40, E.glide)).toFixed(1)}px)`;
+  $('glowY').style.opacity = (tw(t, land - 2, land + 8, 0, 1, E.glide) * (1 - .35 * U(t, land + 8, land + 40))).toFixed(3);
+
+  // S1: prompt pill (rotating conic border borrowed from the site's "ask-ai" pill: 6 s a turn)
+  const ang = (t / 180) * 360 + 200;
+  $('shell').style.background = `conic-gradient(from ${ang.toFixed(1)}deg, #ef5d50 0deg, #3241e4 110deg, #08104d 180deg, #3241e4 250deg, #ef5d50 360deg)`;
+  const pu = E.glide(U(t, T.pill0, T.pill1));
+  const pOut = E.accelExit(U(t, T.out0, T.out0 + 16));
+  const pillDim = E.gentleIn(U(t, T.dim0, T.dim1)) * (1 - U(t, T.out0, T.out0 + 8));
+  put($('pill'), { x: 0, y: lerp(0, -304, pu) - 520 * pOut, s: lerp(1, .86, pu) + .012 * (1 - U(t, 0, 40)) * 0, o: 1 - .55 * pillDim, b: 7 * pillDim });
+  // typing
+  const n = typedAt(fr);
+  $('typed').textContent = QUERY.slice(0, n);
+  $('ph').style.opacity = n > 0 ? 0 : 1;
+  let caretOn = 1;
+  if (fr > TYPE_END) { const ph = ((fr - TYPE_END) / 37.5) % 1; caretOn = ph < .2 ? 1 - ph / .2 : ph < .5 ? 0 : ph < .7 ? (ph - .5) / .2 : 1; }   // the site's caret-blink, 1.25 s
+  if (fr >= T.press) caretOn = 0;
+  $('caret').style.opacity = caretOn.toFixed(3);
+  // send button answers the press one frame later
+  const sq = fr >= T.press + 1 && fr <= T.press + 3 ? .9 : 1;
+  $('send').style.transform = `scale(${sq})`;
+  $('send').style.background = fr >= T.press + 1 && fr <= T.press + 6 ? '#2535c8' : '#3241e4';
+  // chips leave as the pill rises
+  const chipU = U(t, T.pill0, T.pill0 + 8);
+  put($('chips'), { x: 0, y: -40 * E.accelExit(chipU), o: 1 - E.glide(chipU), b: 10 * chipU });
+  // cursor: enters big, shrinks while it travels, parks, presses
+  const cu = U(t, T.cur0, T.cur1);
+  const cx = lerp(1890, 1530, E.glide(cu)), cy = lerp(1110, 512, E.glide(cu));
+  let cs = lerp(2.4, 1, E.softLand(cu));
+  if (t >= T.press && t < T.press + 5) cs *= t < T.press + 2 ? lerp(1, .82, (t - T.press) / 2) : lerp(.82, 1, (t - T.press - 2) / 3);
+  const cOut = U(t, T.press + 6, T.press + 13);
+  putTL($('cursor'), { x: cx + 30 * cOut, y: cy + 40 * cOut, s: cs, o: (t < T.cur0 ? 0 : 1) * (1 - cOut) });
+
+  // S2: the answer card unfolds out of the pill (container morph)
+  const cardU = E.softLand(U(t, T.card0, T.card1));
+  const card = $('card');
+  const reveal = lerp(470, 0, cardU);
+  card.style.clipPath = `inset(0px 0px ${reveal.toFixed(1)}px 0px round 32px)`;
+  const dim = E.gentleIn(U(t, T.dim0, T.dim1)) * (1 - E.glide(U(t, T.out0 + 2, T.out0 + 16)));
+  putTL(card, { x: 0, y: lerp(-60, 0, cardU) - 14 * E.glide(U(t, T.out0, T.out0 + 20)), o: t < T.card0 ? 0 : 1, b: 9 * dim, f: dim > .01 ? ` brightness(${(1 - .62 * dim).toFixed(3)})` : '' });
+  card.style.opacity = t < T.card0 ? 0 : (1 - .25 * dim).toFixed(3);
+  const head = card.querySelector('.cardhead');
+  const hw = wordIn(head, t, T.head0, 20, 10, 12); putTL(head, { x: 0, y: hw.y, o: hw.o, b: hw.b });
+  // competitor rows land, then get pushed down a slot by the rising row
+  const rows = ['rowA', 'rowB', 'rowC'];
+  rows.forEach((id, k) => {
+    const el = $(id); const wi = wordIn(el, t, T.rows[k], 26, 8, 12);
+    const push = E.softLand(U(t, CROSS[k], CROSS[k] + 9));
+    const gone = k === 2 ? E.glide(U(t, CROSS[k], CROSS[k] + 7)) : 0;
+    putTL(el, { x: 0, y: wi.y + 102 * push, o: wi.o * (1 - gone), b: wi.b });
+    const rk = el.querySelector('.rank'); const nn = String(k + 1 + (fr >= Math.round(CROSS[k]) ? 1 : 0));
+    if (rk.textContent !== nn) rk.textContent = nn;
+  });
+
+  // "Where's your brand?" (blur-in word build over the softened card, then leaves upward)
+  const l2 = $('line2'); const ws = l2.querySelectorAll('.w');
+  const lOut = E.accelExit(U(t, T.out0, T.out0 + 11));
+  ws.forEach((w, i) => { const a = wordIn(w, t, T.line0 + i * 4, 40, 14, 13); w.style.transform = `translateY(${a.y.toFixed(2)}px)`; w.style.opacity = a.o.toFixed(3); w.style.filter = a.b > .05 ? `blur(${a.b.toFixed(2)}px)` : 'none'; });
+  put(l2, { x: 0, y: -100 * lOut, o: 1 - lOut, b: 14 * lOut });
+
+  // S3: the coral triangle lifts "Your Brand" up through the list to #1
+  const ry = riseY(t);
+  const moving = U(t, T.rise0, T.rise1);
+  const rY = $('rowY');
+  putTL(rY, { x: 0, y: ry - RISE_TO, s: 1 + .035 * (1 - E.glide(U(t, T.rise1 - 6, T.rise1 + 6))) * (t > T.rise0 ? 1 : 0), o: t < T.rise0 ? 0 : 1 });
+  rY.style.boxShadow = `0 22px 54px -18px rgba(239,93,80,${(.45 + .4 * Math.sin(Math.PI * clamp(moving * 1.1))).toFixed(3)})`;
+  // the #1 badge springs (the film's one spring), the check draws
+  const bs = spring(Math.max(0, (t - T.badge) / 30));
+  put($('b1Y'), { x: 0, y: 0, s: .35 + .65 * bs, o: clamp((t - T.badge) / 3) });
+  $('b1Y').style.transform = `scale(${(.35 + .65 * bs).toFixed(4)})`;
+  const ck = E.glide(U(t, T.chk0, T.chk1));
+  $('chkC').style.strokeDashoffset = (1 - ck).toFixed(4); $('chkP').style.strokeDashoffset = (1 - E.glide(U(t, T.chk0 + 4, T.chk1 + 2))).toFixed(4);
+  $('chkY').style.opacity = t >= T.chk0 ? 1 : 0;
+
+  // ---------------- section B content (S4-S5)
+  const cB = $('contentB');
+  cB.style.transform = `translate(0px,${(D1 - p).toFixed(2)}px)`;
+  cB.style.visibility = (p < 2 || p > D1 + D2 + D3 - 2) ? 'hidden' : 'visible';
+  // S4 headline: words build as the section settles (the site's fade-up reveal)
+  const h4 = $('h4'); h4.querySelectorAll('.w').forEach((w, i) => { const a = wordIn(w, t, T.h4 + i * 3, 30, 12, 13); w.style.transform = `translateY(${a.y.toFixed(2)}px)`; w.style.opacity = a.o.toFixed(3); w.style.filter = a.b > .05 ? `blur(${a.b.toFixed(2)}px)` : 'none'; });
+  // pills pop in, #1 badges land a beat later
+  $('pills').querySelectorAll('.pl').forEach((pl, i) => {
+    const f0 = T.pills + i * T.pillGap; const a = wordIn(pl, t, f0, 22, 8, 11);
+    pl.style.transform = `translateY(${a.y.toFixed(2)}px) scale(${(.94 + .06 * E.softLand(U(t, f0, f0 + 11))).toFixed(4)})`; pl.style.opacity = a.o.toFixed(3); pl.style.filter = a.b > .05 ? `blur(${a.b.toFixed(2)}px)` : 'none';
+    const b = pl.querySelector('.b1'); const bu = U(t, f0 + 4, f0 + 13);
+    b.style.transform = `scale(${(.55 + .45 * E.snap(bu)).toFixed(4)})`; b.style.opacity = clamp((t - f0 - 4) / 3).toFixed(3);
+  });
+  // persistent caption: rides in with section B, stays put through S5, leaves with section B
+  const capY = Math.max(0, D1 - p) - Math.max(0, p - (D1 + D2));
+  const ca = wordIn($('cap'), t, T.cap, 16, 8, 12);
+  put($('cap'), { x: 0, y: capY + ca.y, o: ca.o, b: ca.b });
+  $('cap').style.visibility = (p < 2 || p > D1 + D2 + D3 - 2) ? 'hidden' : 'visible';
+  // S5: the stat lives 1000 px further down the page
+  const s5 = D2;
+  put($('num'), { x: 0, y: s5 + 0, s: 1 });
+  put($('lab'), { x: 0, y: s5 });
+  const la = wordIn($('lab'), t, T.lab, 24, 10, 12); $('lab').style.opacity = la.o; $('lab').style.transform += ` translateY(${la.y.toFixed(2)}px)`; if (la.b > .05) $('lab').style.filter = `blur(${la.b.toFixed(2)}px)`;
+  putTL($('chart'), { x: 0, y: s5 });
+  // count-up tied to the trend line (shrinking steps, lands exactly on 451)
+  const cu2 = U(fr, T.cnt0, T.cnt1); const v = Math.round(451 * (1 - Math.pow(1 - cu2, 3)));
+  const vs = String(v).padStart(3, ' ');
+  ['d0', 'd1', 'd2'].forEach((id, i) => { $(id).textContent = vs[i] === ' ' ? '' : vs[i]; });
+  const na = wordIn($('num'), t, T.cnt0 - 4, 30, 10, 12);
+  $('num').style.opacity = na.o; $('num').style.transform += ` translateY(${na.y.toFixed(2)}px)`;
+  // trend line draws, its head rides the tip
+  const tu = E.glide(U(t, T.trend0, T.trend1));
+  const drawn = trendLen * tu; $('trend').style.strokeDashoffset = (trendLen - drawn).toFixed(1);
+  const L = LAYOUT.trendL; let hi = 1; while (hi < L.length - 1 && L[hi] < drawn) hi++;
+  const a0 = trendPts[hi - 1], a1 = trendPts[hi], seg = (drawn - L[hi - 1]) / Math.max(1e-6, L[hi] - L[hi - 1]);
+  const hx = lerp(a0[0], a1[0], clamp(seg)), hy = lerp(a0[1], a1[1], clamp(seg));
+  $('head').setAttribute('transform', `translate(${hx.toFixed(1)},${hy.toFixed(1)})`);
+  $('head').style.opacity = t > T.trend0 + 1 ? 1 : 0;
+  $('areaRect').setAttribute('width', (hx + 50).toFixed(1));
+  // S4 leaves upward as the page scrolls (built into the section transform)
+
+  // ---------------- section C content (S6-S7)
+  const cC = $('contentC');
+  cC.style.transform = `translate(0px,${(D1 + D2 + D3 - p).toFixed(2)}px)`;
+  cC.style.visibility = p < D1 + D2 + 2 ? 'hidden' : 'visible';
+  put($('glowC'), { x: 0, y: 0, s: 1 + .03 * Math.sin(t / 45) });
+  // S6 payoff: the site's H1, word by word
+  const outA = E.accelExit(U(t, T.out6, T.out6 + 9));
+  $('h6a').querySelectorAll('.w').forEach((w, i) => { const a = wordIn(w, t, T.h6 + i * 4, 40, 14, 13); w.style.transform = `translateY(${a.y.toFixed(2)}px)`; w.style.opacity = a.o.toFixed(3); w.style.filter = a.b > .05 ? `blur(${a.b.toFixed(2)}px)` : 'none'; });
+  const creep = 1 + .012 * U(t, T.h6, T.out6);
+  put($('h6a'), { x: 0, y: -90 * outA, s: creep, o: 1 - outA, b: 12 * outA });
+  const h6bW = $('h6b').querySelectorAll(':scope > .w');
+  h6bW.forEach((w, i) => { const a = wordIn(w, t, T.h6 + 14 + i * 3, 40, 14, 13); w.style.transform = `translateY(${a.y.toFixed(2)}px)`; w.style.opacity = a.o.toFixed(3); w.style.filter = a.b > .05 ? `blur(${a.b.toFixed(2)}px)` : 'none'; });
+  put($('h6b'), { x: 0, y: 0, s: creep });
+  // S7: the coral words collapse into the coral triangle (convergence)
+  const markCx = 960, markCy = 470;                  // mark box centre while it forms
+  const triW = 161, triH = 148, off = 52;            // two identical triangles, blue offset 35% down (as in logo_only.png)
+  const coralCy = markCy - 100 + triH / 2, blueCy = markCy - 100 + off + triH / 2;
+  const coralCentroidY = markCy - 100 + triH * 2 / 3;
+  if (LAYOUT.letters) {
+    const n = LAYOUT.letters.length;
+    LAYOUT.letters.forEach((L, i) => {
+      const dly = Math.abs(i - (n - 1) / 2) < 3 ? 2 : (i % 3);   // outer letters a touch earlier
+      const u = E.gentleIn(U(t, T.conv0 + (2 - dly), T.conv1 - dly));
+      const dx = (markCx - L.cx) * u, dy = (coralCentroidY - L.cy) * u;
+      const o = 1 - U(t, T.conv1 - dly - 3, T.conv1 - dly + 1);
+      L.el.style.transform = `translate(${dx.toFixed(2)}px,${dy.toFixed(2)}px) scale(${(1 - .85 * u).toFixed(4)})`;
+      L.el.style.opacity = o.toFixed(3);
+    });
+  }
+  // coral triangle grows out of the point; blue rises in front of it
+  const gC = E.snap(U(t, T.triC0, T.triC1));
+  const slide = E.glide(U(t, T.lock0, T.lock1));
+  const mx = lerp(markCx, LAYOUT.markX || markCx, slide);
+  const settle = 1 + .015 * U(t, T.lock1, T.end);
+  const triC = $('triC'), triB = $('triB');
+  triC.style.transformOrigin = `${triW / 2}px ${triH * 2 / 3}px`;
+  triC.style.transform = `translate(${(mx - triW / 2).toFixed(2)}px,${(coralCy - triH / 2).toFixed(2)}px) scale(${(gC * settle).toFixed(4)})`;
+  triC.style.opacity = t >= T.triC0 ? 1 : 0;
+  const bu = E.softLand(U(t, T.triB0, T.triB1));
+  triB.style.transform = `translate(${(mx - triW / 2).toFixed(2)}px,${(blueCy - triH / 2 + 230 * (1 - bu)).toFixed(2)}px) scale(${settle.toFixed(4)})`;
+  triB.style.opacity = clamp((t - T.triB0) / 4).toFixed(3);
+  // coral flash as the triangle lands, then the light settles to blue
+  $('glowK').style.opacity = (tw(t, T.triC0, T.triC0 + 5, 0, 1, E.glide) * (1 - .7 * U(t, T.triC0 + 5, T.triC0 + 40))).toFixed(3);
+  // wordmark wipes out from behind the mark
+  const wm = $('wm');
+  const wu = E.glide(U(t, T.lock0 + 2, T.lock1 + 2));
+  wm.style.clipPath = `inset(-20px ${((1 - wu) * 100).toFixed(2)}% -20px -20px)`;
+  wm.style.transform = `translate(${(-24 * (1 - wu)).toFixed(2)}px,0px) scale(${settle.toFixed(4)})`;
+  wm.style.transformOrigin = `${(-(LAYOUT.wmLeft || 0) + 960)}px 52px`;
+  wm.style.opacity = t >= T.lock0 + 2 ? 1 : 0;
+  // CTA
+  const c1 = wordIn($('cta1'), t, T.cta1, 24, 10, 12), c2 = wordIn($('cta2'), t, T.cta2, 24, 10, 12);
+  put($('cta1'), { x: 0, y: c1.y, o: c1.o, b: c1.b }); put($('cta2'), { x: 0, y: c2.y, o: c2.o, b: c2.b });
+};
+
+// preview: open film.html?play in a browser
+if (location.search.includes('play')) {
+  document.body.classList.add('play');
+  document.fonts.ready.then(() => { FILM.init(); const t0 = performance.now(); const loop = () => { const f = ((performance.now() - t0) / 1000 * 30) % 600; FILM.render(f); requestAnimationFrame(loop); }; loop(); });
+}
+</script>
+</body>
+</html>
