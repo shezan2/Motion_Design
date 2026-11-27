@@ -5,7 +5,7 @@
 | Client | OmniGro AI (omnigroai.com), Singapore. GEO / AEO / AI SEO agency |
 | Video | 20 s brand promo, 16:9 1920x1080, 30 fps (600 frames) |
 | Plan | spec / onboarding piece (bill as one-off up to 30 s if needed) |
-| Version | v1 (first draft) |
+| Version | **v1 delivered 27 Nov 2026** (first draft): `out/omnigro-promo-16x9-v1.mp4` |
 | Revision rounds used | 0 |
 | Engine | HTML + deterministic JS timeline, rendered frame by frame in headless Chromium (Playwright), 4-subframe shutter blur, ffmpeg encode. Chosen over Lottie for the site's real CSS look: variable Bricolage Grotesque, glass, glows, conic borders |
 | Sound | original synthesized music bed (120 BPM) + 5 kinds of SFX, no voiceover |
@@ -70,3 +70,37 @@ Checks: 600 frames = 20.0 s. One importance-3 beat of seven. CTA beat 3.9 s (19.
 - 27 Nov: landscape only, as asked. The 9:16 can be re-composed later (pills stack, line breaks change).
 - 27 Nov: no third-party AI logos; platform names as text, like the site's step-1 chips.
 - 27 Nov: music is an original synthesized bed (no licence question). A licensed track can replace it on request.
+
+## v1 build log (27 Nov)
+- Style frames first, then a fast draft (no motion blur) through `look.py`; fixed: S4/S5 not centred, rows pushed in the wrong order during the climb, "+45 1%" digit gaps (now Bricolage tabular figures), the answer card appearing above the prompt (it now hangs off the pill and unfolds with it), an empty mid-scroll frame between S4 and S5 (scroll cut from 1000 to 760 px, the number fades in while it scrolls).
+- Holds were too still (look.py: two frozen 1.5 s stretches). Added rising data motes and faster drift on the navy hero art, camera creeps on S4 and S5, the trend head keeps travelling through its hold, one hover-lift wave across the pills (the site's card hover), a living wave edge.
+- G3 failed twice (end hold 2.3 s, then 2.03 s): small CTA text never registers on look.py's 96x54 area-averaged frame. Fix: the URL became the site's coral button with one light sweep across it (the wordmark shine was dropped so there is still only one sweep). G3 now passes.
+- Mark rebuilt in vector for the animation, verified against `logo_only.png` (99.7% coverage agreement, edges only).
+- Sound: first mix had the sub 13 dB above the musical body (thin on phones); rebalanced (harmonic bass, warmer louder pad, knock on the kick, body on the hits). Final -14.0 LUFS, -1.2 dBTP.
+- Grain: temporal strength 2 (strength 4 made a 121 MB file); kills the faint banding on the lavender ground. Master 14.8 MB.
+
+## Files
+| File | What |
+|---|---|
+| `out/omnigro-promo-16x9-v1.mp4` | master, 1920x1080, 30 fps, H.264 CRF 16, AAC 320k 48 kHz, -14 LUFS |
+| `out/omnigro-promo-16x9-v1-preview.mp4` | 720p WhatsApp preview (1.7 MB) |
+| `out/omnigro-promo-16x9-v1-cover.jpg` | cover frame (the payoff, f470) |
+| `out/omnigro-promo-16x9-v1-sheet.jpg` | look.py contact sheet |
+| `NOTE.md` | internal note, client message, optional VO script |
+| `build/film.html` | the whole film: stage, styles, timeline (`T`), `FILM.render(t)`; open `build/film.html?play` through a local server to preview |
+| `build/render.cjs` | stills, sub-frame PNG sequence, cue export (Playwright + ffmpeg) |
+| `build/sound.py` | music + SFX + master from `audio/cues.json` |
+
+## How to rebuild (from this folder)
+```bash
+node build/render.cjs still 0,180,470,590 /tmp/stills            # check frames
+node build/render.cjs cues audio/cues.json                          # SFX cue list from the timeline
+SUB=4 JOBS=3 node build/render.cjs frames /tmp/frames              # 600 frames, 180-degree shutter blur (~4 min)
+SUB=4 node build/render.cjs frames /tmp/frames 545 600              # re-render only a range after an edit
+python3 build/sound.py                                              # audio/mix.wav
+ffmpeg -framerate 30 -i /tmp/frames/f%04d.png -i audio/mix.wav -map 0:v -map 1:a -vf "noise=c0s=2:c0f=t" \
+  -c:v libx264 -profile:v high -pix_fmt yuv420p -r 30 -crf 16 -preset slow -c:a aac -b:a 320k -ar 48000 \
+  -movflags +faststart -shortest out/omnigro-promo-16x9-v2.mp4
+python3 <skill>/scripts/look.py out/omnigro-promo-16x9-v2.mp4 --out look --expect 20 --expect-audio
+```
+Copy and numbers live in `build/film.html` (`QUERY`, the headline spans) so a change is one edit plus a partial re-render. Never overwrite v1: the next delivery is v2.
