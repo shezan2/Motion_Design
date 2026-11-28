@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<title>CriterAI intro film</title>
+<style>
+@font-face { font-family: 'Geist'; src: url(fonts/Geist-Variable.woff2) format('woff2'); font-weight: 100 900; font-style: normal; }
+@font-face { font-family: 'Gelasio'; src: url(fonts/gelasio-latin-700-normal.woff2) format('woff2'); font-weight: 700; font-style: normal; }
+@font-face { font-family: 'Gelasio'; src: url(fonts/gelasio-latin-700-italic.woff2) format('woff2'); font-weight: 700; font-style: italic; }
+@font-face { font-family: 'Gelasio'; src: url(fonts/gelasio-latin-600-normal.woff2) format('woff2'); font-weight: 600; font-style: normal; }
+
+:root {
+  --cream: #fffef7; --ink: #1a2332; --body: #42504e; --teal: #1b6b6d; --teal2: #17575a; --teal3: #164f4d;
+  --forest: #071b1c; --forest2: #0b2425; --forest3: #123f41;
+  --mint: #a6e1d1; --mint2: #e8f5f1; --mint3: #d4ede8; --mint4: #7ec8b8; --gold: #c99227;
+}
+html, body { margin: 0; padding: 0; background: #000; }
+#stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--cream);
+  font-family: 'Geist', system-ui, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+.abs { position: absolute; left: 0; top: 0; }
+.layer { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+
+/* ---------- ground ---------- */
+#ground-dark { background: radial-gradient(ellipse 70% 75% at 50% 50%, #0f3233 0%, #0b2627 45%, #071b1c 100%); }
+#ground-glow { background: radial-gradient(ellipse 60% 45% at 50% 108%, rgba(166,225,209,0.55) 0%, rgba(166,225,209,0.18) 45%, rgba(166,225,209,0) 75%); }
+#ground-vig { background: radial-gradient(ellipse 85% 85% at 50% 45%, rgba(18,63,65,0) 60%, rgba(18,63,65,0.07) 100%); }
+
+/* ---------- hook ---------- */
+#hook { transform-origin: 960px 540px; }
+.pill { position: absolute; left: 0; top: 0; height: 64px; padding: 0 28px 0 22px; box-sizing: border-box; border-radius: 32px;
+  display: flex; align-items: center; gap: 14px; white-space: nowrap; font-size: 26px; font-weight: 450; letter-spacing: -0.01em;
+  color: rgba(255,254,247,0.86); background: rgba(166,225,209,0.07); border: 1.5px solid rgba(166,225,209,0.22); transform-origin: 50% 50%; }
+.pill i { width: 10px; height: 10px; border-radius: 50%; background: var(--mint); opacity: 0.8; flex: none; }
+.pill.doc i { border-radius: 3px; background: none; border: 2px solid var(--mint); width: 9px; height: 11px; }
+.pill.next i { background: #f7d779; }
+.hookline { position: absolute; left: 960px; top: 540px; font-family: 'Gelasio', serif; font-weight: 700; font-size: 132px; line-height: 1;
+  letter-spacing: -0.02em; color: var(--cream); white-space: nowrap; transform-origin: 50% 50%; }
+.hookline em { font-style: italic; color: var(--mint); }
+#dot { width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; background: radial-gradient(circle, #ffe7a8 0%, #c99227 55%, rgba(201,146,39,0) 72%); }
+
+/* ---------- bloom ---------- */
+.bloom { position: absolute; border-radius: 50%; left: 0; top: 0; }
+#bloom { background: radial-gradient(circle, #fffef7 0%, #fffef7 88%, rgba(255,254,247,0) 100%); }
+#bloomring { border: 6px solid rgba(166,225,209,0.75); box-sizing: border-box; filter: blur(8px); }
+#checkglow { position: absolute; left: 0; top: 0; width: 700px; height: 700px; margin: -350px 0 0 -350px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(247,215,121,0.55) 0%, rgba(201,146,39,0.18) 40%, rgba(201,146,39,0) 70%); }
+
+/* ---------- world (camera) ---------- */
+#world { transform-origin: 0 0; }
+#mark { position: absolute; left: 0; top: 0; width: 520px; height: 520px; overflow: visible; transform-origin: 0 0; }
+
+.card { position: absolute; left: 0; top: 0; background: #ffffff; border: 2px solid var(--mint3); box-sizing: border-box;
+  box-shadow: 0 1px 2px rgba(7,27,28,0.05), 0 14px 34px rgba(7,27,28,0.07), 0 46px 90px rgba(7,27,28,0.10); }
+#qtext { position: absolute; left: 0; top: 0; font-size: 44px; font-weight: 500; letter-spacing: -0.015em; white-space: nowrap; color: var(--ink); transform-origin: 0 50%; }
+#placeholder { position: absolute; left: 470px; top: 540px; font-size: 44px; font-weight: 400; color: rgba(66,80,78,0.55); white-space: nowrap; transform: translateY(-50%); }
+#caret { position: absolute; width: 4px; height: 52px; background: var(--teal); border-radius: 2px; }
+#send { position: absolute; width: 92px; height: 92px; border-radius: 50%; background: var(--teal); display: flex; align-items: center; justify-content: center; transform-origin: 50% 50%; }
+#send svg { width: 40px; height: 40px; }
+#bubble { position: absolute; background: var(--teal); border-radius: 30px 30px 8px 30px; }
+
+.tag { position: absolute; height: 46px; padding: 0 20px; border-radius: 23px; background: var(--mint2); color: var(--teal); display: flex; align-items: center; gap: 10px;
+  font-size: 24px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; transform-origin: 0 50%; }
+.tag svg { width: 22px; height: 22px; }
+.atitle { position: absolute; font-size: 34px; font-weight: 400; color: var(--body); white-space: nowrap; letter-spacing: -0.01em; }
+.row { position: absolute; height: 64px; display: flex; align-items: center; white-space: nowrap; }
+.row .hl { position: absolute; left: -14px; top: 0; height: 64px; border-radius: 16px; background: #e3f4ed; transform-origin: 0 50%; }
+.row .num { position: relative; width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--mint3); background: #fff; box-sizing: border-box; flex: none;
+  display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 600; color: var(--teal); }
+.row .num .fill { position: absolute; inset: -2px; border-radius: 50%; background: var(--mint); }
+.row .num b { position: relative; font-weight: 600; }
+.row .num svg { position: absolute; left: 50%; top: 50%; width: 30px; height: 30px; margin: -15px 0 0 -15px; overflow: visible; }
+.row .txt { position: relative; margin-left: 24px; font-size: 40px; font-weight: 500; color: var(--ink); letter-spacing: -0.015em; }
+#verify { position: absolute; height: 82px; border-radius: 20px; border: 2.5px solid var(--teal); box-sizing: border-box; background: #fff; overflow: hidden; transform-origin: 0 50%; }
+#verify .face { position: absolute; left: 0; top: 0; height: 100%; display: flex; align-items: center; gap: 16px; padding: 0 30px; white-space: nowrap; font-size: 36px; font-weight: 600; color: var(--teal); letter-spacing: -0.01em; }
+#verify .face svg { width: 38px; height: 38px; flex: none; }
+#vring { width: 44px; height: 44px; flex: none; overflow: visible; }
+#vmark { width: 58px; height: 58px; flex: none; position: relative; }
+#vmark img { position: absolute; left: -6px; top: -6px; width: 70px; height: 70px; }
+#sweep { position: absolute; top: -20%; height: 140%; width: 180px; background: linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.75) 50%, rgba(255,255,255,0) 100%); }
+#composer2 { position: absolute; border-radius: 26px; background: #fafaf8; border: 2px solid var(--mint3); box-sizing: border-box; display: flex; align-items: center; padding: 0 28px; font-size: 30px; color: rgba(66,80,78,0.5); }
+#composer2 .s { position: absolute; right: 14px; top: 50%; width: 52px; height: 52px; margin-top: -26px; border-radius: 50%; background: var(--mint3); }
+
+/* ---------- hud ---------- */
+.pay { position: absolute; left: 960px; top: 540px; font-family: 'Gelasio', serif; font-weight: 700; font-size: 168px; line-height: 1; letter-spacing: -0.022em;
+  color: var(--ink); white-space: nowrap; transform-origin: 50% 50%; }
+.pay .ai { color: var(--teal); display: inline-block; }
+#payAI { position: absolute; left: 0; top: 0; font-family: 'Gelasio', serif; font-weight: 700; font-size: 168px; line-height: 1; letter-spacing: -0.022em; color: var(--teal); white-space: nowrap; transform-origin: 50% 50%; }
+#lockup { position: absolute; left: 0; top: 0; width: 2000px; height: 667px; overflow: visible; transform-origin: 0 0; }
+#cta { position: absolute; left: 0; top: 0; height: 88px; padding: 0 40px 0 44px; border-radius: 18px; background: var(--teal); color: #fff; display: flex; align-items: center; gap: 16px;
+  font-size: 38px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; box-shadow: 0 10px 30px rgba(27,107,109,0.25); }
+#cta .ico { position: relative; width: 36px; height: 36px; flex: none; }
+#cta .ico svg { position: absolute; left: 0; top: 0; width: 36px; height: 36px; overflow: visible; transform-origin: 50% 50%; }
+#cta .shine { position: absolute; top: 0; left: 0; height: 100%; width: 160px; background: linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.35) 50%, rgba(255,255,255,0) 100%); }
+#url { position: absolute; left: 0; top: 0; font-size: 38px; font-weight: 500; color: var(--body); letter-spacing: -0.01em; white-space: nowrap; }
+#mascot { position: absolute; left: 0; top: 0; width: 300px; transform-origin: 50% 100%; }
+#cursor { position: absolute; left: 0; top: 0; width: 60px; height: 72px; transform-origin: 6px 4px; overflow: visible; }
+
+#grain { background-image: url(assets/grain.png); background-size: 256px 256px; mix-blend-mode: soft-light; opacity: 0.16; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <!-- ground -->
+  <div id="ground-glow" class="layer"></div>
+  <div id="ground-vig" class="layer"></div>
+
+  <!-- world: camera-transformed product scene -->
+  <div id="worldwrap" class="layer">
+    <div id="world" class="layer">
+      <div id="card" class="card"></div>
+      <div id="composer2"><span>Ask a follow-up…</span><span class="s"></span></div>
+      <div id="bubble"></div>
+      <div id="placeholder">Ask a visa question…</div>
+      <div id="caret"></div>
+      <div id="qtext"></div>
+      <div id="send"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg></div>
+
+      <div id="tag" class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#1b6b6d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13.5H11L10 22l8.5-11.5H12L13 2z"/></svg>Instant answer</div>
+      <div id="atitle" class="atitle">For a Student visa (subclass 500), you’ll usually need:</div>
+      <div id="rows"></div>
+      <div id="verify">
+        <div class="face" id="vface1"><svg viewBox="0 0 24 24" fill="none" stroke="#1b6b6d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8l7.5 3v5.6c0 4.6-3.2 8.4-7.5 9.8-4.3-1.4-7.5-5.2-7.5-9.8V5.8l7.5-3z"/><path d="M8.6 12.2l2.4 2.4 4.6-4.8"/></svg>Verify by Expert</div>
+        <div class="face" id="vface2"><svg id="vring" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" fill="none" stroke="#d4ede8" stroke-width="5"/><circle id="vringArc" cx="22" cy="22" r="18" fill="none" stroke="#1b6b6d" stroke-width="5" stroke-linecap="round" transform="rotate(-90 22 22)"/></svg><span>Expert review · in as little as 30 minutes</span></div>
+        <div class="face" id="vface3"><span id="vmark"><img src="assets/mark.png" alt=""></span><span>Verified by a Registered Migration Agent</span></div>
+        <div id="sweep"></div>
+      </div>
+
+      <svg id="mark" viewBox="79 72.5 520 520">
+        <defs>
+          <mask id="mRing" maskUnits="userSpaceOnUse" x="-200" y="-200" width="2400" height="1100"><path id="ringPath" d="M 454.1 204.7 A 172 172 0 1 0 502.6 385.7" stroke="#fff" stroke-width="124" fill="none" stroke-linecap="butt"/></mask>
+          <mask id="mCheck" maskUnits="userSpaceOnUse" x="-200" y="-200" width="2400" height="1100"><path id="checkPath" d="M 270 292 L 352 386 L 572 168" stroke="#fff" stroke-width="104" fill="none" stroke-linecap="round" stroke-linejoin="round"/></mask>
+        </defs>
+        <image href="assets/logo-ring.png" x="0" y="0" width="2000" height="667" mask="url(#mRing)"/>
+        <image href="assets/logo-check.png" x="0" y="0" width="2000" height="667" mask="url(#mCheck)"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- dark hook sits above the world until the bloom covers it -->
+  <div id="hookwrap" class="layer">
+    <div id="ground-dark" class="layer"></div>
+    <div id="hook" class="layer"></div>
+    <div id="hl1" class="hookline">Which <em>visa</em>?</div>
+    <div id="hl2" class="hookline">Which <em>documents</em>?</div>
+    <div id="hl3" class="hookline">What’s <em>next</em>?</div>
+    <div id="dot" class="abs"></div>
+  </div>
+  <div id="bloom" class="bloom"></div>
+  <div id="bloomring" class="bloom"></div>
+  <div id="checkglow"></div>
+  <!-- the mark is re-parented above the bloom during the turn (see film.js) -->
+  <div id="markhost" class="layer"></div>
+
+  <!-- hud -->
+  <div id="hud" class="layer">
+    <div id="pay1" class="pay">Lawyer trained.</div>
+    <div id="pay2" class="pay">Law driven.</div>
+    <div id="pay3" class="pay"><span class="ai" id="pay3ai">AI</span> <span id="pay3rest">delivered.</span></div>
+    <div id="payAI">AI</div>
+    <svg id="lockup" viewBox="0 0 2000 667">
+      <defs>
+        <mask id="lRing" maskUnits="userSpaceOnUse" x="-200" y="-200" width="2400" height="1100"><path id="lRingPath" d="M 454.1 204.7 A 172 172 0 1 0 502.6 385.7" stroke="#fff" stroke-width="124" fill="none" stroke-linecap="butt"/></mask>
+        <mask id="lCheck" maskUnits="userSpaceOnUse" x="-200" y="-200" width="2400" height="1100"><path id="lCheckPath" d="M 270 292 L 352 386 L 572 168" stroke="#fff" stroke-width="104" fill="none" stroke-linecap="round" stroke-linejoin="round"/></mask>
+        <clipPath id="lCriterClip"><rect id="lCriterRect" x="560" y="0" width="980" height="667"/></clipPath>
+      </defs>
+      <image id="lRingImg" href="assets/logo-ring.png" x="0" y="0" width="2000" height="667" mask="url(#lRing)"/>
+      <g clip-path="url(#lCriterClip)"><image id="lCriterImg" href="assets/logo-criter.png" x="0" y="0" width="2000" height="667"/></g>
+      <image id="lAiImg" href="assets/logo-ai.png" x="0" y="0" width="2000" height="667"/>
+      <image id="lCheckImg" href="assets/logo-check.png" x="0" y="0" width="2000" height="667" mask="url(#lCheck)"/>
+    </svg>
+    <div id="cta">Start for free<span class="ico"><svg id="ctaArrow" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><svg id="ctaCheck" viewBox="0 0 24 24" fill="none"><path id="ctaCheckPath" d="M4.5 12.8 L9.6 17.6 L20 6.6" stroke="#f2c14e" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="shine"></div></div>
+    <div id="url">criter.ai</div>
+    <img id="mascot" src="assets/mascot-welcome.webp" alt="">
+    <svg id="cursor" viewBox="0 0 60 72"><path d="M6 4 L6 56 L19 44 L28 66 L38 62 L29 40 L48 40 Z" fill="#1a2332" stroke="#ffffff" stroke-width="4" stroke-linejoin="round"/></svg>
+  </div>
+
+  <div id="grain" class="layer"></div>
+</div>
+<script src="film.js"></script>
+</body>
+</html>

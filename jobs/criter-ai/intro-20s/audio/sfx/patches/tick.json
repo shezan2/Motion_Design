@@ -1,0 +1,58 @@
+{
+ "name": "tick",
+ "description": "Soft wooden tick for the hook's phrase swaps (marimba partials, 50 ms).",
+ "layers": [
+  {
+   "wave": "noise",
+   "env": {
+    "attack": 0.0005,
+    "hold": 0.0,
+    "release": 0.008,
+    "curve": 3
+   },
+   "filters": [
+    {
+     "type": "highpass",
+     "cutoff": 3000
+    },
+    {
+     "type": "lowpass",
+     "cutoff": 10000
+    }
+   ],
+   "gain_db": -8
+  },
+  {
+   "wave": "sine",
+   "freq": 1108.73,
+   "partials": [
+    [
+     1,
+     0,
+     1
+    ],
+    [
+     2.76,
+     -8,
+     0.5
+    ],
+    [
+     5.4,
+     -16,
+     0.3
+    ]
+   ],
+   "env": {
+    "attack": 0.0008,
+    "hold": 0.002,
+    "release": 0.05,
+    "curve": 3
+   }
+  }
+ ],
+ "master": {
+  "lufs": -22,
+  "peak_db": -1,
+  "highpass": 300
+ }
+}

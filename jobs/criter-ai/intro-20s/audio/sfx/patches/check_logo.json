@@ -1,0 +1,137 @@
+{
+ "name": "check_logo",
+ "description": "Logo version of the check motif: same notes, a low octave for weight, longer room.",
+ "layers": [
+  {
+   "wave": "sine",
+   "freq": [
+    [
+     0,
+     659.26
+    ],
+    [
+     0.105,
+     659.26
+    ],
+    [
+     0.105,
+     880.0
+    ]
+   ],
+   "fm": {
+    "ratio": 2,
+    "index": [
+     [
+      0,
+      1.6
+     ],
+     [
+      0.5,
+      0.15
+     ]
+    ]
+   },
+   "env": {
+    "attack": 0.0015,
+    "hold": 0.105,
+    "release": 1.0,
+    "curve": 3
+   }
+  },
+  {
+   "wave": "sine",
+   "freq": [
+    [
+     0,
+     1318.52
+    ],
+    [
+     0.105,
+     1318.52
+    ],
+    [
+     0.105,
+     1760.0
+    ]
+   ],
+   "partials": [
+    [
+     1,
+     0,
+     1
+    ],
+    [
+     2.0,
+     -8,
+     0.5
+    ]
+   ],
+   "env": {
+    "attack": 0.002,
+    "hold": 0.105,
+    "release": 0.5,
+    "curve": 3
+   },
+   "gain_db": -14
+  },
+  {
+   "wave": "noise",
+   "at": [
+    0
+   ],
+   "env": {
+    "attack": 0.0005,
+    "hold": 0.0,
+    "release": 0.012,
+    "curve": 3
+   },
+   "filters": [
+    {
+     "type": "highpass",
+     "cutoff": 4000
+    },
+    {
+     "type": "lowpass",
+     "cutoff": 11000
+    }
+   ],
+   "gain_db": -18
+  },
+  {
+   "wave": "sine",
+   "freq": [
+    [
+     0,
+     329.63
+    ],
+    [
+     0.105,
+     329.63
+    ],
+    [
+     0.105,
+     440.0
+    ]
+   ],
+   "env": {
+    "attack": 0.003,
+    "hold": 0.105,
+    "release": 0.55,
+    "curve": 2.5
+   },
+   "gain_db": -14
+  }
+ ],
+ "master": {
+  "lufs": -15,
+  "peak_db": -1,
+  "highpass": 160,
+  "reverb": {
+   "mix": 0.2,
+   "decay": 1.0
+  }
+ },
+ "expect": {
+  "pitch": "rising"
+ }
+}

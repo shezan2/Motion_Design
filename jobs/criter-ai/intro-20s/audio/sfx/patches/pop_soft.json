@@ -1,0 +1,53 @@
+{
+ "name": "pop_soft",
+ "description": "Soft rounded UI pop for elements arriving (rising sine blip).",
+ "layers": [
+  {
+   "wave": "sine",
+   "freq": [
+    [
+     0,
+     380
+    ],
+    [
+     0.045,
+     820
+    ]
+   ],
+   "env": {
+    "attack": 0.001,
+    "hold": 0.01,
+    "release": 0.06,
+    "curve": 2.5
+   }
+  },
+  {
+   "wave": "sine",
+   "freq": [
+    [
+     0,
+     760
+    ],
+    [
+     0.045,
+     1640
+    ]
+   ],
+   "env": {
+    "attack": 0.001,
+    "hold": 0.005,
+    "release": 0.04,
+    "curve": 3
+   },
+   "gain_db": -14
+  }
+ ],
+ "master": {
+  "lufs": -22,
+  "peak_db": -1,
+  "highpass": 200
+ },
+ "expect": {
+  "pitch": "rising"
+ }
+}

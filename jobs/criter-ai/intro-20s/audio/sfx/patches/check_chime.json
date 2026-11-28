@@ -1,0 +1,113 @@
+{
+ "name": "check_chime",
+ "description": "CriterAI check motif: warm FM bell a 4th up (E5 -> A5), soft glint, small room.",
+ "layers": [
+  {
+   "wave": "sine",
+   "freq": [
+    [
+     0,
+     659.26
+    ],
+    [
+     0.095,
+     659.26
+    ],
+    [
+     0.095,
+     880.0
+    ]
+   ],
+   "fm": {
+    "ratio": 2,
+    "index": [
+     [
+      0,
+      1.6
+     ],
+     [
+      0.5,
+      0.15
+     ]
+    ]
+   },
+   "env": {
+    "attack": 0.0015,
+    "hold": 0.095,
+    "release": 0.7,
+    "curve": 3
+   }
+  },
+  {
+   "wave": "sine",
+   "freq": [
+    [
+     0,
+     1318.52
+    ],
+    [
+     0.095,
+     1318.52
+    ],
+    [
+     0.095,
+     1760.0
+    ]
+   ],
+   "partials": [
+    [
+     1,
+     0,
+     1
+    ],
+    [
+     2.0,
+     -8,
+     0.5
+    ]
+   ],
+   "env": {
+    "attack": 0.002,
+    "hold": 0.095,
+    "release": 0.35,
+    "curve": 3
+   },
+   "gain_db": -14
+  },
+  {
+   "wave": "noise",
+   "at": [
+    0
+   ],
+   "env": {
+    "attack": 0.0005,
+    "hold": 0.0,
+    "release": 0.012,
+    "curve": 3
+   },
+   "filters": [
+    {
+     "type": "highpass",
+     "cutoff": 4000
+    },
+    {
+     "type": "lowpass",
+     "cutoff": 11000
+    }
+   ],
+   "gain_db": -18
+  }
+ ],
+ "master": {
+  "lufs": -16,
+  "peak_db": -1,
+  "highpass": 220,
+  "reverb": {
+   "mix": 0.16,
+   "decay": 0.7
+  }
+ },
+ "expect": {
+  "pitch": "rising"
+ }
+}

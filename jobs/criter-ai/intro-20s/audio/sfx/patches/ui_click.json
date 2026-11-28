@@ -1,0 +1,76 @@
+{
+ "name": "ui_click",
+ "description": "Trackpad-style click: noise tick + short falling triangle + small low body. No tail.",
+ "layers": [
+  {
+   "wave": "noise",
+   "env": {
+    "attack": 0.0005,
+    "hold": 0.001,
+    "release": 0.006,
+    "curve": 3
+   },
+   "filters": [
+    {
+     "type": "highpass",
+     "cutoff": 2500
+    },
+    {
+     "type": "lowpass",
+     "cutoff": 9000
+    }
+   ],
+   "gain_db": -6
+  },
+  {
+   "wave": "triangle",
+   "freq": [
+    [
+     0,
+     1700
+    ],
+    [
+     0.03,
+     1400
+    ]
+   ],
+   "env": {
+    "attack": 0.0005,
+    "hold": 0.002,
+    "release": 0.03,
+    "curve": 3
+   }
+  },
+  {
+   "wave": "sine",
+   "freq": [
+    [
+     0,
+     420
+    ],
+    [
+     0.04,
+     300
+    ]
+   ],
+   "env": {
+    "attack": 0.0005,
+    "hold": 0.003,
+    "release": 0.04,
+    "curve": 3
+   },
+   "gain_db": -8
+  }
+ ],
+ "master": {
+  "lufs": -20,
+  "peak_db": -1,
+  "highpass": 200
+ },
+ "expect": {
+  "duration": [
+   0.015,
+   0.08
+  ]
+ }
+}

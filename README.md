@@ -1,3 +1,14 @@
+# Motion design films
+
+| Client | Folder | Film | Status |
+| --- | --- | --- | --- |
+| [CriterAI](https://criter.ai) | [`jobs/criter-ai/intro-20s`](jobs/criter-ai/intro-20s/) | 20 s landscape brand and product intro, SFX only, 1080p30 + 1080p60 + 4K60 | v1, 28 Nov 2026 |
+| [Outtakes](https://outtakes.sg) | [`outtakes-launch-lottie`](outtakes-launch-lottie/), [`outtakes-launch-video`](outtakes-launch-video/) | launch films, 9:16 and 16:9 | delivered |
+
+## CriterAI intro (20 s, 16:9)
+
+The noise of Australian visa options collapses into CriterAI's own check mark; a student asks a question, gets an instant answer, taps **Verify by Expert**, and every point is checked by a registered migration agent; then "Lawyer trained. Law driven. AI delivered." and the logo. Built as an HTML composition rendered frame by frame with real motion blur; sound effects from ElevenLabs Sound Effects v3 (elevenlabs/skills) and the game-sfx synth, placed by measured peak. See the job's [`README`](jobs/criter-ai/intro-20s/README.md) and [`NOTE.md`](jobs/criter-ai/intro-20s/NOTE.md).
+
 # Outtakes launch films
 
 Motion-design launch films for **[Outtakes](https://outtakes.sg)**, a platform that helps sports photographers get found, booked and paid. The films have one job: get photographers to sign up for free and set up a profile before the platform goes live on **20 Nov 2026, 5PM SGT**.

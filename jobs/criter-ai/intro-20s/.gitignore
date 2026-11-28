@@ -1,0 +1,9 @@
+# renders kept out of git: drafts, silent masters, logs, cue dumps
+out/draft*.mp4
+out/master_*.mp4
+out/*.parts/
+out/*.cues.json
+out/render_*.log
+audio/mix_v*.wav
+node_modules/
+__pycache__/
