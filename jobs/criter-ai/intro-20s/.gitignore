@@ -4,6 +4,6 @@ out/master_*.mp4
 out/*.parts/
 out/*.cues.json
 out/render_*.log
-audio/mix_v*.wav
+audio/mix_v[0-9]*.wav
 node_modules/
 __pycache__/

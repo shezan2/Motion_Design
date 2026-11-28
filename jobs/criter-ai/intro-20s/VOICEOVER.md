@@ -82,3 +82,30 @@ Every claim is on criter.ai: "instant visa guidance", a registered migration age
 
 ## Mixing it in (skill sound.md 4.4)
 Split the take by silence, level-match every line, place each on its start time above, duck the SFX about 10-12 dB under speech (the voice at least 8 dB above everything), keep the check chimes and the logo hit between lines, then -14 LUFS and true peak under -1 dBTP. Deliver as a separate `-vo` file; the SFX-only cut stays as is.
+
+## Voiced cut v1 (take: `audio/vo/take1-elevenlabs-v4.mp3`, ElevenLabs v4, 28 Nov 2026)
+Built with `audio/vo.py`: the take split at its pauses into the 11 lines (the three questions and "Lawyer trained. Law
+driven." were read together, split at their 0.18-0.2 s pauses), each line level-matched, placed just after its words
+appear, SFX ducked 11 dB under speech, -14.0 LUFS, -2.3 dBTP. Voice over SFX while speaking: median 26.5 dB, 10th
+percentile 9.9 dB (target 8 dB or more). Pauses between lines 0.12 s or more; the last word ends at 19.84 s.
+Four lines are tightened 4-7% with a pitch-preserving tempo change because the read was longer than the on-screen
+slot: "Which visa?", "Which documents?", "Then a registered migration agent checks it," and the three payoff lines.
+"...checks it," ends as the rows start ticking, so the four check chimes ring out clear right after the voice.
+
+| Line | In the film |
+|---|---|
+| Which visa? | 0.03 s |
+| Which documents? | 1.00 s |
+| What's next? | 2.09 s |
+| Just ask CriterAI. | 3.30 s |
+| Get an instant answer. | 5.20 s |
+| Then a registered migration agent checks it, | 6.82 s |
+| in as little as thirty minutes. | 9.95 s |
+| Lawyer trained. | 12.00 s |
+| Law driven. | 13.02 s |
+| AI delivered. | 14.03 s |
+| Start for free at criter.ai. | 17.42 s |
+
+Files: `out/criter-ai-intro-16x9-vo-v1.mp4` (1080p30) and captions `out/criter-ai-intro-16x9-vo-v1.srt`. 60 fps and 4K voiced
+files are the same picture re-muxed with `audio/mix_vo.wav`:
+`ffmpeg -i out/criter-ai-intro-16x9-4k-v1.mp4 -i audio/mix_vo.wav -map 0:v -map 1:a -c:v copy -c:a aac -b:a 320k out/criter-ai-intro-16x9-4k-vo-v1.mp4`

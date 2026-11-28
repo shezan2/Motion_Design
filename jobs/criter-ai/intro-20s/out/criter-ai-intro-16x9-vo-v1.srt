@@ -1,0 +1,44 @@
+1
+00:00:00,030 --> 00:00:00,980
+Which visa?
+
+2
+00:00:01,000 --> 00:00:02,070
+Which documents?
+
+3
+00:00:02,090 --> 00:00:03,150
+What's next?
+
+4
+00:00:03,300 --> 00:00:05,180
+Just ask CriterAI.
+
+5
+00:00:05,200 --> 00:00:06,800
+Get an instant answer.
+
+6
+00:00:06,820 --> 00:00:09,508
+Then a registered migration agent checks it,
+
+7
+00:00:09,950 --> 00:00:11,950
+in as little as thirty minutes.
+
+8
+00:00:12,000 --> 00:00:13,000
+Lawyer trained.
+
+9
+00:00:13,020 --> 00:00:14,010
+Law driven.
+
+10
+00:00:14,030 --> 00:00:15,458
+AI delivered.
+
+11
+00:00:17,420 --> 00:00:20,000
+Start for free at criter.ai.
+

@@ -81,6 +81,7 @@ Skills used: elevenlabs/skills `sound-effects` (SFX v3 via the ElevenLabs connec
 | Version | Date | What | look.py |
 |---|---|---|---|
 | v1 | 28 Nov 2026 | first delivery (spec piece for onboarding) | 20.00 s, G0/G2/G3 PASS, end hold 1.13 s, -14.0 LUFS, -1.8 dBTP |
+| v1-vo | 28 Nov 2026 | voiced cut from Shezan's ElevenLabs v4 take, + .srt | 20.00 s, G0/G2/G3 PASS, -14.0 LUFS, -2.3 dBTP, voice >= 9.9 dB over SFX (p10) |
 
 ## Revision rounds
 None yet. Log each request here with the time in the video and what changed.
