@@ -1,23 +1,13 @@
-# Message to CriterAI's co-founder (ready to paste)
+# Cold message to CriterAI's co-founder (ready to paste)
 
-Attach `out/criter-ai-intro-16x9-vo-v1.mp4` (voiceover) and `out/criter-ai-intro-16x9-v1.mp4` (sound effects only), plus `out/criter-ai-intro-cover-v1.jpg` if you want a thumbnail. Both MP4s are about 18 MB, over WhatsApp's roughly 16 MB video limit, so on WhatsApp send them as documents.
+Same shape as the OmniGro message. criter.ai has no about or team page, so fill the name yourself.
+Attach `out/criter-ai-intro-16x9-vo-v1.mp4` (voiceover version, 18 MB: send as a document on WhatsApp, or use a link), and the `.srt` if they want captions as a file.
 
 ```
 Hi [Name],
-
-Ahead of us working together, we made a 20-second intro film for CriterAI from your website, logo and copy. I've attached two versions: one with a voiceover and one with sound effects only, so it works with the sound on or off.
-
-The idea: all the visa questions pull together into your check mark. A student asks "What do I need for my student visa?", gets an instant answer, taps Verify by Expert, and a registered migration agent checks each point. It ends on "Lawyer trained. Law driven. AI delivered." and Start for free.
-
-A few things to check on your side:
-- The chat screen is rebuilt in your colours, since the app isn't public. If you can share a few real screenshots, we'll swap them in.
-- The student visa answer is general guidance written for the film, so it's worth having one of your agents check the wording.
-- The voiceover says "KRIT-er A.I." Let me know if you say it differently.
-
-It's landscape in 1080p, and there's a 4K version ready. We can also cut a vertical version for Reels and TikTok.
-
-Would you have 15 minutes this week to go through it together?
-
-[Your name]
-Ozen Digital
+I'm Shezan from Ozen Digital, a motion design studio in Singapore. I made a short video for CriterAI as a sample, built entirely from your site: your copy, your colours and fonts, and the expert verification flow from your FAQ.
+The idea: all the visa questions collapse into your check mark. A student asks what they need for a student visa, gets an instant answer, and taps Verify by Expert to have a registered migration agent check it in as little as 30 minutes. It ends on "Lawyer trained. Law driven. AI delivered." It's 20 seconds, landscape, with a voiceover and captions.
+[Video attached / link]
+If you'd like more of these, we do monthly plans from S$175 a month, or one-off videos from S$99. Happy to send a vertical cut for Reels or Shorts as well.
+Shezan
 ```
