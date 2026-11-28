@@ -7,7 +7,7 @@
 |---|---|
 | `criter-ai-intro-16x9-v1.mp4` | **Main.** 1920x1080, 30 fps (house standard), H.264 High, BT.709, AAC 320 kbps 48 kHz, 20.00 s, 18.4 MB |
 | `criter-ai-intro-16x9-60fps-v1.mp4` | Same film at 60 fps (smoother UI motion), 19.1 MB |
-| `criter-ai-intro-16x9-4k-v1.mp4` | 3840x2160, 60 fps, for YouTube 4K or an agency edit |
+| `criter-ai-intro-16x9-4k-v1.mp4` | 3840x2160, 60 fps (true 4K render, not upscaled), for YouTube 4K or an agency edit, 36.6 MB |
 | `criter-ai-intro-16x9-v1-preview.mp4` | 1280x720 light copy for WhatsApp, 1.4 MB |
 | `criter-ai-intro-cover-v1.jpg` | Cover: the verified answer (hero frame) |
 | `criter-ai-intro-cover-alt-v1.jpg` | Alternate cover: the stacked headline |
@@ -42,7 +42,7 @@ Every frame is motion-blurred for real: 8 renders per frame over a 180-degree sh
 - **Licences:** synth sounds are original. ElevenLabs sound effects were generated on the connected ElevenLabs account: confirm that account's plan covers commercial use of generated sound effects before CriterAI runs this as an ad.
 - I can't listen; the mix was checked by measurement (doctor reports, per-event levels, look.py). **Listen once on headphones and once on a phone speaker before sending.**
 
-## look.py (main file)
+## look.py (main file; the 4K file also passes G0/G2 with the same audio numbers)
 Length 20.00 s, G0 PASS, G2 PASS (no flat runs), G3 PASS (end hold 1.13 s; no hard cuts, one continuous take), -14.0 LUFS, -1.8 dBTP, audible 0.04-20.00 s, no dropouts, no audio flags. Mean motion 1.4/255, below the human band (6.8): a calm, premium pace on a flat cream ground; every hold has a living element (drift, creep, moving light). The 60 fps file measures the same picture with half the per-frame change, so its end hold reads 1.63 s by that metric; the 30 fps main is the gated deliverable.
 
 ## Frames (look.py sheet, one per 1.25 s)
