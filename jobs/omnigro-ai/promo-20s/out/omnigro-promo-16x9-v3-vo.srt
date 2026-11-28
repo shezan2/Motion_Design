@@ -1,0 +1,28 @@
+1
+00:00:00,150 --> 00:00:02,200
+Your customers ask AI.
+
+2
+00:00:02,250 --> 00:00:04,050
+It names your competitors.
+
+3
+00:00:04,100 --> 00:00:05,435
+Where's your brand?
+
+4
+00:00:06,150 --> 00:00:08,120
+OmniGro puts it on top.
+
+5
+00:00:08,250 --> 00:00:12,375
+Our latest pilot: number one
+on every major AI platform.
+
+6
+00:00:14,100 --> 00:00:16,560
+Get your brand recommended by AI.
+
+7
+00:00:18,000 --> 00:00:19,950
+omnigroai.com

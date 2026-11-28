@@ -5,7 +5,7 @@
 | Client | OmniGro AI (omnigroai.com), Singapore. GEO / AEO / AI SEO agency |
 | Video | 20 s brand promo, 16:9 1920x1080, 30 fps (600 frames) |
 | Plan | spec / onboarding piece (bill as one-off up to 30 s if needed) |
-| Version | **v2 delivered 27 Nov 2026** (SFX only): `out/omnigro-promo-16x9-v2.mp4`; v1 (music) kept |
+| Version | **v3 delivered 28 Nov 2026** (voiced: ElevenLabs take + SFX): `out/omnigro-promo-16x9-v3-vo.mp4` + `.srt`; v2 (SFX only) and v1 (music) kept |
 | Revision rounds used | 0 |
 | Engine | HTML + deterministic JS timeline, rendered frame by frame in headless Chromium (Playwright), 4-subframe shutter blur, ffmpeg encode. Chosen over Lottie for the site's real CSS look: variable Bricolage Grotesque, glass, glows, conic borders |
 | Sound | v2: sound effects only (real recorded Mixkit + CC0 library sounds, no music), built with the Clipwing real-sfx and GFXER sfx-library methods; v1 had a synthesized music bed |
@@ -111,3 +111,8 @@ Copy and numbers live in `build/film.html` (`QUERY`, the headline spans) so a ch
 - Researched and read: Clipwing real-sfx, GFXER sfx-library, soundcn (Kenney CC0), ElevenLabs sound-effects, Remotion add-sfx, vibe-motion/sound, procedural-sfx, owoevan sfx-skill. Used: real-sfx (method, levels, anchoring, bed, checks), GFXER (pick table, lead frames, layering, pocket, licence-safe Mixkit/CC0 sounds), soundcn (Kenney CC0 UI sounds). Their scripts were not run (the session's safety check blocks running fetched third-party code); their rules live in `build/sfx_v2.py`.
 - Rounds of the mix: (1) loudness fell to -16.6 because peaks set the level; (2) the send click hit the leveller trap and the payoff out-shouted the logo: fixed with a bus compressor, gains, -14.3 LUFS; (3) long tails merged everything: added a 5-frame silence pocket before the landing, shorter question swell and logo tail; (4) two holes at bed level: hover tick on the cursor park and a tick on the trend line completing (real picture moves); five same-source bloops alternated; masked push ticks removed.
 - Rebuild: `python3 build/sfx_fetch.py` then `python3 build/sfx_v2.py`, then `ffmpeg -i out/omnigro-promo-16x9-v1.mp4 -i audio/sfx_v2_mix.wav -map 0:v -map 1:a -c:v copy -c:a aac -b:a 320k -ar 48000 -movflags +faststart -shortest out/omnigro-promo-16x9-v2.mp4`.
+
+## v3 (28 Nov): voiced
+- Shezan generated the ElevenLabs take from the v2 voiceover prompt (`audio/vo/omnigro-vo-take1.mp3`). Placed by `build/vo_v3.py`; the voiced picture is `film.html?cut=vo` (render with `CUT=vo`), which differs from v2 only in frames 246-284 (pilot caption earlier) and 510-599 (end card a second earlier).
+- Fit edit: last line trimmed to the URL (the full line does not fit after the logo hit in 20 s). Line 5 at 1.04x.
+- Rebuild: `python3 build/vo_v3.py`; frames: copy the v2 frames and `CUT=vo SUB=4 node build/render.cjs frames <dir> 246 285` and `... 510 600`; encode like v1 with `audio/vo_v3_mix.wav`.

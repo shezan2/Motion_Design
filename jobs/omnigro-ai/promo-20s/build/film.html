@@ -259,6 +259,10 @@ const T = {
   out6: 486, conv0: 486, conv1: 500, triC0: 499, triC1: 514, triB0: 502, triB1: 517,
   lock0: 518, lock1: 538, cta1: 552, cta2: 560, shine0: 573, shine1: 597, end: 600, wave0: 294,
 };
+// voiced cut (film.html?cut=vo, v3): the pilot caption fades up with its headline, and the end card cascades in about
+// a second earlier so the URL button is on screen just before the voice says it (on-screen words before heard words)
+const CUT = new URLSearchParams(location.search).get('cut') || '';
+if (CUT === 'vo') Object.assign(T, { cap: 246, lock0: 512, lock1: 530, cta1: 527, cta2: 533, shine0: 560, shine1: 590 });
 const D1 = 1240, D2 = 760, D3 = 1240;
 // the OmniGro mark: two identical triangles, blue offset down by 35% of the height (measured from logo_only.png)
 const MARK_H = 230, TRI_H = MARK_H * 1513 / 2045, TRI_W = TRI_H * 1649 / 1513, TRI_OFF = MARK_H - TRI_H, MARK_CY = 432;

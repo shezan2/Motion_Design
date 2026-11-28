@@ -1,3 +1,32 @@
+# OmniGro AI / promo-20s / v3 (voiced: ElevenLabs take + SFX)
+
+**Change (28 Nov 2026):** Shezan's ElevenLabs take (`audio/vo/omnigro-vo-take1.mp3`, deep voice, 18.6 s) cut into the v2 sound-effects mix, line by line. File: `out/omnigro-promo-16x9-v3-vo.mp4` (+ `-preview.mp4`) with captions `out/omnigro-promo-16x9-v3-vo.srt`. v1 and v2 are unchanged.
+
+**How it was placed** (`build/vo_v3.py`, the Ozen "placing the take" steps): the take splits into 9 phrases at its pauses (the 7 script lines, with the natural pauses after "Our latest pilot:" and "report:"); every line is level-matched to one speech loudness (-29.62 LUFS); each line starts on its first syllable just after its words are on screen; no two lines touch and no word sits under the landing hit (5.9 s) or the logo hit (16.6 s); the SFX dip under speech (9 dB, deeper where the scene is busy) so the voice is at least 8 dB above everything else; the bed stays at -54 dBFS.
+
+| Line | Heard | Level match | SFX dip | Voice above SFX |
+|---|---|---|---|---|
+| Your customers ask AI. | 0.15-2.01 s | -0.8 dB | 9 dB | 9.5 dB |
+| It names your competitors. | 2.25-3.91 s | -0.4 dB | 9 dB | 12.0 dB |
+| Where's your brand? | 4.10-5.18 s | -0.2 dB | 9 dB | 17.4 dB |
+| OmniGro puts it on top. | 6.15-7.87 s | +0.4 dB | 9 dB | 13.1 dB |
+| Our latest pilot: number one on every major AI platform. | 8.25-12.12 s | +0.5 dB | 12 dB | 9.0 dB | 1.04x
+| Get your brand recommended by AI. | 14.10-16.31 s | +0.0 dB | 15 dB | 9.0 dB |
+| omnigroai.com | 18.00-19.89 s | +1.1 dB | 9 dB | 11.4 dB |
+
+**Fit edits (say so if you want them different):**
+- The last line "Your free AI visibility report: omni-gro A I dot com" runs 4.3 s and cannot fit between the logo hit and the end of a 20 s film, so only "omni-gro A I dot com" is used; "Get your free AI visibility report" stays on screen as text. The full line would need the film at about 21.5 s.
+- "Our latest pilot: number one on every major AI platform" plays 4% faster (formant-preserving, not audible) with its colon pause tightened, so it ends as +451% lands.
+- Voiced-cut picture (`film.html?cut=vo`, only frames 246-284 and 510-599 differ from v2): the "From our latest pilot" caption fades up with its headline, so it is on screen before the voice says it; the end card cascades in about a second earlier (wordmark f512, CTA line f527, URL button f533) so the button is readable before the voice says the URL, and the light sweep crosses the button while it is spoken.
+
+**Numbers:** look.py: 20.00 s, G0 PASS, G2 PASS, G3 PASS (end hold 0.70 s), no frozen stretch. Audio -14.8 LUFS (the master stops at 4 dB of limiting rather than squash the hits to reach -14.0), -1.5 dBTP, LRA 2.9 LU, -15.6 LUFS through a 150 Hz high-pass, audible 99 %, no flags.
+
+**Captions:** `omnigro-promo-16x9-v3-vo.srt` for LinkedIn and YouTube caption upload (7 cues, at most 2 lines, under 42 characters a line). Not burned in: the film's own type already carries the key lines, and burned captions would sit on top of it. Say if a burned-in copy is wanted for platforms without caption upload.
+
+**Listen list:** (1) 0:00-0:02, the first line over the typing; (2) 0:08-0:12, the 4% faster line: natural?; (3) 0:16.3-0:16.7, the payoff ends 0.3 s before the logo hit: enough air?; (4) 0:18-0:20, "omni-gro A I dot com": said right, and not crowded at the end?
+
+---
+
 # OmniGro AI / promo-20s / v2 (SFX only)
 
 **Change (27 Nov 2026, Shezan):** "no music just sound effects and for sound effects use the best github skills out there". The picture is identical to v1 (the video stream is copied bit for bit); the soundtrack is rebuilt as sound effects only, from real recorded and CC0 library sounds, placed on the film's own frames. File: `out/omnigro-promo-16x9-v2.mp4` (+ `-preview.mp4`). v1 (music + synthesized SFX) is kept unchanged.

@@ -5,7 +5,7 @@
 //   node build/render.cjs cues audio/cues.json              # write the SFX cue list from the timeline
 //
 // Every frame is a pure function of time (FILM.render(t)), so any frame or range can be re-rendered alone.
-// Workers: JOBS=3 (default). Sub-frames: SUB=4 (180-degree shutter), SUB=1 for a fast draft.
+// Workers: JOBS=3 (default). Sub-frames: SUB=4 (180-degree shutter), SUB=1 for a fast draft. CUT=vo renders the voiced cut (v3).
 const { chromium } = require('playwright');
 const http = require('http');
 const fs = require('fs');
@@ -32,7 +32,7 @@ async function openPage(browser, port) {
   const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
   page.on('pageerror', e => console.error('pageerror:', e.message));
   page.on('console', m => { if (m.type() === 'error') console.error('console:', m.text()); });
-  await page.goto(`http://127.0.0.1:${port}/build/film.html`, { waitUntil: 'load' });
+  await page.goto(`http://127.0.0.1:${port}/build/film.html${process.env.CUT ? '?cut=' + process.env.CUT : ''}`, { waitUntil: 'load' });
   await page.evaluate(async () => { await document.fonts.ready; await Promise.all([...document.images].map(i => i.decode().catch(() => {}))); FILM.init(); });
   return page;
 }

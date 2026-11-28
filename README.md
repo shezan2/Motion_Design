@@ -24,9 +24,9 @@ A 20-second landscape (16:9) motion piece for **[OmniGro AI](https://www.omnigro
 
 | Folder | Built with | Length | Cuts | Status |
 | --- | --- | --- | --- | --- |
-| [`jobs/omnigro-ai/promo-20s`](jobs/omnigro-ai/promo-20s/) | HTML + JS timeline, Playwright, ffmpeg; SFX from Mixkit + CC0 libraries | 20 s, 30 fps | 16:9 | v2 delivered (SFX only) |
+| [`jobs/omnigro-ai/promo-20s`](jobs/omnigro-ai/promo-20s/) | HTML + JS timeline, Playwright, ffmpeg; SFX from Mixkit + CC0 libraries | 20 s, 30 fps | 16:9 | v3 delivered (voiced), v2 (SFX only) |
 
-Start with [`STATE.md`](jobs/omnigro-ai/promo-20s/STATE.md) (brand sheet, idea, beat sheet, rebuild commands) and [`NOTE.md`](jobs/omnigro-ai/promo-20s/NOTE.md) (what is real, QA numbers, client message). The current video is [`out/omnigro-promo-16x9-v2.mp4`](jobs/omnigro-ai/promo-20s/out/omnigro-promo-16x9-v2.mp4): sound effects only, built with the [real-sfx](https://github.com/Clipwing/skills) and [sfx-library](https://github.com/GFXER/sfx-library) skills' methods from Mixkit and CC0 sounds. v1 (with a synthesized music bed) is kept next to it.
+Start with [`STATE.md`](jobs/omnigro-ai/promo-20s/STATE.md) (brand sheet, idea, beat sheet, rebuild commands) and [`NOTE.md`](jobs/omnigro-ai/promo-20s/NOTE.md) (what is real, QA numbers, client message). The voiced cut is [`out/omnigro-promo-16x9-v3-vo.mp4`](jobs/omnigro-ai/promo-20s/out/omnigro-promo-16x9-v3-vo.mp4) (ElevenLabs voiceover over the SFX, captions in the `.srt` beside it). [`out/omnigro-promo-16x9-v2.mp4`](jobs/omnigro-ai/promo-20s/out/omnigro-promo-16x9-v2.mp4) is sound effects only, built with the [real-sfx](https://github.com/Clipwing/skills) and [sfx-library](https://github.com/GFXER/sfx-library) skills' methods from Mixkit and CC0 sounds. v1 (with a synthesized music bed) is kept next to it.
 
 ## Other branches
 
