@@ -1,0 +1,11 @@
+{
+  "name": "nickrl-intro",
+  "private": true,
+  "version": "1.0.0",
+  "license": "MIT",
+  "type": "module",
+  "description": "Nick R.L. 20 s landscape intro film (Lottie scenes rendered with Skia Skottie via canvaskit-wasm)",
+  "dependencies": {
+    "canvaskit-wasm": "0.41.1"
+  }
+}

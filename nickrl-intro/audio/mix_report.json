@@ -1,0 +1,359 @@
+{
+ "summary": {
+  "cues": 36,
+  "placements": 38,
+  "raw_lufs": -28.29,
+  "gain_db": 13.37,
+  "limiter_max_gr_db": -6.0,
+  "final_lufs": -15.8,
+  "final_true_peak_dbtp": -1.5,
+  "bed": {
+   "file": "bed.mp3",
+   "median_250ms_dbfs": -52.0
+  }
+ },
+ "placements": [
+  {
+   "frame": 3,
+   "kind": "tick",
+   "take": "tick_1",
+   "role": "tick",
+   "anchor_s": 0.005,
+   "placed_at_s": 0.095,
+   "peak_dbfs": -14.5
+  },
+  {
+   "frame": 6,
+   "kind": "tick",
+   "take": "tick_4",
+   "role": "tick",
+   "anchor_s": 0.005,
+   "placed_at_s": 0.195,
+   "peak_dbfs": -14.5
+  },
+  {
+   "frame": 10,
+   "kind": "tick",
+   "take": "tick_3",
+   "role": "tick",
+   "anchor_s": 0.005,
+   "placed_at_s": 0.328,
+   "peak_dbfs": -14.5
+  },
+  {
+   "frame": 13,
+   "kind": "tick",
+   "take": "tick_1",
+   "role": "tick",
+   "anchor_s": 0.005,
+   "placed_at_s": 0.428,
+   "peak_dbfs": -14.5
+  },
+  {
+   "frame": 17,
+   "kind": "tick",
+   "take": "tick_4",
+   "role": "tick",
+   "anchor_s": 0.005,
+   "placed_at_s": 0.562,
+   "peak_dbfs": -14.5
+  },
+  {
+   "frame": 21,
+   "kind": "tick",
+   "take": "tick_3",
+   "role": "tick",
+   "anchor_s": 0.005,
+   "placed_at_s": 0.695,
+   "peak_dbfs": -14.5
+  },
+  {
+   "frame": 25,
+   "kind": "tick",
+   "take": "tick_1",
+   "role": "tick",
+   "anchor_s": 0.005,
+   "placed_at_s": 0.828,
+   "peak_dbfs": -14.5
+  },
+  {
+   "frame": 29,
+   "kind": "tick",
+   "take": "tick_4",
+   "role": "tick",
+   "anchor_s": 0.005,
+   "placed_at_s": 0.962,
+   "peak_dbfs": -14.5
+  },
+  {
+   "frame": 34,
+   "kind": "tick",
+   "take": "tick_3",
+   "role": "tick",
+   "anchor_s": 0.005,
+   "placed_at_s": 1.128,
+   "peak_dbfs": -14.5
+  },
+  {
+   "frame": 39,
+   "kind": "tick",
+   "take": "tick_1",
+   "role": "tick",
+   "anchor_s": 0.005,
+   "placed_at_s": 1.295,
+   "peak_dbfs": -16.5
+  },
+  {
+   "frame": 46,
+   "kind": "tick",
+   "take": "tick_4",
+   "role": "tick",
+   "anchor_s": 0.005,
+   "placed_at_s": 1.528,
+   "peak_dbfs": -16.5
+  },
+  {
+   "frame": 58,
+   "kind": "tick",
+   "take": "tick_3",
+   "role": "tick",
+   "anchor_s": 0.005,
+   "placed_at_s": 1.928,
+   "peak_dbfs": -16.5
+  },
+  {
+   "frame": 86,
+   "kind": "whoosh_short",
+   "take": "whoosh_short_2",
+   "role": "whoosh",
+   "anchor_s": 0.105,
+   "placed_at_s": 2.762,
+   "peak_dbfs": -10.0
+  },
+  {
+   "frame": 97,
+   "kind": "hit_sold",
+   "take": "hit_sold_4",
+   "role": "hit",
+   "anchor_s": 0.005,
+   "placed_at_s": 3.228,
+   "peak_dbfs": -3.0
+  },
+  {
+   "frame": 97,
+   "kind": "hit_sold",
+   "take": "thud_card_2",
+   "role": "foley",
+   "anchor_s": 0.025,
+   "placed_at_s": 3.208,
+   "peak_dbfs": -15.0
+  },
+  {
+   "frame": 100,
+   "kind": "shimmer",
+   "take": "shimmer_1",
+   "role": "chime",
+   "anchor_s": 0.005,
+   "placed_at_s": 3.328,
+   "peak_dbfs": -26.0
+  },
+  {
+   "frame": 105,
+   "kind": "pop",
+   "take": "click_3",
+   "role": "click",
+   "anchor_s": 0.005,
+   "placed_at_s": 3.495,
+   "peak_dbfs": -16.0
+  },
+  {
+   "frame": 117,
+   "kind": "pop",
+   "take": "click_3",
+   "role": "click",
+   "anchor_s": 0.005,
+   "placed_at_s": 3.895,
+   "peak_dbfs": -20.0
+  },
+  {
+   "frame": 160,
+   "kind": "whoosh_short",
+   "take": "whoosh_short_2",
+   "role": "whoosh",
+   "anchor_s": 0.105,
+   "placed_at_s": 5.228,
+   "peak_dbfs": -22.0
+  },
+  {
+   "frame": 172,
+   "kind": "whoosh_deep",
+   "take": "whoosh_deep_4",
+   "role": "whoosh",
+   "anchor_s": 0.495,
+   "placed_at_s": 5.238,
+   "peak_dbfs": -11.0
+  },
+  {
+   "frame": 193,
+   "kind": "arrow",
+   "take": "arrow_2",
+   "role": "foley",
+   "anchor_s": 0.015,
+   "placed_at_s": 6.418,
+   "peak_dbfs": -7.0
+  },
+  {
+   "frame": 229,
+   "kind": "whoosh_short",
+   "take": "whoosh_short_2",
+   "role": "whoosh",
+   "anchor_s": 0.105,
+   "placed_at_s": 7.528,
+   "peak_dbfs": -21.0
+  },
+  {
+   "frame": 241,
+   "kind": "chess",
+   "take": "chess_1",
+   "role": "foley",
+   "anchor_s": 0.005,
+   "placed_at_s": 8.028,
+   "peak_dbfs": -7.0
+  },
+  {
+   "frame": 271,
+   "kind": "whoosh_short",
+   "take": "whoosh_short_2",
+   "role": "whoosh",
+   "anchor_s": 0.105,
+   "placed_at_s": 8.928,
+   "peak_dbfs": -21.0
+  },
+  {
+   "frame": 281,
+   "kind": "check",
+   "take": "check_2",
+   "role": "foley",
+   "anchor_s": 0.175,
+   "placed_at_s": 9.192,
+   "peak_dbfs": -8.0
+  },
+  {
+   "frame": 313,
+   "kind": "whoosh_short",
+   "take": "whoosh_short_2",
+   "role": "whoosh",
+   "anchor_s": 0.105,
+   "placed_at_s": 10.328,
+   "peak_dbfs": -21.0
+  },
+  {
+   "frame": 326,
+   "kind": "key",
+   "take": "key_4",
+   "role": "foley",
+   "anchor_s": 0.582,
+   "placed_at_s": 10.285,
+   "peak_dbfs": -7.0
+  },
+  {
+   "frame": 352,
+   "kind": "whoosh_morph",
+   "take": "whoosh_deep_1",
+   "role": "whoosh",
+   "anchor_s": 0.655,
+   "placed_at_s": 11.078,
+   "peak_dbfs": -9.0
+  },
+  {
+   "frame": 352,
+   "kind": "whoosh_morph",
+   "take": "whoosh_deep_3",
+   "role": "whoosh",
+   "anchor_s": 0.445,
+   "placed_at_s": 11.288,
+   "peak_dbfs": -14.0
+  },
+  {
+   "frame": 366,
+   "kind": "thud_card",
+   "take": "thud_card_2",
+   "role": "foley",
+   "anchor_s": 0.025,
+   "placed_at_s": 12.175,
+   "peak_dbfs": -11.0
+  },
+  {
+   "frame": 395,
+   "kind": "tick",
+   "take": "tick_1",
+   "role": "tick",
+   "anchor_s": 0.005,
+   "placed_at_s": 13.162,
+   "peak_dbfs": -22.5
+  },
+  {
+   "frame": 404,
+   "kind": "tick",
+   "take": "tick_4",
+   "role": "tick",
+   "anchor_s": 0.005,
+   "placed_at_s": 13.462,
+   "peak_dbfs": -24.5
+  },
+  {
+   "frame": 434,
+   "kind": "shimmer",
+   "take": "shimmer_4",
+   "role": "chime",
+   "anchor_s": 0.005,
+   "placed_at_s": 14.462,
+   "peak_dbfs": -23.0
+  },
+  {
+   "frame": 480,
+   "kind": "tick",
+   "take": "tick_3",
+   "role": "tick",
+   "anchor_s": 0.005,
+   "placed_at_s": 15.995,
+   "peak_dbfs": -16.5
+  },
+  {
+   "frame": 488,
+   "kind": "tick",
+   "take": "tick_1",
+   "role": "tick",
+   "anchor_s": 0.005,
+   "placed_at_s": 16.262,
+   "peak_dbfs": -18.5
+  },
+  {
+   "frame": 520,
+   "kind": "whoosh_short",
+   "take": "whoosh_short_2",
+   "role": "whoosh",
+   "anchor_s": 0.105,
+   "placed_at_s": 17.228,
+   "peak_dbfs": -23.0
+  },
+  {
+   "frame": 558,
+   "kind": "click",
+   "take": "click_2",
+   "role": "click",
+   "anchor_s": 0.005,
+   "placed_at_s": 18.595,
+   "peak_dbfs": -14.0
+  },
+  {
+   "frame": 564,
+   "kind": "shimmer",
+   "take": "shimmer_1",
+   "role": "chime",
+   "anchor_s": 0.005,
+   "placed_at_s": 18.795,
+   "peak_dbfs": -19.0
+  }
+ ]
+}

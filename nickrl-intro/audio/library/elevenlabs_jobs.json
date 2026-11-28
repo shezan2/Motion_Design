@@ -1,0 +1,29 @@
+{
+  "flow_id": "PJEtuzH0SVonF6kSdjDv",
+  "model": "eleven_text_to_sound_v3",
+  "skill": "elevenlabs/skills sound-effects (official), run through the ElevenLabs connector",
+  "jobs": {
+    "tick":         {"node": "gose6xCRLZdTXg4IgZOj", "prompt": "Single soft mechanical clock tick, crisp wooden click, close-mic, dry",
+                     "sessions": ["x3ScOZteQvoFKIiWgXgd", "XOKB2iBxicylloFFgqQK", "cWxVqwxcCGOrg6iP6ea9", "KWCf0ieWTxj17AONDpWU"]},
+    "whoosh_short": {"node": "OStfg4ECovyj00DksO2a", "prompt": "Short soft air whoosh, smooth fast swipe, close-mic, dry, no tail",
+                     "sessions": ["LUkByPbaaAuiGEPYu026", "yConzQKZJZRCaLbe61lt", "AYZ8WSICW7XcgkmOxSfg", "NVFYdjT2KZ20Bzgl9NP9"]},
+    "whoosh_deep":  {"node": "JGbx7JzqkgS2t8yrXGs0", "prompt": "Deep soft whoosh with a low warm sweep, smooth and subtle",
+                     "sessions": ["Z1rFtpXWheHkfJvxeEui", "0b5W1miq8OBmUDti7zOD", "5R14BD8h7tg8LCWsGI6h", "f55EitTHKWcKtsmZANvr"]},
+    "hit_sold":     {"node": "qAuPRkTvYBYmOYlzarz2", "prompt": "Deep warm low impact with a soft boom tail, felt not harsh, close",
+                     "sessions": ["x8jXDO9EFWK6uGhUjSPe", "IPQuhTwzSGgSByDZF9Hj", "QZgTGXcYO48ienBKBU8L", "3b36eHtZMy8UsptjiF7g"]},
+    "arrow":        {"node": "uk5fBhSzN6B5m6LNzdZD", "prompt": "Arrow hitting a wooden target, sharp thunk with a short wobble vibration",
+                     "sessions": ["Wr0OyXJNI7VPyCeLjvVW", "C5lMtxRAGkm89gao0q2w", "SBT2ADgKwK4zc3vGrBLV", "Uwiyz5gS2UGWyCwjamiB"]},
+    "chess":        {"node": "TkLBaxsPp4LzfeJ6hWHU", "prompt": "Wooden chess piece placed firmly on a wooden board, single clack, close-mic",
+                     "sessions": ["VGaO55HeGGH3J8lWTYxn", "UYIUX0GNaZovM2xf4Csu", "qnW1vGpB2RCykL741ghD", "qi2lgmtkBWifUAm06CoY"]},
+    "check":        {"node": "A0lfu2pqtZTBVxVHsvzX", "prompt": "Pen quickly ticking a checkmark on paper, short crisp scratch, close-mic",
+                     "sessions": ["7iSWteAvUDZv9dNGHjkL", "1Qn1QZ1wEH8RlI1eHg1B", "1VTyx8DlRvTGmdmgw9oM", "7GY5zeUY4TzTt8LN62mk"]},
+    "key":          {"node": "EizzA5r1okDLueXWPDFu", "prompt": "Key turning in a front door lock, clean metallic click and unlatch, close-mic",
+                     "sessions": ["LR6bXNzFSwxQybBtQNmo", "PZqF7vwjfSJuLUR3m5vW", "XobSKqr4Yi0xTzIfxGrc", "EcD9qw0rvvCJtAOikzte"]},
+    "click":        {"node": "sygbSJS3tcpGPAMNLagB", "prompt": "Single computer mouse click, crisp and dry, close-mic",
+                     "sessions": ["T83AHePkum5qoWdisaSd", "SuERvqqnEvlkhmUFS5fP", "XrZDJjHL8m9tlidC6TLL", "895j9OUTVWOWjR1mgC8r"]},
+    "thud_card":    {"node": "9RrncT0T1vecDD3HR8iH", "prompt": "Soft low thud of a thick card landing on a padded table, close-mic",
+                     "sessions": ["AdDfFt9vLVWhnKmgjECK", "GyQYXFdbYbStAZSv6eGj", "klICQSpuuNMlAkHgS5NS", "tSadoB6DYfZkMa4ly23l"]},
+    "shimmer":      {"node": "sG32ZyFdSEJrQBhejq9G", "prompt": "Gentle high airy shimmer, soft glassy sparkle with a short tail",
+                     "sessions": ["G0aN6O8WMdfdwsa7t1YM", "QpQ7w1e3w0vFbBZQ8FUO", "N5IZWpvwzizKB4dxfjM6", "67NeoOiTAHqOtnNshFaw"]}
+  }
+}

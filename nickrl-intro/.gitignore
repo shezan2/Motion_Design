@@ -1,0 +1,7 @@
+/node_modules
+/out
+/audio/work
+__pycache__/
+*.pyc
+/audio/*.wav
+/audio/library/takes_bed_*.mp3

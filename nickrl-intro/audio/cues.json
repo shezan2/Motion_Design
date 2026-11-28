@@ -1,0 +1,258 @@
+{
+ "fps": 30,
+ "frames": 600,
+ "cues": [
+  {
+   "frame": 3,
+   "t": 0.1,
+   "kind": "tick",
+   "gain_db": -2.0,
+   "note": "day 16"
+  },
+  {
+   "frame": 6,
+   "t": 0.2,
+   "kind": "tick",
+   "gain_db": -2.0,
+   "note": "day 30"
+  },
+  {
+   "frame": 10,
+   "t": 0.3333,
+   "kind": "tick",
+   "gain_db": -2.0,
+   "note": "day 48"
+  },
+  {
+   "frame": 13,
+   "t": 0.4333,
+   "kind": "tick",
+   "gain_db": -2.0,
+   "note": "day 61"
+  },
+  {
+   "frame": 17,
+   "t": 0.5667,
+   "kind": "tick",
+   "gain_db": -2.0,
+   "note": "day 78"
+  },
+  {
+   "frame": 21,
+   "t": 0.7,
+   "kind": "tick",
+   "gain_db": -2.0,
+   "note": "day 93"
+  },
+  {
+   "frame": 25,
+   "t": 0.8333,
+   "kind": "tick",
+   "gain_db": -2.0,
+   "note": "day 108"
+  },
+  {
+   "frame": 29,
+   "t": 0.9667,
+   "kind": "tick",
+   "gain_db": -2.0,
+   "note": "day 121"
+  },
+  {
+   "frame": 34,
+   "t": 1.1333,
+   "kind": "tick",
+   "gain_db": -2.0,
+   "note": "day 137"
+  },
+  {
+   "frame": 39,
+   "t": 1.3,
+   "kind": "tick",
+   "gain_db": -4.0,
+   "note": "day 150"
+  },
+  {
+   "frame": 46,
+   "t": 1.5333,
+   "kind": "tick",
+   "gain_db": -4.0,
+   "note": "day 165"
+  },
+  {
+   "frame": 58,
+   "t": 1.9333,
+   "kind": "tick",
+   "gain_db": -4.0,
+   "note": "day 180"
+  },
+  {
+   "frame": 86,
+   "t": 2.8667,
+   "kind": "whoosh_short",
+   "gain_db": -3.0,
+   "note": "gold arc shoots a sixth of the ring (whoosh peak at max speed)"
+  },
+  {
+   "frame": 97,
+   "t": 3.2333,
+   "kind": "hit_sold",
+   "gain_db": 0.0,
+   "note": "Sold lands (the one big hit)"
+  },
+  {
+   "frame": 100,
+   "t": 3.3333,
+   "kind": "shimmer",
+   "gain_db": -15.0,
+   "note": "texture: the light turns warm"
+  },
+  {
+   "frame": 105,
+   "t": 3.5,
+   "kind": "pop",
+   "gain_db": -5.0,
+   "note": "texture: 'in 1 month.' lands"
+  },
+  {
+   "frame": 117,
+   "t": 3.9,
+   "kind": "pop",
+   "gain_db": -9.0,
+   "note": "texture: case line lands"
+  },
+  {
+   "frame": 160,
+   "t": 5.3333,
+   "kind": "whoosh_short",
+   "gain_db": -15.0,
+   "note": "texture: words leave"
+  },
+  {
+   "frame": 172,
+   "t": 5.7333,
+   "kind": "whoosh_deep",
+   "gain_db": -4.0,
+   "note": "gold ring completes and flies into the target (peak)"
+  },
+  {
+   "frame": 193,
+   "t": 6.4333,
+   "kind": "arrow",
+   "gain_db": -1.0,
+   "note": "arrow hits the target: Right advice"
+  },
+  {
+   "frame": 229,
+   "t": 7.6333,
+   "kind": "whoosh_short",
+   "gain_db": -14.0,
+   "note": "keyword swap to strategy."
+  },
+  {
+   "frame": 241,
+   "t": 8.0333,
+   "kind": "chess",
+   "gain_db": -1.0,
+   "note": "knight set down: Right strategy"
+  },
+  {
+   "frame": 271,
+   "t": 9.0333,
+   "kind": "whoosh_short",
+   "gain_db": -14.0,
+   "note": "keyword swap to execution."
+  },
+  {
+   "frame": 281,
+   "t": 9.3667,
+   "kind": "check",
+   "gain_db": -2.0,
+   "note": "check drawn: Right execution"
+  },
+  {
+   "frame": 313,
+   "t": 10.4333,
+   "kind": "whoosh_short",
+   "gain_db": -14.0,
+   "note": "keyword swap to home."
+  },
+  {
+   "frame": 326,
+   "t": 10.8667,
+   "kind": "key",
+   "gain_db": -1.0,
+   "note": "door drawn and lit: Right home"
+  },
+  {
+   "frame": 352,
+   "t": 11.7333,
+   "kind": "whoosh_morph",
+   "gain_db": -2.0,
+   "note": "house opens into the card (peak)"
+  },
+  {
+   "frame": 366,
+   "t": 12.2,
+   "kind": "thud_card",
+   "gain_db": -5.0,
+   "note": "card settles"
+  },
+  {
+   "frame": 395,
+   "t": 13.1667,
+   "kind": "tick",
+   "gain_db": -10.0,
+   "note": "first chip"
+  },
+  {
+   "frame": 404,
+   "t": 13.4667,
+   "kind": "tick",
+   "gain_db": -12.0,
+   "note": "last chip"
+  },
+  {
+   "frame": 434,
+   "t": 14.4667,
+   "kind": "shimmer",
+   "gain_db": -12.0,
+   "note": "light sweeps the name (settle)"
+  },
+  {
+   "frame": 480,
+   "t": 16.0,
+   "kind": "tick",
+   "gain_db": -4.0,
+   "note": "scale cut into the CTA"
+  },
+  {
+   "frame": 488,
+   "t": 16.2667,
+   "kind": "tick",
+   "gain_db": -6.0,
+   "note": "pill lands"
+  },
+  {
+   "frame": 520,
+   "t": 17.3333,
+   "kind": "whoosh_short",
+   "gain_db": -16.0,
+   "note": "cursor glides in (peak)"
+  },
+  {
+   "frame": 558,
+   "t": 18.6,
+   "kind": "click",
+   "gain_db": -3.0,
+   "note": "WhatsApp pressed"
+  },
+  {
+   "frame": 564,
+   "t": 18.8,
+   "kind": "shimmer",
+   "gain_db": -8.0,
+   "note": "light sweeps the name"
+  }
+ ]
+}

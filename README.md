@@ -1,3 +1,15 @@
+# Ozen motion design films
+
+| Folder | Client | Film | Length | Format |
+| --- | --- | --- | --- | --- |
+| [`nickrl-intro`](nickrl-intro/) | Nick R.L., PropNex (property agent) | Brand intro: "Sold in 1 month", his four "Right" promises and his name card. SFX only | 20 s, 30 fps | 16:9 |
+| [`outtakes-launch-lottie`](outtakes-launch-lottie/) | Outtakes | Launch film, current version | 64 s, 30 fps | 9:16 and 16:9 |
+| [`outtakes-launch-video`](outtakes-launch-video/) | Outtakes | Launch film, first build (Remotion) | 47 s, 30 fps | 9:16 and 16:9 |
+
+## Nick R.L. intro film
+
+A 20-second landscape film for a Singapore property agent, built only from his own public material: his "6 months on the market, sold in 1 month" Yishun result, his "Right advice, Right strategy, Right execution, Right home" promise, and his name card details. Sound effects come from the Clipwing real-sfx method and the official ElevenLabs sound-effects skill. Start with the [README](nickrl-intro/README.md); the video is in [`nickrl-intro/delivery/`](nickrl-intro/delivery/).
+
 # Outtakes launch films
 
 Motion-design launch films for **[Outtakes](https://outtakes.sg)**, a platform that helps sports photographers get found, booked and paid. The films have one job: get photographers to sign up for free and set up a profile before the platform goes live on **20 Nov 2026, 5PM SGT**.
